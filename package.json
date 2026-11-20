@@ -1,0 +1,30 @@
+{
+  "name": "egehan-monorepo",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Egehan — turn a project's git history into a living, offline, deterministic chronicle.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=20.12.0"
+  },
+  "workspaces": [
+    "packages/core-spec"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "spec:validate": "npm run validate -w @egehan/core-spec",
+    "clean": "rm -rf packages/*/dist packages/*/*.tsbuildinfo",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.2"
+  }
+}

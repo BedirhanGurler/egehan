@@ -1,0 +1,9 @@
+node_modules/
+dist/
+package-lock.json
+# Dictionaries and fixtures are hand-curated data read by humans and by two engines;
+# their line structure is deliberate and reformatting them produces noisy diffs.
+packages/core-spec/dictionary/
+packages/core-spec/fixtures/
+packages/core-spec/schema/
+packages/core-spec/spec/

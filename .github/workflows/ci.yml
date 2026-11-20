@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  spec:
+    name: spec contract
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      # The dictionary contract is a hard gate: a typo in a placeholder name does not crash
+      # anything, it quietly ships a broken sentence into a keepsake someone intends to keep.
+      - name: Validate the dictionary contract
+        run: npm run spec:validate
+
+      - name: Test
+        run: npm test
+
+  node:
+    name: node-cli (${{ matrix.os }}, node ${{ matrix.node }})
+    # Enabled with the node-cli package. Turkish characters in git log output are exactly the kind
+    # of thing that works on macOS and breaks on Windows, so the matrix is not optional here.
+    if: ${{ hashFiles('packages/node-cli/package.json') != '' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        node: [20, 22, 24]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # the engine reads history; a shallow clone would hide bugs
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build
+      - run: npm test

@@ -1,0 +1,650 @@
+{
+  "language": "en",
+  "version": "1.0.0",
+  "$comment": "Egehan English narrative dictionary. This file is DATA, NOT CODE: both the Node and the .NET engine read it. Adding a new language means writing a narratives.<code>.json that mirrors this structure exactly — scripts/validate-dictionaries.ts enforces that mirror.",
+
+  "$templateFormat": {
+    "note": "A template is either a plain string or a { t, requires } object. 'requires' demands that the listed placeholders be non-empty and non-zero; the engine applies that filter first, then makes its deterministic choice.",
+    "placeholders": {
+      "author": "Author name (may be redacted depending on privacy settings)",
+      "date": "14 March 2026",
+      "dateShort": "14 March",
+      "time": "03:18",
+      "weekday": "Saturday",
+      "month": "March",
+      "year": "2026",
+      "files": "4 files",
+      "filesCount": "4",
+      "additions": "85 lines",
+      "removals": "42 lines",
+      "insertions": "85",
+      "deletions": "42",
+      "changedLines": "127",
+      "subject": "Cleaned, human-readable commit subject",
+      "scope": "Conventional commit scope, when present",
+      "tag": "v1.0.0, when present",
+      "commits": "12 commits",
+      "commitsCount": "12",
+      "span": "3 days",
+      "from": "14 March",
+      "to": "17 March",
+      "authorsCount": "2",
+      "flavorSubject": "Project-type subject: backbone / interface / app",
+      "flavorArtifact": "Project-type object: endpoint / screen / module",
+      "flavorLayer": "Project-type layer: data flow / view layer",
+      "flavorDomain": "Project-type domain: system / user experience"
+    }
+  },
+
+  "locale": {
+    "months": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+    "weekdays": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+    "weekdaysShort": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    "dateFormat": "{day} {month} {year}",
+    "dateShortFormat": "{day} {month}",
+    "timeFormat": "{hour}:{minute}",
+    "listSeparator": ", ",
+    "listLastSeparator": " and "
+  },
+
+  "units": {
+    "file": { "one": "file", "other": "files" },
+    "line": { "one": "line", "other": "lines" },
+    "commit": { "one": "commit", "other": "commits" },
+    "day": { "one": "day", "other": "days" },
+    "author": { "one": "developer", "other": "developers" },
+    "format": "{n} {unit}"
+  },
+
+  "flavors": {
+    "frontend": {
+      "subject": "interface",
+      "artifact": "screen",
+      "layer": "view layer",
+      "domain": "user experience"
+    },
+    "mobile": {
+      "subject": "app",
+      "artifact": "screen",
+      "layer": "touch surface",
+      "domain": "device experience"
+    },
+    "backend": {
+      "subject": "backbone",
+      "artifact": "endpoint",
+      "layer": "data flow",
+      "domain": "system"
+    },
+    "systems": {
+      "subject": "infrastructure",
+      "artifact": "component",
+      "layer": "runtime",
+      "domain": "platform"
+    },
+    "library": {
+      "subject": "library",
+      "artifact": "module",
+      "layer": "public surface",
+      "domain": "package"
+    }
+  },
+
+  "categories": {
+    "birth": {
+      "label": "Birth",
+      "icon": "🌱",
+      "chapterTitles": {
+        "poetic": [
+          "One Line Out of Nothing",
+          "The First Breath",
+          "An Empty Directory Awakens",
+          "The Day Everything Started"
+        ],
+        "minimalist": [
+          "Beginning",
+          "First Commit",
+          "Repository Created",
+          "Point Zero"
+        ],
+        "humorous": [
+          "A Folder Was Born",
+          "The «initial commit» Classics",
+          "Nothing Was Broken Yet",
+          "The Clean Slate Era"
+        ]
+      },
+      "chapterNarratives": {
+        "poetic": [
+          "On {from} there was an empty directory; {commits} later there was a project.",
+          "It all began on {from}, with a {flavorSubject} that did not even have a settled name.",
+          "{commits} over {span} laid every foundation stone this project would stand on."
+        ],
+        "minimalist": [
+          "{from}: project created. {commits}, {additions} added.",
+          "Setup period: {commits}, {files}.",
+          "{from} – {to}: initial scaffolding."
+        ],
+        "humorous": [
+          "On {from} somebody created a folder and there was no going back: {commits}.",
+          "The era when everything still seemed fine: {commits}.",
+          "{commits} laid a foundation that would be dug up many times over."
+        ]
+      },
+      "entries": {
+        "poetic": [
+          "On {date} a single line came out of nothing; with «{subject}» this project drew its first breath.",
+          "On {date}, around {time}, {files} were touched and «{subject}» gave the {flavorSubject} its first shape.",
+          "{author} placed the very first brick on an empty directory: «{subject}».",
+          "On {date}, {additions} arrived and the story began — no name yet, but a direction: «{subject}».",
+          "In that first moment when nothing had broken yet, on a {weekday}, «{subject}» was recorded.",
+          "While the {flavorLayer} was still entirely empty, {date} left the first mark: «{subject}»."
+        ],
+        "minimalist": [
+          "{date} {time} — first commit: «{subject}» ({files}, +{insertions}).",
+          "{date}: «{subject}». {files}, {additions}.",
+          "Setup commit — «{subject}» ({files}).",
+          "Repository created on {date}: «{subject}».",
+          "«{subject}» — {author}, {date}.",
+          "First step: «{subject}» ({changedLines} lines changed)."
+        ],
+        "humorous": [
+          "On {date} a folder was created and a one-way road began: «{subject}».",
+          "No bugs yet, no meetings held. Just «{subject}».",
+          "{author} opened {files} on {date} and went for it: «{subject}». The age of innocence.",
+          "«{subject}» — otherwise known as the moment «I'll finish this in two days» was said.",
+          "Around {time}, {additions} were written and the project officially existed: «{subject}».",
+          "First commit, first enthusiasm: «{subject}»."
+        ]
+      }
+    },
+
+    "first-steps": {
+      "label": "First Steps",
+      "icon": "👣",
+      "chapterTitles": {
+        "poetic": [
+          "While the Foundations Were Laid",
+          "The Skeleton Rises",
+          "Before Any Version Existed",
+          "Finding the Direction"
+        ],
+        "minimalist": [
+          "Core Features",
+          "Before the First Release",
+          "Foundation Period",
+          "Core Development"
+        ],
+        "humorous": [
+          "Everything Still Seemed Possible",
+          "Nobody Was Using It Yet",
+          "The «We'll Fix It Later» Age",
+          "The Draft Years"
+        ]
+      },
+      "chapterNarratives": {
+        "poetic": [
+          "Between {from} and {to}, {commits} taught the {flavorSubject} how to stand on its own.",
+          "With no release tag in sight, {span} carried {commits} and {additions}.",
+          "Across {commits} the skeleton rose; each commit laid ground for the next."
+        ],
+        "minimalist": [
+          "{from} – {to}: {commits}, {additions} added, {removals} removed.",
+          "Pre-release development: {commits}, {files}.",
+          "Core features: {commits} ({authorsCount} developers)."
+        ],
+        "humorous": [
+          "{commits} during the «we got the architecture right this time» phase: {from} – {to}.",
+          "{span} in which nobody used it, so nothing was broken.",
+          "{commits} written, {additions} added, none of it tested. Yet."
+        ]
+      },
+      "entries": {
+        "poetic": [
+          "On {date} «{subject}» let the {flavorSubject} stand a little firmer; {additions} appeared across {files}.",
+          "On a {weekday} the {flavorArtifact} side gained a new ability: «{subject}».",
+          "{author} gave the project one more capability on {date}: «{subject}».",
+          "On {date}, around {time}, the {flavorLayer} widened; «{subject}» was finished.",
+          "With no version tag yet in existence, {date} deepened the foundation a little more: «{subject}».",
+          "{additions} brought «{subject}» to life and the {flavorDomain} grew one shade clearer."
+        ],
+        "minimalist": [
+          "{date} — «{subject}» ({files}, +{insertions}/-{deletions}).",
+          "«{subject}» added. {files}, {additions}.",
+          "{date}: «{subject}» — {author}.",
+          "New feature: «{subject}» ({changedLines} lines).",
+          "{dateShort} {time} — «{subject}».",
+          "«{subject}» — within {scope} ({files})."
+        ],
+        "humorous": [
+          "On {date} «{subject}» was added, and at that moment it was genuinely believed to work.",
+          "«{subject}» — {additions} for a feature whose documentation will never be written.",
+          "{author} touched {files} on {date}, said «{subject}», and went back to the coffee.",
+          "Around {time}, «{subject}» was written. Tests? Later.",
+          "«{subject}» — crossed one item off the TODO list and spawned three new ones.",
+          "{changedLines} lines changed, nothing broke: «{subject}»."
+        ]
+      }
+    },
+
+    "growing-pains": {
+      "label": "Growing Pains",
+      "icon": "🩹",
+      "chapterTitles": {
+        "poetic": [
+          "The Aching Days",
+          "Mending What Broke",
+          "Meeting Resistance",
+          "When Patience Was Tested"
+        ],
+        "minimalist": [
+          "Debugging Period",
+          "Fixes",
+          "Stabilization Work",
+          "Restructuring"
+        ],
+        "humorous": [
+          "The Week Everything Broke",
+          "Three Fixes Walk Into a Repo",
+          "The «It Worked Before» Era",
+          "Bug Season"
+        ]
+      },
+      "chapterNarratives": {
+        "poetic": [
+          "Between {from} and {to}, {commits} returned to the same wound again and again; {removals} removed, {additions} rewritten.",
+          "Over {span} the project paid the price of growing: {commits}, {files}.",
+          "Every broken piece found its place again across {commits}."
+        ],
+        "minimalist": [
+          "{from} – {to}: {commits} of fixes. +{insertions}/-{deletions}.",
+          "Stabilization period: {commits}, {files}.",
+          "{commits} resolved the outstanding defects ({span})."
+        ],
+        "humorous": [
+          "{commits} in {span}. All fixing the same thing, probably.",
+          "{from} – {to}: the period the project insists «it was working».",
+          "{removals} deleted. Some code left and nobody mourned it."
+        ]
+      },
+      "entries": {
+        "poetic": [
+          "On {date} «{subject}» was put right; {removals} were cut and {additions} rewritten across {files}.",
+          "A crack appeared in the {flavorLayer} and on {date} «{subject}» mended it.",
+          "{author} untangled «{subject}» with careful work on a {weekday}.",
+          "On {date}, around {time}, the {flavorSubject} caught its breath again: «{subject}».",
+          "{removals} removed, {additions} added: on {date} «{subject}» left the excess behind.",
+          "The price of growth was paid on {date}; «{subject}» brought the {flavorDomain} back into balance."
+        ],
+        "minimalist": [
+          "{date} — fix: «{subject}» ({files}, +{insertions}/-{deletions}).",
+          "«{subject}» resolved. {files}.",
+          "{dateShort} {time} — fix: «{subject}».",
+          "{date}: «{subject}» — {author} ({changedLines} lines).",
+          "Restructuring: «{subject}» (-{deletions}/+{insertions}).",
+          "«{subject}» — fixed within {scope}."
+        ],
+        "humorous": [
+          "On {date} «{subject}» was fixed. On the third attempt.",
+          "«{subject}» — {removals} deleted, because some code had it coming.",
+          "Around {time} «{subject}» was solved and sleep finally happened.",
+          "{author} opened {files} on {date}, said «{subject}», closed them. Hope.",
+          "«{subject}» — the answer to «how was this ever working».",
+          "{changedLines} lines later: «{subject}». It might genuinely work now."
+        ]
+      }
+    },
+
+    "midnight-oil": {
+      "label": "Midnight Oil",
+      "icon": "🌙",
+      "chapterTitles": {
+        "poetic": [
+          "While Everyone Slept",
+          "The Night Shift",
+          "Written Towards Dawn",
+          "The Hours the Lamp Stayed On"
+        ],
+        "minimalist": [
+          "Night Commits",
+          "00:00 – 05:00",
+          "Late-Hour Work",
+          "Night Shift"
+        ],
+        "humorous": [
+          "The Sleep Debt Era",
+          "Caffeine-Assisted Architecture",
+          "Code to Regret in the Morning",
+          "Midnight Heroics"
+        ]
+      },
+      "chapterNarratives": {
+        "poetic": [
+          "Between {from} and {to}, {commits} were made in the quiet of the night; {additions} written while the city slept.",
+          "The lamp stayed on for {span}: {commits}, {files}.",
+          "In the deepest hours of the night, {commits} shaped the {flavorSubject}."
+        ],
+        "minimalist": [
+          "{from} – {to}: {commits} made during night hours.",
+          "Night shift: {commits}, {additions}.",
+          "{commits} — between 00:00 and 05:00."
+        ],
+        "humorous": [
+          "{commits} at night. None of them remembered in the morning.",
+          "For {span}, commits were chosen over sleep: {commits}.",
+          "{additions} written, {removals} deleted, an estimated 0 hours slept."
+        ]
+      },
+      "entries": {
+        "poetic": [
+          "On the night of {dateShort}, around {time}, careful work was done across {files} while everyone slept; «{subject}» let the {flavorSubject} breathe again.",
+          "In the {time} silence of the night «{subject}» was finished; {additions} written, witnessed by no one.",
+          "{date}, {time} — the lamp was still on and «{subject}» was nearly done.",
+          "{author} returned to the {flavorLayer} on a {weekday} night, around {time}: «{subject}».",
+          "While the city slept, {changedLines} lines changed around {time}: «{subject}».",
+          "On the night of {dateShort}, code was chosen over sleep; that is how «{subject}» was born."
+        ],
+        "minimalist": [
+          "{dateShort} {time} — «{subject}» ({files}, +{insertions}/-{deletions}).",
+          "Night commit: «{subject}» — {time}.",
+          "{date} {time}: «{subject}» ({changedLines} lines).",
+          "{time} — «{subject}», {author}.",
+          "«{subject}» — {time} at night, {files}.",
+          "{dateShort}, night: «{subject}»."
+        ],
+        "humorous": [
+          "{time}. No reasonable person writes code at this hour. «{subject}» was written.",
+          "On the night of {dateShort}, around {time}, «{subject}» was committed; reading it in the morning was a surprise.",
+          "{time} — coffee gone, {additions} written: «{subject}».",
+          "«{subject}» — written on {time} energy, to be refactored by daylight.",
+          "{author} chose, around {time}, between sleep and the {flavorArtifact}: «{subject}».",
+          "{files} opened at {time}. Regret deferred until morning: «{subject}»."
+        ]
+      }
+    },
+
+    "milestone": {
+      "label": "Milestone",
+      "icon": "🏁",
+      "chapterTitles": {
+        "poetic": [
+          "A Threshold Crossed",
+          "A New Era",
+          "The Moment the Stone Settled",
+          "The Step With No Way Back"
+        ],
+        "minimalist": [
+          "Release",
+          "Milestone",
+          "Architectural Leap",
+          "Significant Change"
+        ],
+        "humorous": [
+          "Officially a Serious Project",
+          "No Undo From Here",
+          "It Got a Version Number",
+          "The Big Day"
+        ]
+      },
+      "chapterNarratives": {
+        "poetic": [
+          "A threshold was crossed on {from}; {commits} carried the {flavorSubject} into a new era.",
+          "Effort gathered across {commits} turned into a milestone on {to}.",
+          "With {additions}, the {flavorDomain} was no longer what it had been."
+        ],
+        "minimalist": [
+          "{from} – {to}: {commits}, {additions} added.",
+          "Milestone: {commits}, {files}.",
+          "Release period: {commits} ({span})."
+        ],
+        "humorous": [
+          "After {commits}, the project officially earned a version number.",
+          "{from}: no going back now, {commits} in.",
+          "{additions} and the project collected its «serious software» badge."
+        ]
+      },
+      "entries": {
+        "poetic": [
+          { "t": "On {date} the {tag} tag was cut; «{subject}» declared a new era for this project.", "requires": ["tag"] },
+          { "t": "With {tag} the {flavorSubject} crossed a threshold it could not return from: «{subject}».", "requires": ["tag"] },
+          "On {date}, {additions} landed across {files}; «{subject}» marked an architectural leap.",
+          "{author} redefined the {flavorLayer} on {date} with {additions}: «{subject}».",
+          "On a {weekday}, {changedLines} lines changed and «{subject}» gave the {flavorDomain} a new form.",
+          "On {date}, around {time}, the stone settled into place: «{subject}»."
+        ],
+        "minimalist": [
+          { "t": "{date} — {tag}: «{subject}» ({files}, +{insertions}).", "requires": ["tag"] },
+          { "t": "{tag} released — «{subject}».", "requires": ["tag"] },
+          "{date}: «{subject}» — {additions}, {files}.",
+          "Architectural change: «{subject}» ({changedLines} lines).",
+          "{dateShort} {time} — «{subject}», {author}.",
+          "«{subject}» — +{insertions}/-{deletions}."
+        ],
+        "humorous": [
+          { "t": "{tag} shipped. No going back: «{subject}».", "requires": ["tag"] },
+          { "t": "On {date} the {tag} tag was cut and the project started being taken seriously: «{subject}».", "requires": ["tag"] },
+          "On {date}, {additions} were written in one sitting. Either courage or caffeine: «{subject}».",
+          "«{subject}» — {changedLines} lines. Spare a thought for the reviewer.",
+          "{author} changed {files} at once on {date}: «{subject}». Bold.",
+          "{additions} in a single commit — whoever opened that diff regretted it: «{subject}»."
+        ]
+      }
+    },
+
+    "evolution": {
+      "label": "Evolution",
+      "icon": "🌳",
+      "chapterTitles": {
+        "poetic": [
+          "Quiet Maturation",
+          "Edges Smoothed",
+          "Growth Without Noise",
+          "The Craftsman's Touches"
+        ],
+        "minimalist": [
+          "Improvements",
+          "Maintenance Period",
+          "Tests and Documentation",
+          "Steady Development"
+        ],
+        "humorous": [
+          "Tests Were Finally Written",
+          "Boring But Necessary",
+          "Technical Debt Instalments",
+          "Tidying Season"
+        ]
+      },
+      "chapterNarratives": {
+        "poetic": [
+          "Between {from} and {to}, {commits} let the project mature without a sound.",
+          "Across {span} the edges were smoothed: {commits}, {files}.",
+          "No demolition, no fireworks; only {commits} of patient craft."
+        ],
+        "minimalist": [
+          "{from} – {to}: {commits} of improvements.",
+          "Maintenance period: {commits}, +{insertions}/-{deletions}.",
+          "{commits} — tests, documentation and refinements."
+        ],
+        "humorous": [
+          "{commits}, none of them exciting. That is the good news.",
+          "Over {span}, instalments of the technical debt were paid: {commits}.",
+          "{commits} and tests were finally written. Applause."
+        ]
+      },
+      "entries": {
+        "poetic": [
+          "On {date} «{subject}» matured the {flavorSubject} a little further; {files} were reviewed.",
+          "On a {weekday}, without any noise, «{subject}» was completed and the {flavorLayer} grew sturdier.",
+          "{author} smoothed the {flavorDomain} on {date} with «{subject}».",
+          "On {date}, around {time}, {changedLines} lines were tidied: «{subject}».",
+          "No demolition, no fireworks; only patient craft on {date}: «{subject}».",
+          "{additions} and {removals} found their balance; «{subject}» took its place."
+        ],
+        "minimalist": [
+          "{date} — «{subject}» ({files}, +{insertions}/-{deletions}).",
+          "«{subject}» — {author}, {date}.",
+          "{dateShort} {time}: «{subject}».",
+          "Improvement: «{subject}» ({changedLines} lines).",
+          "«{subject}» — within {scope} ({files}).",
+          "{date}: «{subject}»."
+        ],
+        "humorous": [
+          "On {date}, «{subject}». Not exciting, but the right thing to do.",
+          "«{subject}» — someone finally remembered the documentation.",
+          "{author} tidied {files} on {date}: «{subject}». Perfectionism.",
+          "«{subject}» — {changedLines} lines, zero new features. That is maturity.",
+          "Around {time} «{subject}» happened; nobody noticed, everybody benefited.",
+          "One more instalment of the technical debt: «{subject}»."
+        ]
+      }
+    }
+  },
+
+  "modifiers": {
+    "$comment": "When a commit matches more than one category, at most one clause for the secondary category is chosen here and appended to the main sentence.",
+    "midnight-oil": {
+      "poetic": ["And the hour was the {time} silence of the night.", "All of it happened while the city slept.", "At {time}, alone."],
+      "minimalist": ["(night, {time})", "— {time}, at night.", "(late hour)"],
+      "humorous": ["{time}. Of course.", "Sleep lost again.", "Coffee: cup three."]
+    },
+    "growing-pains": {
+      "poetic": ["The same wound had been revisited once more.", "The ache had not passed yet.", "The chain of repairs continued."],
+      "minimalist": ["(fix streak)", "— consecutive fix.", "(stabilization)"],
+      "humorous": ["Nobody is counting which fix this is.", "The hope was real this time.", "Even a bug has its pride."]
+    },
+    "milestone": {
+      "poetic": ["This step heralded a threshold too.", "And an era closed.", "History made a note here."],
+      "minimalist": ["(milestone)", "— significant change.", "(release)"],
+      "humorous": ["We are a serious project now.", "The undo window has closed.", "This commit goes on the résumé."]
+    }
+  },
+
+  "pulse": {
+    "title": "Developer Pulse",
+    "chronotypes": {
+      "night-owl": {
+        "label": "Night Owl",
+        "icon": "🌙",
+        "narratives": {
+          "poetic": ["This project's heart beats at night; the weight of its commits gathered in the dark.", "The lamp was mostly lit after midnight; the most productive hour is {busiestHour}."],
+          "minimalist": ["Night owl. Busiest hour: {busiestHour}.", "Commits cluster in the night hours."],
+          "humorous": ["You and sleep are not close. Your peak hour is {busiestHour}.", "The night owl certification has been earned."]
+        }
+      },
+      "early-architect": {
+        "label": "Early Architect",
+        "icon": "🌅",
+        "narratives": {
+          "poetic": ["This project was built at sunrise; its clearest decisions were made around {busiestHour}.", "The quiet of the morning became this code's architect."],
+          "minimalist": ["Early architect. Busiest hour: {busiestHour}.", "Commits cluster in the morning hours."],
+          "humorous": ["You are one of those rare people: {busiestHour} and already writing code.", "The early riser gets the commit."]
+        }
+      },
+      "daylight-builder": {
+        "label": "Daylight Builder",
+        "icon": "☀️",
+        "narratives": {
+          "poetic": ["This project grew in daylight, at a steady rhythm; the busiest hour is {busiestHour}.", "The discipline of working hours shows in every line."],
+          "minimalist": ["Daylight builder. Busiest hour: {busiestHour}.", "Commits cluster in daytime hours."],
+          "humorous": ["You have a healthy sleep schedule. A rare talent in this field.", "Code during hours, life in the evening. Respect."]
+        }
+      },
+      "evening-craftsman": {
+        "label": "Evening Craftsman",
+        "icon": "🌆",
+        "narratives": {
+          "poetic": ["This is a craft that begins after the day ends; the most productive hour is {busiestHour}.", "The calm of the evening lent this project its craftsmanship."],
+          "minimalist": ["Evening craftsman. Busiest hour: {busiestHour}.", "Commits cluster in the evening hours."],
+          "humorous": ["The real work starts in the evening. Around {busiestHour}.", "Meetings by day, code by night. Classic."]
+        }
+      },
+      "balanced-rhythm": {
+        "label": "Balanced Rhythm",
+        "icon": "⚖️",
+        "narratives": {
+          "poetic": ["This project has no single hour; it grew with the flow of life.", "Neither night nor day; this code took a little from every hour."],
+          "minimalist": ["Balanced rhythm. Busiest hour: {busiestHour}.", "Commits spread evenly across the day."],
+          "humorous": ["You are loyal to no hour. A free spirit.", "Your commit times are unpredictable. Mysterious."]
+        }
+      }
+    },
+    "creation": {
+      "building": "This period was mostly construction: {creationPercent}% of changed lines were new code.",
+      "refining": "This period was mostly refinement: only {creationPercent}% of changed lines were new code, the rest was cleanup.",
+      "balanced": "Construction and refinement in balance: new code ratio {creationPercent}%."
+    },
+    "streak": {
+      "longest": "Longest unbroken streak: {streakDays} days ({from} – {to}).",
+      "current": "Current streak: {streakDays} days.",
+      "none": "No notable unbroken streak yet."
+    },
+    "labels": {
+      "busiestDay": "Most productive day",
+      "busiestHour": "Most productive hour",
+      "chronotype": "Coding chronotype",
+      "creationRatio": "New code ratio",
+      "longestStreak": "Longest streak",
+      "currentStreak": "Current streak",
+      "avgCommitSize": "Average commit size",
+      "totalCommits": "Total commits",
+      "totalAuthors": "Developers",
+      "projectAge": "Project age",
+      "hourDistribution": "Distribution by hour",
+      "weekdayDistribution": "Distribution by weekday",
+      "monthlyActivity": "Monthly activity"
+    }
+  },
+
+  "milestones": {
+    "first-commit": "The first commit was made — the moment everything began.",
+    "commit-count": "Commit number {value} was reached.",
+    "release-tag": "Version {value} was released.",
+    "anniversary": "The project completed day {value}.",
+    "streak": "A {value}-day unbroken streak was completed.",
+    "midnight-fix": "A problem was solved in the middle of the night.",
+    "architectural-leap": "An architectural leap of {value} lines landed in a single commit.",
+    "celebration": {
+      "title": "A new milestone was recorded!",
+      "action": "View the story"
+    }
+  },
+
+  "ui": {
+    "$comment": "Fixed strings used by the HTML timeline and the IDE surfaces.",
+    "documentTitle": "{project} — Code Chronicle",
+    "subtitle": "A {days}-day journey, {commits} records",
+    "tocTitle": "Chapters",
+    "searchPlaceholder": "Search the story…",
+    "filterAll": "All",
+    "filterByCategory": "By category",
+    "filterByAuthor": "By developer",
+    "filterByYear": "By year",
+    "themeToggle": "Toggle theme",
+    "expandAll": "Expand all",
+    "collapseAll": "Collapse all",
+    "noResults": "No record matches this filter.",
+    "statsTitle": "Developer Pulse",
+    "timelineTitle": "Timeline",
+    "capsuleTitle": "Time Capsule",
+    "capsuleLocked": "This capsule stays locked until {unlockDate}.",
+    "capsuleCountdown": "{days} days {hours} hours {minutes} minutes",
+    "capsuleUnlockable": "The capsule's date has arrived.",
+    "capsulePassphrasePrompt": "Enter the passphrase to open the capsule",
+    "capsulePassphraseButton": "Open the capsule",
+    "capsuleWrongPassphrase": "That passphrase is not correct.",
+    "capsuleHint": "Hint: {hint}",
+    "capsuleAuthor": "Written by {author}",
+    "generatedBy": "Generated with Egehan {version}",
+    "generatedAt": "Generated at {date}",
+    "offlineNote": "This file is fully offline; it has no external dependencies and makes no network requests.",
+    "commitsLabel": "commits",
+    "filesLabel": "files",
+    "insertionsLabel": "added",
+    "deletionsLabel": "removed",
+    "daysLabel": "days",
+    "authorsLabel": "developers",
+    "chapterCommits": "{commits} records",
+    "statusBar": "🌱 Egehan: Day {days} • {commits} Commits",
+    "openChronicle": "Open the Egehan Timeline",
+    "regenerate": "Regenerate the chronicle"
+  }
+}

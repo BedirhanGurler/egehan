@@ -1,0 +1,31 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+*.tsbuildinfo
+bin/
+obj/
+*.vsix
+
+# generated chronicle artifacts (never commit the tool's own output from dev runs)
+/EGEHAN.md
+/egehan-chronicle.html
+/.egehan/
+
+# time capsules are never tracked — they may contain private letters
+*.capsule.json
+capsule.egehan.json
+
+# os / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vs/
+*.user
+
+# logs & temp
+*.log
+npm-debug.log*
+.tmp/
+coverage/

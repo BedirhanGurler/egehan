@@ -1,0 +1,243 @@
+{
+  "$comment": "EGEHAN ENGINE CONTRACT — single source of truth. Both the Node and the .NET engines MUST read their thresholds from this file. Never inline these numbers in implementation code: a drift between the two engines is a bug, and packages/core-spec/fixtures/ exists to prove it.",
+  "specVersion": "1.0.0",
+  "schemaVersion": "1.0.0",
+
+  "determinism": {
+    "$comment": "The same commit must always produce the same sentence, on every machine, in every runtime, forever.",
+    "hashPrefixLength": 8,
+    "hashRadix": 16,
+    "selectionFormula": "variantIndex = parseInt(sha.toLowerCase().substring(0, hashPrefixLength), hashRadix) % variants.length",
+    "shaNormalization": "lowercase-hex-40",
+    "groupSelectionSource": "sha-of-first-commit-in-group",
+    "noRandomness": true,
+    "noWallClockInOutput": [
+      "generator.generatedAt is the ONLY field allowed to carry generation time",
+      "all other values must be derived from repository data alone"
+    ]
+  },
+
+  "git": {
+    "$comment": "Encoding flags are mandatory on every invocation. Turkish characters (ğ, ü, ş, ı, ö, ç) must survive on Windows, macOS and Linux alike.",
+    "mandatoryFlags": [
+      "-c", "i18n.logOutputEncoding=UTF-8",
+      "-c", "core.quotepath=false",
+      "-c", "log.showSignature=false"
+    ],
+    "recordSeparator": "\u001e",
+    "fieldSeparator": "\u001f",
+    "logFields": ["H", "h", "P", "an", "ae", "aI", "cI", "D", "s", "b"],
+    "numstatMode": "--numstat",
+    "followMerges": false,
+    "maxSubjectLength": 200
+  },
+
+  "time": {
+    "mode": "author-local",
+    "$comment": "Local hour is derived from the commit's own ISO-8601 author date including its recorded UTC offset. Converting to UTC or to the reader's timezone would destroy the 'midnight oil' story, which is the whole point.",
+    "weekStartsOn": 1,
+    "dayBoundary": "local-midnight"
+  },
+
+  "conventionalCommits": {
+    "pattern": "^\\s*(?<type>[A-Za-z]+)\\s*(?:\\((?<scope>[^()]{0,80})\\))?\\s*(?<breaking>!)?\\s*:\\s*(?<subject>.+)$",
+    "revertPattern": "^\\s*[Rr]evert\\b",
+    "mergePattern": "^\\s*(?:Merge|Birle[sş]tir)\\b",
+    "typeAliases": {
+      "feature": "feat",
+      "features": "feat",
+      "add": "feat",
+      "bugfix": "fix",
+      "hotfix": "fix",
+      "bug": "fix",
+      "patch": "fix",
+      "documentation": "docs",
+      "doc": "docs",
+      "performance": "perf",
+      "tests": "test",
+      "testing": "test",
+      "refactoring": "refactor",
+      "chores": "chore",
+      "styling": "style",
+      "deps": "chore",
+      "init": "feat"
+    },
+    "keywordFallback": {
+      "$comment": "Applied only when the subject carries no conventional prefix. Case-insensitive, diacritic-sensitive, whole-word match on the lowercased subject. Turkish and English keywords both count — the tool must be useful in repositories that never adopted Conventional Commits.",
+      "fix": ["fix", "fixed", "fixes", "bug", "bugfix", "hotfix", "patch", "repair", "resolve", "resolved", "hata", "hatasi", "hatası", "duzelt", "düzelt", "duzeltme", "düzeltme", "onar", "cozuldu", "çözüldü", "giderildi"],
+      "feat": ["add", "added", "adds", "new", "implement", "implemented", "introduce", "feature", "support", "create", "ekle", "eklendi", "yeni", "olustur", "oluştur", "gelistir", "geliştir", "destek"],
+      "docs": ["readme", "docs", "documentation", "changelog", "comment", "dokuman", "doküman", "belge", "aciklama", "açıklama"],
+      "test": ["test", "tests", "spec", "coverage", "e2e", "unit", "testler"],
+      "perf": ["perf", "performance", "optimize", "optimized", "optimization", "faster", "speed", "cache", "performans", "hizlandir", "hızlandır", "iyilestir", "iyileştir"],
+      "refactor": ["refactor", "refactored", "cleanup", "clean up", "rename", "renamed", "restructure", "simplify", "tidy", "duzenle", "düzenle", "temizle", "sadelestir", "sadeleştir", "yeniden"],
+      "style": ["format", "formatted", "lint", "prettier", "eslint", "whitespace", "indent", "bicim", "biçim"],
+      "build": ["build", "bundle", "webpack", "vite", "rollup", "compile", "derle", "paketle"],
+      "ci": ["ci", "pipeline", "workflow", "action", "actions", "deploy", "release", "publish", "docker", "yayinla", "yayınla"],
+      "chore": ["bump", "upgrade", "update", "deps", "dependency", "dependencies", "version", "merge", "wip", "guncelle", "güncelle", "surum", "sürüm"]
+    },
+    "subjectCleanup": {
+      "stripPrefixPattern": "^\\s*(?:[A-Za-z]+)\\s*(?:\\([^()]{0,80}\\))?\\s*!?\\s*:\\s*",
+      "stripTicketPattern": "(?:\\s+#\\d+|\\s*\\[[A-Z][A-Z0-9]{1,9}-\\d+\\]|\\s*\\(#\\d+\\))\\s*$",
+      "stripTrailingPeriod": true,
+      "collapseWhitespace": true,
+      "capitalizeFirstLetter": true,
+      "maxLength": 140,
+      "ellipsis": "…"
+    }
+  },
+
+  "classification": {
+    "$comment": "A commit is evaluated against every category; the first match in evaluationOrder becomes its primary category, the remaining matches become secondaryCategories and may contribute a narrative modifier clause.",
+    "evaluationOrder": ["milestone", "birth", "growing-pains", "midnight-oil", "first-steps", "evolution"],
+    "categories": {
+      "birth": {
+        "description": "The repository's very first commit, and the setup commits that immediately follow it.",
+        "firstCommitAlwaysMatches": true,
+        "setupWindowHours": 24,
+        "setupWindowAppliesToTypes": ["chore", "build", "ci", "docs", "style", "feat"]
+      },
+      "first-steps": {
+        "description": "Foundational work carried out before the project's first release tag.",
+        "requiresNoReleaseTagBefore": true,
+        "types": ["feat", "build", "ci", "chore", "style"]
+      },
+      "growing-pains": {
+        "description": "A burst of consecutive fixes, or a refactor that deletes far more than it adds.",
+        "clusterWindowHours": 48,
+        "minFixCommitsInCluster": 3,
+        "clusterFixTypes": ["fix", "revert"],
+        "refactorDeletionRatio": 1.5,
+        "refactorMinChangedLines": 150
+      },
+      "midnight-oil": {
+        "description": "Committed in the small hours, local time.",
+        "localHourFrom": 0,
+        "localHourTo": 4
+      },
+      "milestone": {
+        "description": "A tagged release, or a single architectural leap.",
+        "tagPattern": "^v?\\d+\\.\\d+\\.\\d+(?:[-+].+)?$",
+        "anyTagMatches": true,
+        "largeInsertionThreshold": 1000,
+        "breakingChangeMatches": true
+      },
+      "evolution": {
+        "description": "Steady maturation: performance, tests, documentation, routine care.",
+        "types": ["perf", "test", "docs", "refactor", "chore", "build", "ci", "style"],
+        "isFallback": true
+      }
+    },
+    "modifierCategories": ["midnight-oil", "growing-pains", "milestone"],
+    "maxModifiersPerEntry": 1
+  },
+
+  "chapters": {
+    "$comment": "Entries are grouped into chapters by consecutive runs of the same primary category, so the chronicle reads as a story rather than a list.",
+    "groupBy": "consecutive-primary-category",
+    "maxEntriesPerChapter": 40,
+    "maxGapHoursWithinChapter": 336,
+    "titleSelection": "deterministic-by-first-entry-sha"
+  },
+
+  "pulse": {
+    "$comment": "Developer Pulse. Shares are computed over all non-merge commits in range.",
+    "chronotypes": [
+      { "id": "night-owl", "hours": [22, 23, 0, 1, 2, 3, 4], "minShare": 0.28 },
+      { "id": "early-architect", "hours": [5, 6, 7, 8, 9], "minShare": 0.28 },
+      { "id": "daylight-builder", "hours": [10, 11, 12, 13, 14, 15, 16, 17], "minShare": 0.4 },
+      { "id": "evening-craftsman", "hours": [18, 19, 20, 21], "minShare": 0.3 }
+    ],
+    "chronotypeTieBreak": "highest-share-then-declaration-order",
+    "fallbackChronotype": "balanced-rhythm",
+    "creationRatioFormula": "insertions / max(1, insertions + deletions)",
+    "streak": {
+      "unit": "local-calendar-day",
+      "minLengthToReport": 2,
+      "currentStreakGraceDays": 1
+    },
+    "sizeBuckets": [
+      { "id": "touch", "maxChangedLines": 10 },
+      { "id": "small", "maxChangedLines": 50 },
+      { "id": "medium", "maxChangedLines": 250 },
+      { "id": "large", "maxChangedLines": 1000 },
+      { "id": "epic", "maxChangedLines": null }
+    ]
+  },
+
+  "milestoneCelebrations": {
+    "$comment": "Events worth a gentle IDE notification. The IDE layer must fire each event at most once per repository; the generated report only states that the event occurred.",
+    "commitCounts": [1, 10, 50, 100, 250, 500, 1000, 2500, 5000, 10000],
+    "anniversaryDays": [30, 100, 365, 500, 730, 1000],
+    "onReleaseTag": true,
+    "onMidnightFix": true,
+    "onLongestStreakBroken": false,
+    "onStreakDays": [7, 30, 100]
+  },
+
+  "projectTypes": {
+    "$comment": "Detected from the files present in the working tree. Multiple types may match; all are reported, and the highest-priority flavor drives narrative metaphors.",
+    "detectors": [
+      { "id": "dotnet", "flavor": "backend", "priority": 70, "anyGlob": ["*.sln", "*.csproj", "*.fsproj", "*.vbproj", "src/*.csproj", "**/*.csproj"] },
+      { "id": "flutter", "flavor": "mobile", "priority": 90, "anyFile": ["pubspec.yaml"] },
+      { "id": "react-native", "flavor": "mobile", "priority": 88, "anyFile": ["metro.config.js", "metro.config.cjs", "react-native.config.js"] },
+      { "id": "native-mobile", "flavor": "mobile", "priority": 85, "allDirs": ["ios", "android"] },
+      { "id": "swift", "flavor": "mobile", "priority": 84, "anyGlob": ["*.xcodeproj", "*.xcworkspace", "Package.swift"] },
+      { "id": "android", "flavor": "mobile", "priority": 83, "anyFile": ["settings.gradle", "settings.gradle.kts", "app/build.gradle", "app/build.gradle.kts"] },
+      { "id": "frontend", "flavor": "frontend", "priority": 75, "anyFile": ["next.config.js", "next.config.mjs", "next.config.ts", "nuxt.config.ts", "vite.config.ts", "vite.config.js", "angular.json", "svelte.config.js", "astro.config.mjs", "remix.config.js"] },
+      { "id": "node", "flavor": "frontend", "priority": 40, "anyFile": ["package.json"] },
+      { "id": "python", "flavor": "backend", "priority": 65, "anyFile": ["pyproject.toml", "requirements.txt", "setup.py", "Pipfile"] },
+      { "id": "go", "flavor": "backend", "priority": 65, "anyFile": ["go.mod"] },
+      { "id": "rust", "flavor": "systems", "priority": 65, "anyFile": ["Cargo.toml"] },
+      { "id": "java", "flavor": "backend", "priority": 65, "anyFile": ["pom.xml", "build.gradle", "build.gradle.kts"] },
+      { "id": "php", "flavor": "backend", "priority": 60, "anyFile": ["composer.json"] },
+      { "id": "ruby", "flavor": "backend", "priority": 60, "anyFile": ["Gemfile"] },
+      { "id": "infra", "flavor": "systems", "priority": 50, "anyFile": ["Dockerfile", "docker-compose.yml", "docker-compose.yaml", "main.tf", "Chart.yaml"] },
+      { "id": "docs-only", "flavor": "library", "priority": 10, "anyFile": ["mkdocs.yml", "docusaurus.config.js"] }
+    ],
+    "fallbackFlavor": "library",
+    "maxDepth": 2,
+    "ignoreDirs": ["node_modules", ".git", "dist", "build", "bin", "obj", "vendor", ".next", ".nuxt", "target", "Pods", ".venv", "venv", "__pycache__"]
+  },
+
+  "privacy": {
+    "$comment": "The tool produces artifacts that people share publicly. Leaking a team's e-mail addresses by default would be unacceptable in any corporate repository.",
+    "redactEmailsByDefault": true,
+    "emailHashAlgorithm": "sha256",
+    "emailHashPrefixLength": 12,
+    "anonymizeAuthorFormat": "Geliştirici #{index}",
+    "anonymizeAuthorFormatEn": "Developer #{index}",
+    "neverEmit": ["raw commit body when redactEmails is on and the body matches an e-mail pattern"],
+    "emailPattern": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+  },
+
+  "capsule": {
+    "$comment": "Sealed mode only. A passphrase-free capsule would be a false promise: the ciphertext travels inside a shareable HTML file, so anything the file can decrypt by itself, any reader can decrypt too. PBKDF2 is chosen because it is the one KDF available in all three runtimes (Web Crypto, Node, .NET) — scrypt and Argon2 are not in Web Crypto.",
+    "mode": "sealed",
+    "kdf": "PBKDF2",
+    "kdfHash": "SHA-256",
+    "iterations": 600000,
+    "derivedKeyBits": 256,
+    "cipher": "AES-256-GCM",
+    "saltBytes": 16,
+    "ivBytes": 12,
+    "authTagBits": 128,
+    "encoding": "base64",
+    "additionalDataFormat": "egehan-capsule-v1|{unlockDate}",
+    "minPassphraseLength": 12,
+    "trackedByGitByDefault": false
+  },
+
+  "output": {
+    "markdownFileName": "EGEHAN.md",
+    "htmlFileName": "egehan-chronicle.html",
+    "reportFileName": "egehan-report.json",
+    "stateDirName": ".egehan",
+    "configFileName": ".egehanrc.json"
+  },
+
+  "limits": {
+    "maxCommitsPerRun": 100000,
+    "maxEntriesInHtml": 5000,
+    "warnAboveCommits": 20000
+  }
+}

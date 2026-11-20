@@ -1,0 +1,21 @@
+{
+  "name": "@egehan/core-spec",
+  "version": "1.0.0",
+  "private": true,
+  "description": "The language-agnostic Egehan contract: report schema, engine rules, narrative dictionaries and the HTML chronicle template. Contains data only — deliberately no implementation code, so that no runtime is privileged over another.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "validate": "node scripts/validate-dictionaries.mjs",
+    "test": "node --test \"tests/**/*.test.mjs\""
+  },
+  "egehan": {
+    "assets": {
+      "schema": "schema/egehan-report.schema.json",
+      "rules": "spec/rules.json",
+      "dictionaries": "dictionary",
+      "templates": "templates",
+      "fixtures": "fixtures"
+    }
+  }
+}

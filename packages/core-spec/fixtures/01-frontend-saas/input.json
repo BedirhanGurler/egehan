@@ -1,0 +1,253 @@
+{
+  "fixture": "01-frontend-saas",
+  "description": "A one-year frontend SaaS history in UTC+03:00, built to touch every classification rule at least once: birth and its 24-hour setup window, pre-release first steps, a three-fix cluster inside 48 hours, a lone 03:18 fix, a deletion-heavy refactor that is also a night commit, a merge commit, and two tagged releases of which the second is a 1000+ insertion leap.",
+  "specVersion": "1.0.0",
+  "project": {
+    "name": "orbit-dashboard",
+    "detectedTypes": ["frontend", "node"],
+    "flavor": "frontend",
+    "defaultBranch": "main",
+    "remoteHost": "github.com"
+  },
+  "config": {
+    "language": "tr",
+    "tone": "poetic",
+    "redactEmails": true,
+    "anonymizeAuthors": false,
+    "includeMergeCommits": false,
+    "theme": "auto"
+  },
+  "commits": [
+    {
+      "sha": "3f2a1b9c4d5e6f708192a3b4c5d6e7f809a1b2c3",
+      "parents": [],
+      "authorName": "Ada Yılmaz",
+      "authorEmail": "ada@example.com",
+      "authoredAt": "2025-01-06T21:14:03+03:00",
+      "committedAt": "2025-01-06T21:14:03+03:00",
+      "subject": "chore: initial commit",
+      "body": "",
+      "tags": [],
+      "files": [
+        { "path": "README.md", "insertions": 12, "deletions": 0 },
+        { "path": ".gitignore", "insertions": 18, "deletions": 0 },
+        { "path": "package.json", "insertions": 24, "deletions": 0 }
+      ]
+    },
+    {
+      "sha": "a1c4e7b20d93f85614ac72be09d3f1a5c6e8b0d2",
+      "parents": ["3f2a1b9c4d5e6f708192a3b4c5d6e7f809a1b2c3"],
+      "authorName": "Ada Yılmaz",
+      "authorEmail": "ada@example.com",
+      "authoredAt": "2025-01-06T22:40:11+03:00",
+      "committedAt": "2025-01-06T22:40:11+03:00",
+      "subject": "chore: vite ve typescript yapılandırmasını kur",
+      "body": "",
+      "tags": [],
+      "files": [
+        { "path": "vite.config.ts", "insertions": 31, "deletions": 0 },
+        { "path": "tsconfig.json", "insertions": 22, "deletions": 0 },
+        { "path": "package.json", "insertions": 9, "deletions": 2 }
+      ]
+    },
+    {
+      "sha": "b7d0f3a81e2c45906fb8d1a7c30e92f5481ba6cd",
+      "parents": ["a1c4e7b20d93f85614ac72be09d3f1a5c6e8b0d2"],
+      "authorName": "Ada Yılmaz",
+      "authorEmail": "ada@example.com",
+      "authoredAt": "2025-01-09T11:02:50+03:00",
+      "committedAt": "2025-01-09T11:02:50+03:00",
+      "subject": "feat(auth): add authentication shell",
+      "body": "",
+      "tags": [],
+      "files": [
+        { "path": "src/auth/AuthProvider.tsx", "insertions": 96, "deletions": 0 },
+        { "path": "src/auth/useSession.ts", "insertions": 54, "deletions": 0 },
+        { "path": "src/App.tsx", "insertions": 14, "deletions": 3 }
+      ]
+    },
+    {
+      "sha": "c2e8a05f7b1d46382ac9e0b5d74f13a86205cfe9",
+      "parents": ["b7d0f3a81e2c45906fb8d1a7c30e92f5481ba6cd"],
+      "authorName": "Mert Demir",
+      "authorEmail": "mert@example.com",
+      "authoredAt": "2025-01-14T16:45:12+03:00",
+      "committedAt": "2025-01-14T16:45:12+03:00",
+      "subject": "feat(dashboard): ilk gösterge panosu yerleşimi [EGE-104]",
+      "body": "",
+      "tags": [],
+      "files": [
+        { "path": "src/dashboard/Layout.tsx", "insertions": 142, "deletions": 0 },
+        { "path": "src/dashboard/Widgets.tsx", "insertions": 88, "deletions": 0 },
+        { "path": "src/styles/dashboard.css", "insertions": 61, "deletions": 0 }
+      ]
+    },
+    {
+      "sha": "d9b1c46ea0f358712bd4e8a96c05f3b7142ed8a0",
+      "parents": ["c2e8a05f7b1d46382ac9e0b5d74f13a86205cfe9"],
+      "authorName": "Ada Yılmaz",
+      "authorEmail": "ada@example.com",
+      "authoredAt": "2025-02-01T10:00:00+03:00",
+      "committedAt": "2025-02-01T10:00:00+03:00",
+      "subject": "chore(release): v0.1.0",
+      "body": "İlk genel sürüm.",
+      "tags": ["v0.1.0"],
+      "files": [
+        { "path": "package.json", "insertions": 1, "deletions": 1 },
+        { "path": "CHANGELOG.md", "insertions": 24, "deletions": 0 }
+      ]
+    },
+    {
+      "sha": "e4f7a92b08c1d5346fa7b2e90d85c13f6a4027be",
+      "parents": ["d9b1c46ea0f358712bd4e8a96c05f3b7142ed8a0"],
+      "authorName": "Mert Demir",
+      "authorEmail": "mert@example.com",
+      "authoredAt": "2025-02-11T14:22:09+03:00",
+      "committedAt": "2025-02-11T14:22:09+03:00",
+      "subject": "fix: oturum yükleyicisinde null koruması",
+      "body": "",
+      "tags": [],
+      "files": [
+        { "path": "src/auth/useSession.ts", "insertions": 11, "deletions": 4 }
+      ]
+    },
+    {
+      "sha": "f8a3c01d5e7b24698cd1a0f4b739e2c58016df4a",
+      "parents": ["e4f7a92b08c1d5346fa7b2e90d85c13f6a4027be"],
+      "authorName": "Mert Demir",
+      "authorEmail": "mert@example.com",
+      "authoredAt": "2025-02-12T09:05:44+03:00",
+      "committedAt": "2025-02-12T09:05:44+03:00",
+      "subject": "fix(auth): session loader race (#211)",
+      "body": "",
+      "tags": [],
+      "files": [
+        { "path": "src/auth/useSession.ts", "insertions": 28, "deletions": 19 },
+        { "path": "src/auth/AuthProvider.tsx", "insertions": 7, "deletions": 5 }
+      ]
+    },
+    {
+      "sha": "0b5e8d13f6a79c24e81bd0a53f7c926e4a18b7d5",
+      "parents": ["f8a3c01d5e7b24698cd1a0f4b739e2c58016df4a"],
+      "authorName": "Ada Yılmaz",
+      "authorEmail": "ada@example.com",
+      "authoredAt": "2025-02-12T18:31:20+03:00",
+      "committedAt": "2025-02-12T18:31:20+03:00",
+      "subject": "fix(auth): çıkış yapıldığında önbelleği temizle",
+      "body": "",
+      "tags": [],
+      "files": [
+        { "path": "src/auth/AuthProvider.tsx", "insertions": 16, "deletions": 3 },
+        { "path": "src/cache/index.ts", "insertions": 9, "deletions": 1 }
+      ]
+    },
+    {
+      "sha": "1c6f9e24a07b8d35f92ce1b64a8d037f5b29c8e6",
+      "parents": ["0b5e8d13f6a79c24e81bd0a53f7c926e4a18b7d5"],
+      "authorName": "Ada Yılmaz",
+      "authorEmail": "ada@example.com",
+      "authoredAt": "2025-03-14T03:18:42+03:00",
+      "committedAt": "2025-03-14T03:18:42+03:00",
+      "subject": "fix: token refresh race condition",
+      "body": "",
+      "tags": [],
+      "files": [
+        { "path": "src/auth/refreshToken.ts", "insertions": 44, "deletions": 21 },
+        { "path": "src/auth/useSession.ts", "insertions": 23, "deletions": 14 },
+        { "path": "src/api/client.ts", "insertions": 12, "deletions": 5 },
+        { "path": "src/auth/__tests__/refreshToken.test.ts", "insertions": 6, "deletions": 2 }
+      ]
+    },
+    {
+      "sha": "2d70af35b18c9e46a03df2c75b9e148a6c3ad9f7",
+      "parents": ["1c6f9e24a07b8d35f92ce1b64a8d037f5b29c8e6"],
+      "authorName": "Mert Demir",
+      "authorEmail": "mert@example.com",
+      "authoredAt": "2025-04-02T13:10:00+03:00",
+      "committedAt": "2025-04-02T13:10:00+03:00",
+      "subject": "perf: tablo satırlarını memoize et",
+      "body": "",
+      "tags": [],
+      "files": [
+        { "path": "src/dashboard/Widgets.tsx", "insertions": 34, "deletions": 18 }
+      ]
+    },
+    {
+      "sha": "3e81b046c29da57b14e0f3d86ca0259b7d4be0a8",
+      "parents": ["2d70af35b18c9e46a03df2c75b9e148a6c3ad9f7"],
+      "authorName": "Ada Yılmaz",
+      "authorEmail": "ada@example.com",
+      "authoredAt": "2025-04-20T15:00:00+03:00",
+      "committedAt": "2025-04-20T15:00:00+03:00",
+      "subject": "test: oturum yükleyicisi için kapsama ekle",
+      "body": "",
+      "tags": [],
+      "files": [
+        { "path": "src/auth/__tests__/useSession.test.ts", "insertions": 118, "deletions": 0 }
+      ]
+    },
+    {
+      "sha": "4f92c157d30eb68c25f104e97db1360c8e5cf1b9",
+      "parents": ["3e81b046c29da57b14e0f3d86ca0259b7d4be0a8"],
+      "authorName": "Mert Demir",
+      "authorEmail": "mert@example.com",
+      "authoredAt": "2025-05-30T23:59:01+03:00",
+      "committedAt": "2025-05-30T23:59:01+03:00",
+      "subject": "docs: katkı rehberini yaz.",
+      "body": "",
+      "tags": [],
+      "files": [
+        { "path": "CONTRIBUTING.md", "insertions": 92, "deletions": 0 },
+        { "path": "README.md", "insertions": 14, "deletions": 6 }
+      ]
+    },
+    {
+      "sha": "50a3d268e41fc79d36021fa08ec2471d9f60d2ca",
+      "parents": ["4f92c157d30eb68c25f104e97db1360c8e5cf1b9"],
+      "authorName": "Ada Yılmaz",
+      "authorEmail": "ada@example.com",
+      "authoredAt": "2025-06-15T02:41:33+03:00",
+      "committedAt": "2025-06-15T02:41:33+03:00",
+      "subject": "refactor: eski adaptör katmanını kaldır",
+      "body": "",
+      "tags": [],
+      "files": [
+        { "path": "src/legacy/adapter.ts", "insertions": 0, "deletions": 612 },
+        { "path": "src/legacy/mapper.ts", "insertions": 0, "deletions": 288 },
+        { "path": "src/api/client.ts", "insertions": 118, "deletions": 74 },
+        { "path": "src/legacy/index.ts", "insertions": 2, "deletions": 36 }
+      ]
+    },
+    {
+      "sha": "61b4e379f520da8e47132ab19fd3582eaf71e3db",
+      "parents": ["50a3d268e41fc79d36021fa08ec2471d9f60d2ca", "3e81b046c29da57b14e0f3d86ca0259b7d4be0a8"],
+      "authorName": "Ada Yılmaz",
+      "authorEmail": "ada@example.com",
+      "authoredAt": "2025-07-04T11:20:00+03:00",
+      "committedAt": "2025-07-04T11:20:00+03:00",
+      "subject": "Merge branch 'feature/billing' into main",
+      "body": "",
+      "tags": [],
+      "files": []
+    },
+    {
+      "sha": "72c5f48a0631eb9f58243bc2ae4693fb08a2f4ec",
+      "parents": ["61b4e379f520da8e47132ab19fd3582eaf71e3db"],
+      "authorName": "Ada Yılmaz",
+      "authorEmail": "ada@example.com",
+      "authoredAt": "2025-09-01T12:00:00+03:00",
+      "committedAt": "2025-09-01T12:00:00+03:00",
+      "subject": "feat!: yeni faturalama motoru",
+      "body": "BREAKING CHANGE: faturalama uçları yeniden tasarlandı.",
+      "tags": ["v1.0.0"],
+      "files": [
+        { "path": "src/billing/engine.ts", "insertions": 584, "deletions": 0 },
+        { "path": "src/billing/invoice.ts", "insertions": 311, "deletions": 0 },
+        { "path": "src/billing/plans.ts", "insertions": 207, "deletions": 0 },
+        { "path": "src/api/client.ts", "insertions": 96, "deletions": 188 },
+        { "path": "src/legacy/billing.ts", "insertions": 0, "deletions": 122 },
+        { "path": "CHANGELOG.md", "insertions": 42, "deletions": 0 }
+      ]
+    }
+  ]
+}
