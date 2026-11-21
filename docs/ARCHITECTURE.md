@@ -136,6 +136,20 @@ rebase, pollutes bisect, and in the worst case recurses. A hook that blocks make
 gets uninstalled within a week. The artifacts are regenerated silently and committed by the developer
 whenever they choose, which works because the generator is deterministic (ADR-002) and therefore idempotent.
 
+**Deference to whoever owns the hooks.** Most repositories that would want Egehan already run something
+on commit, and taking over `.git/hooks` is the surest way to get uninstalled. With Husky the block goes
+into `.husky/<hook>` — the file a human owns in both v8 and v9, and the one that survives
+`husky install` — never into the `_` directory Husky regenerates. With Lefthook nothing is written at
+all: Lefthook rewrites its hook files on every install, so anything appended there would vanish without
+warning. The command prints the `lefthook.yml` entries to add instead, which is slower for the user and
+the only honest option.
+
+**Consequence, learned the hard way.** The hooks directory is resolved with
+`git rev-parse --absolute-git-dir`. The obvious `--git-dir` answers a _relative_ `.git` when run from
+the repository root, and resolving that against the process working directory installs the hook into
+whichever repository the tool itself is running from. A test caught it doing exactly that — which is why
+the test suite asserts the resolved directory lies inside the repository being operated on.
+
 ### ADR-007 — TypeScript, npm workspaces, Node's own test runner
 
 **Decision.** TypeScript compiled to ESM, npm workspaces (not pnpm), `node:test` for tests,

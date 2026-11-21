@@ -2,6 +2,7 @@
 import { Command, InvalidArgumentError } from 'commander';
 import { runCapsule } from './commands/capsule.js';
 import { runGenerate } from './commands/generate.js';
+import { runHook, type HookAction } from './commands/hook.js';
 import { runInit } from './commands/init.js';
 import { runStats } from './commands/stats.js';
 import { fail, info, theme } from './output.js';
@@ -145,6 +146,23 @@ program
       });
     },
   );
+
+program
+  .command('hook')
+  .argument('<action>', 'install, uninstall or status')
+  .description('keep the chronicle updating after every commit and merge')
+  .addHelpText(
+    'after',
+    '\nThe installed hook runs in the background and never stages or commits anything.\n' +
+      'It installs alongside Husky; with Lefthook it prints the configuration to add instead.\n' +
+      'EGEHAN_SKIP_HOOK=1 switches it off for a single command.',
+  )
+  .action((action: string) => {
+    if (action !== 'install' && action !== 'uninstall' && action !== 'status') {
+      throw new InvalidArgumentError('Expected one of: install, uninstall, status');
+    }
+    runHook({ cwd: process.cwd(), action: action as HookAction });
+  });
 
 function parseFormat(value: string): OutputFormat {
   if (!FORMATS.includes(value as OutputFormat)) {

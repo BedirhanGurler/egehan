@@ -67,7 +67,7 @@ done before its tests are.
 | 1     | `egehan` npm CLI — git reader, story engine, Markdown renderer, Developer Pulse         | **done** |
 | 1     | `egehan-book.html` — the single-file interactive timeline, pure SVG, offline            | **done** |
 | 1     | `egehan capsule` — passphrase-sealed message, opened in the browser by Web Crypto       | **done** |
-| 1     | `egehan hook install` — the chronicle that keeps itself up to date                      | planned  |
+| 1     | `egehan hook install` — the chronicle that keeps itself up to date                      | **done** |
 | 2     | VS Code extension — status bar, timeline panel, milestone notifications                 | planned  |
 | 3     | `Egehan.Cli` .NET global tool (`net8.0` + `net10.0`)                                    | planned  |
 | 4     | Visual Studio 2022+ extension (VSIX)                                                    | planned  |
@@ -82,6 +82,8 @@ egehan init                                  # interactive setup, writes .egehan
 egehan generate --format both                # EGEHAN.md + egehan-chronicle.html
 egehan generate --since v1.0.0 --output docs # a chapter of its own
 egehan hook install                          # keep the chronicle updating on every commit
+egehan hook status                           # where the hooks live, and who else owns them
+egehan hook uninstall                        # remove them, leaving your other hooks alone
 egehan stats                                 # the Developer Pulse, in the terminal
 egehan capsule --unlock-date 2044-02-01      # a passphrase-sealed letter to the future
 ```

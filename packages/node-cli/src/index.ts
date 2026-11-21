@@ -41,6 +41,16 @@ export { classifyCommits } from './engine/classifier.js';
 export { computePulse } from './engine/pulse.js';
 export { sealCapsule, openCapsule, CapsuleError } from './capsule/capsule.js';
 export { loadCapsule, readCapsuleFile, saveCapsule, capsulePath } from './capsule/storage.js';
+export {
+  resolveHookTarget,
+  installHooks,
+  uninstallHooks,
+  readHookStatus,
+  lefthookSnippet,
+  MANAGED_HOOKS,
+} from './hooks/manager.js';
+export type { HookTarget, HookStatus, HookWriteResult, HookName } from './hooks/manager.js';
+export { hookBlock, hasBlock, withBlock, withoutBlock } from './hooks/block.js';
 export { packageVersion } from './version.js';
 
 export type * from './engine/types.js';

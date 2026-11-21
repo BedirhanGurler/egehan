@@ -68,7 +68,7 @@ Egehan fazlar hâlinde geliştiriliyor. Bu tablo her fazın dürüst durumudur; 
 | 1   | `egehan` npm CLI — git okuyucu, hikaye motoru, Markdown üreteci, Geliştirici Nabzı | **bitti** |
 | 1   | `egehan-book.html` — tek dosyalık interaktif zaman tüneli, saf SVG, çevrimdışı     | **bitti** |
 | 1   | `egehan capsule` — parolayla mühürlenen, tarayıcıda Web Crypto ile açılan mesaj    | **bitti** |
-| 1   | `egehan hook install` — kendini güncel tutan kronik                                | planlandı |
+| 1   | `egehan hook install` — kendini güncel tutan kronik                                | **bitti** |
 | 2   | VS Code eklentisi — durum çubuğu, zaman tüneli paneli, dönüm noktası bildirimleri  | planlandı |
 | 3   | `Egehan.Cli` .NET global tool (`net8.0` + `net10.0`)                               | planlandı |
 | 4   | Visual Studio 2022+ eklentisi (VSIX)                                               | planlandı |
@@ -83,6 +83,8 @@ egehan init                                  # etkileşimli kurulum, .egehanrc.j
 egehan generate --format both                # EGEHAN.md + egehan-chronicle.html
 egehan generate --since v1.0.0 --output docs # kendine ait bir bölüm
 egehan hook install                          # kroniği her commit'te güncel tut
+egehan hook status                           # kancalar nerede, sahibi kim
+egehan hook uninstall                        # kaldır, diğer kancalarına dokunma
 egehan stats                                 # Geliştirici Nabzı, terminalde
 egehan capsule --unlock-date 2044-02-01      # parolayla mühürlenmiş, geleceğe mektup
 ```
