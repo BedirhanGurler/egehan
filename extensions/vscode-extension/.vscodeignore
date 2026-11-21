@@ -1,10 +1,16 @@
-# Everything that is not needed to run the extension. The VSIX ships the bundle, the spec
-# assets it reads at runtime, the icon and the readme — nothing else.
+# Everything that is not needed to run the extension. The VSIX ships the bundle, the spec assets
+# it reads at runtime, the icon, the readme and the licence — nothing else.
 src/**
 scripts/**
 tests/**
 tsconfig.json
+tsconfig.tsbuildinfo
 .vscodeignore
 **/*.map
 **/*.ts
 node_modules/**
+
+# dist/core/ holds the pure modules transpiled on their own so the test suite can import them
+# without VS Code. The shipped bundle already inlines all of it; shipping both would mean two
+# copies of the same code in the package, one of which nothing loads.
+dist/core/**

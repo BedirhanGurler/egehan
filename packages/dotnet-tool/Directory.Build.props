@@ -41,8 +41,8 @@
     <Authors>Bedirhan Gurler</Authors>
     <Company>Bedirhan Gurler</Company>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/bedirhangurler/egehan</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/bedirhangurler/egehan</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/BedirhanGurler/egehan</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/BedirhanGurler/egehan</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <Version>0.1.0</Version>
   </PropertyGroup>

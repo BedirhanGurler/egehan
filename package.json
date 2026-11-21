@@ -20,7 +20,8 @@
     "spec:validate": "npm run validate -w @egehan/core-spec",
     "clean": "rm -rf packages/*/dist packages/*/*.tsbuildinfo",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "version:set": "node scripts/set-version.mjs"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",

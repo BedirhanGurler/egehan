@@ -182,7 +182,7 @@ function oneOf(
 /** Serializes a config for `.egehanrc.json`, with a pointer to the schema for editors. */
 export function serializeConfig(config: EgehanConfig): string {
   const body = {
-    $schema: 'https://github.com/bedirhangurler/egehan/schema/egehanrc.schema.json',
+    $schema: 'https://github.com/BedirhanGurler/egehan/schema/egehanrc.schema.json',
     projectName: config.projectName,
     dedication: config.dedication,
     language: config.language,

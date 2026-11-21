@@ -1,6 +1,13 @@
-# Intentionally present, and intentionally almost empty.
+# Intentionally present, and intentionally empty of rules.
 #
-# When a package has no .npmignore, npm falls back to .gitignore when packing. The published
-# assets/ directory is generated at build time and therefore git-ignored, so that fallback would
-# silently ship a package with no rules file and no dictionaries. This file stops the fallback;
-# the "files" allowlist in package.json is what decides the contents of the tarball.
+# When a package has no .npmignore, npm falls back to .gitignore when deciding what to pack. The
+# published assets/ directory is generated at build time and therefore git-ignored, so that
+# fallback would ship a package with no rules file and no dictionaries — a tool that installs
+# cleanly and then crashes on its first command.
+#
+# Current npm versions let the "files" allowlist in package.json win over .gitignore, so this
+# file changes nothing today. It stays because that precedence has moved between npm versions
+# before, and the failure it prevents is silent and only visible after publishing.
+#
+# Source maps are NOT excluded here: "files" also wins over .npmignore, so they are deleted by
+# scripts/prepare-package.mjs instead.

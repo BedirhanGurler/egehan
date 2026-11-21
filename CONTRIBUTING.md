@@ -6,7 +6,7 @@ conventions matter more here than they might elsewhere.
 ## Getting set up
 
 ```bash
-git clone https://github.com/bedirhangurler/egehan.git
+git clone https://github.com/BedirhanGurler/egehan.git
 cd egehan
 npm install          # npm ships with Node; nothing else is required
 npm test             # the whole workspace

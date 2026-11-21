@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/bedirhangurler/egehan/schema/egehan-report.schema.json",
+  "$id": "https://github.com/BedirhanGurler/egehan/schema/egehan-report.schema.json",
   "title": "Egehan Chronicle Report",
   "description": "The canonical, implementation-independent output of the Egehan story engine. Every renderer (Markdown, HTML, IDE status bar) and every engine (Node, .NET) speaks this document and nothing else. Two engines producing byte-identical reports for the same repository is the project's core correctness guarantee.",
   "type": "object",

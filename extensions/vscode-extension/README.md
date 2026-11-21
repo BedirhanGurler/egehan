@@ -60,4 +60,4 @@ VS Code 1.94 or newer, and `git` on your PATH.
 
 ## License
 
-MIT. Part of the [Egehan](https://github.com/bedirhangurler/egehan) project.
+MIT. Part of the [Egehan](https://github.com/BedirhanGurler/egehan) project.

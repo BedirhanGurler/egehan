@@ -3,7 +3,7 @@
 ## Reporting a vulnerability
 
 Please report security issues privately through GitHub's
-[private vulnerability reporting](https://github.com/bedirhangurler/egehan/security/advisories/new)
+[private vulnerability reporting](https://github.com/BedirhanGurler/egehan/security/advisories/new)
 rather than in a public issue. Expect an acknowledgement within a few days.
 
 ## What Egehan does and does not touch

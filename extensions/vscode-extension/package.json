@@ -9,11 +9,11 @@
   "icon": "media/icon.png",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bedirhangurler/egehan.git",
+    "url": "git+https://github.com/BedirhanGurler/egehan.git",
     "directory": "extensions/vscode-extension"
   },
-  "bugs": "https://github.com/bedirhangurler/egehan/issues",
-  "homepage": "https://github.com/bedirhangurler/egehan#readme",
+  "bugs": "https://github.com/BedirhanGurler/egehan/issues",
+  "homepage": "https://github.com/BedirhanGurler/egehan#readme",
   "categories": [
     "SCM Providers",
     "Visualization",

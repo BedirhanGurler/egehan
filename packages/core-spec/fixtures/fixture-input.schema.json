@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/bedirhangurler/egehan/schema/fixture-input.schema.json",
+  "$id": "https://github.com/BedirhanGurler/egehan/schema/fixture-input.schema.json",
   "title": "Egehan Conformance Fixture Input",
   "description": "A synthetic, already-parsed commit history. This is the documented boundary between the git-reading layer and the story engine: everything above this line is platform-specific plumbing, everything below it must behave identically in every runtime. Fixtures therefore test the engine, not git.",
   "type": "object",

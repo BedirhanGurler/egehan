@@ -109,7 +109,7 @@ public sealed record EgehanConfig
     {
         var body = new JsonObject
         {
-            ["$schema"] = "https://github.com/bedirhangurler/egehan/schema/egehanrc.schema.json",
+            ["$schema"] = "https://github.com/BedirhanGurler/egehan/schema/egehanrc.schema.json",
             ["projectName"] = ProjectName,
             ["dedication"] = Dedication,
             ["language"] = Language,

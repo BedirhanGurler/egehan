@@ -1,0 +1,216 @@
+name: Release
+
+# Releasing is a deliberate act: push a tag, and only then does anything leave the machine.
+# Nothing here runs on a normal push, and every publish is gated behind the full test suite.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: 'Build and verify everything, publish nothing'
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+env:
+  DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry-run }}
+
+jobs:
+  # Nothing is published until the whole thing passes. A release that skipped its own tests is a
+  # release nobody can trust afterwards.
+  verify:
+    name: verify
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+
+      - run: npm ci
+      - run: npm run build
+      - run: npm run typecheck
+
+      - name: Configure git for the integration tests
+        run: |
+          git config --global user.name "CI"
+          git config --global user.email "ci@example.com"
+          git config --global init.defaultBranch main
+
+      - run: npm test
+      - run: npm run spec:validate
+      - run: npm run sync-spec -w egehan -- --check
+      - run: npm run fixtures:generate -w egehan -- --check
+      - run: npm run format:check
+      - run: dotnet test packages/dotnet-tool/Egehan.sln --nologo
+
+      # Three packages, one version. A tag that disagrees with any manifest means somebody
+      # forgot to bump something, and finding that out after publishing is too late.
+      - name: Check the versions agree with the tag
+        id: version
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "push" ]; then
+            VERSION="${GITHUB_REF_NAME#v}"
+          else
+            VERSION=$(node -p "require('./packages/node-cli/package.json').version")
+          fi
+
+          NPM=$(node -p "require('./packages/node-cli/package.json').version")
+          VSCODE=$(node -p "require('./extensions/vscode-extension/package.json').version")
+          NUGET=$(grep -o '<Version>[^<]*</Version>' packages/dotnet-tool/Directory.Build.props | sed 's/<[^>]*>//g')
+
+          echo "tag=$VERSION npm=$NPM vscode=$VSCODE nuget=$NUGET"
+          for name in NPM VSCODE NUGET; do
+            eval "value=\$$name"
+            if [ "$value" != "$VERSION" ]; then
+              echo "::error::$name is $value but the release is $VERSION"
+              exit 1
+            fi
+          done
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+  npm:
+    name: npm
+    needs: verify
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # Required for npm provenance: the registry records, verifiably, which workflow and which
+      # commit produced the tarball.
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          registry-url: https://registry.npmjs.org
+
+      - run: npm ci
+      - run: npm run build
+
+      - name: Publish
+        working-directory: packages/node-cli
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [ "$DRY_RUN" = "true" ]; then
+            npm publish --provenance --access public --dry-run
+            echo "### npm — dry run only" >> "$GITHUB_STEP_SUMMARY"
+          elif [ -z "${NODE_AUTH_TOKEN:-}" ]; then
+            echo "::error::NPM_TOKEN is not set, so nothing was published to npm."
+            exit 1
+          else
+            npm publish --provenance --access public
+            echo "### npm — published egehan@${{ needs.verify.outputs.version }}" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  nuget:
+    name: nuget
+    needs: verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+
+      - name: Pack
+        run: dotnet pack packages/dotnet-tool/Egehan.Cli/Egehan.Cli.csproj -c Release --nologo
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nuget
+          path: packages/dotnet-tool/nupkg/*.nupkg
+
+      - name: Push
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: |
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "### NuGet — packed only" >> "$GITHUB_STEP_SUMMARY"
+          elif [ -z "${NUGET_API_KEY:-}" ]; then
+            echo "::error::NUGET_API_KEY is not set, so nothing was pushed to NuGet."
+            exit 1
+          else
+            dotnet nuget push packages/dotnet-tool/nupkg/*.nupkg \
+              --source https://api.nuget.org/v3/index.json \
+              --api-key "$NUGET_API_KEY" \
+              --skip-duplicate
+            echo "### NuGet — pushed Egehan.Cli ${{ needs.verify.outputs.version }}" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  vscode:
+    name: vs code marketplace
+    needs: verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build
+
+      - name: Package
+        working-directory: extensions/vscode-extension
+        run: npx --yes @vscode/vsce package --no-dependencies --out egehan.vsix
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vsix
+          path: extensions/vscode-extension/egehan.vsix
+
+      - name: Publish
+        working-directory: extensions/vscode-extension
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+        run: |
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "### VS Code — packaged only" >> "$GITHUB_STEP_SUMMARY"
+          elif [ -z "${VSCE_PAT:-}" ]; then
+            echo "::error::VSCE_PAT is not set, so nothing was published to the Marketplace."
+            exit 1
+          else
+            npx --yes @vscode/vsce publish --no-dependencies --packagePath egehan.vsix
+            echo "### VS Code — published ${{ needs.verify.outputs.version }}" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  github-release:
+    name: github release
+    needs: [verify, npm, nuget, vscode]
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Create the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" \
+            --title "Egehan ${{ needs.verify.outputs.version }}" \
+            --generate-notes \
+            artifacts/nuget/*.nupkg \
+            artifacts/vsix/*.vsix

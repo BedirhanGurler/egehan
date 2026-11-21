@@ -56,22 +56,62 @@ VS Code and Visual Studio a status bar entry keeps the pulse visible and milesto
 A rendered example is committed at [docs/example-chronicle.md](docs/example-chronicle.md) — generated
 from the conformance fixture by the tool itself, so it is always what the current engine produces.
 
+## What it looks like
+
+<p align="center">
+  <img src="docs/media/chronicle-dark.jpg" alt="The chronicle's Developer Pulse: stat tiles, hour and weekday histograms, monthly activity and the category mix." width="820">
+</p>
+
+The timeline narrates each commit in the project's own language and tone, grouped into chapters:
+
+<p align="center">
+  <img src="docs/media/timeline-dark.jpg" alt="The timeline: chapters titled «Temeller Atılırken» and «Taşın Yerine Oturduğu An», each commit narrated in a sentence with its date, sha, author and line counts." width="820">
+</p>
+
+A sealed time capsule counts down at the foot of the page — and says plainly that the countdown is
+the ritual and the passphrase is the lock:
+
+<p align="center">
+  <img src="docs/media/capsule-dark.jpg" alt="The time capsule section: a countdown of 6280 days, and a note explaining that the passphrase is what protects the message." width="820">
+</p>
+
+Light and dark both ship, and the page follows the reader's system setting unless they choose:
+
+<p align="center">
+  <img src="docs/media/chronicle-light.jpg" alt="The same page in the light theme." width="820">
+</p>
+
 ## Project status
 
 Egehan is being built in phases, and this table is the honest state of each one. Nothing is listed as
 done before its tests are.
 
-| Phase | Deliverable                                                                             | Status   |
-| ----- | --------------------------------------------------------------------------------------- | -------- |
-| 1     | `core-spec` — report schema, engine rules, narrative dictionaries, conformance fixtures | **done** |
-| 1     | `egehan` npm CLI — git reader, story engine, Markdown renderer, Developer Pulse         | **done** |
-| 1     | `egehan-book.html` — the single-file interactive timeline, pure SVG, offline            | **done** |
-| 1     | `egehan capsule` — passphrase-sealed message, opened in the browser by Web Crypto       | **done** |
-| 1     | `egehan hook install` — the chronicle that keeps itself up to date                      | **done** |
-| 2     | VS Code extension — status bar, timeline panel, milestone notifications                 | **done** |
-| 3     | `Egehan.Core` — the .NET engine, proved against the Node engine's own fixtures          | **done** |
-| 3     | `Egehan.Cli` — the NuGet global tool (`net8.0` + `net10.0`)                             | **done** |
-| 4     | Visual Studio 2022+ extension (VSIX)                                                    | planned  |
+| Phase | Deliverable                                                                             | Status                             |
+| ----- | --------------------------------------------------------------------------------------- | ---------------------------------- |
+| 1     | `core-spec` — report schema, engine rules, narrative dictionaries, conformance fixtures | **done**                           |
+| 1     | `egehan` npm CLI — git reader, story engine, Markdown renderer, Developer Pulse         | **done**                           |
+| 1     | `egehan-book.html` — the single-file interactive timeline, pure SVG, offline            | **done**                           |
+| 1     | `egehan capsule` — passphrase-sealed message, opened in the browser by Web Crypto       | **done**                           |
+| 1     | `egehan hook install` — the chronicle that keeps itself up to date                      | **done**                           |
+| 2     | VS Code extension — status bar, timeline panel, milestone notifications                 | **done**                           |
+| 3     | `Egehan.Core` — the .NET engine, proved against the Node engine's own fixtures          | **done**                           |
+| 3     | `Egehan.Cli` — the NuGet global tool (`net8.0` + `net10.0`)                             | **done**                           |
+| 4     | Visual Studio 2022+ extension                                                           | **not planned for v1** — see below |
+
+### Why there is no Visual Studio extension
+
+Visual Studio's extension model is a different thing from VS Code's — C# against the VSSDK,
+buildable only on Windows, published to a separate marketplace. Shipping one would mean shipping
+a deliverable that cannot be verified on the machine this project is maintained from, and a
+release is not improved by adding the one piece nobody checked.
+
+.NET developers lose very little: `dotnet tool install -g Egehan.Cli` gives them the whole command
+surface, and the generated HTML timeline opens in Visual Studio as readily as in a browser. What
+is missing is an in-IDE status bar, which is a convenience rather than the product.
+
+If it is ever worth building, it is a thin shell over `Egehan.Core` — the engine, the contract, the
+hooks and the capsule are already in C# and already tested. That is the whole point of keeping the
+rules in data and the engine in a library.
 
 ## The command contract
 

@@ -57,22 +57,62 @@ günceller. VS Code ve Visual Studio'da durum çubuğu nabzı görünür tutar, 
 Üretilmiş bir örnek [docs/example-chronicle.md](docs/example-chronicle.md) dosyasında duruyor — uyum
 fixture'ından aracın kendisi tarafından üretiliyor, yani her zaman güncel motorun gerçek çıktısıdır.
 
+## Nasıl görünüyor
+
+<p align="center">
+  <img src="docs/media/chronicle-dark.jpg" alt="Kroniğin Geliştirici Nabzı: istatistik kutucukları, saat ve gün histogramları, aylık etkinlik ve kategori dağılımı." width="820">
+</p>
+
+Zaman tüneli her commit'i projenin kendi dilinde ve tonunda anlatıyor, bölümlere ayırarak:
+
+<p align="center">
+  <img src="docs/media/timeline-dark.jpg" alt="Zaman tüneli: «Temeller Atılırken» ve «Taşın Yerine Oturduğu An» başlıklı bölümler; her commit bir cümleyle, tarihi, sha'sı, yazarı ve satır sayılarıyla." width="820">
+</p>
+
+Sayfanın altında mühürlü zaman kapsülü geri sayıyor — ve geri sayımın bir ritüel, parolanın ise
+kilidin kendisi olduğunu açıkça söylüyor:
+
+<p align="center">
+  <img src="docs/media/capsule-dark.jpg" alt="Zaman kapsülü bölümü: 6280 günlük geri sayım ve mesajı koruyan şeyin parola olduğunu anlatan not." width="820">
+</p>
+
+Açık ve koyu tema birlikte geliyor; sayfa, okuyucu aksini seçmedikçe sistem ayarını izliyor:
+
+<p align="center">
+  <img src="docs/media/chronicle-light.jpg" alt="Aynı sayfanın açık temalı hâli." width="820">
+</p>
+
 ## Projenin durumu
 
 Egehan fazlar hâlinde geliştiriliyor. Bu tablo her fazın dürüst durumudur; hiçbir şey testleri yazılmadan
 "bitti" olarak işaretlenmez.
 
-| Faz | Teslim                                                                             | Durum     |
-| --- | ---------------------------------------------------------------------------------- | --------- |
-| 1   | `core-spec` — rapor şeması, motor kuralları, anlatı sözlükleri, uyum fixture'ları  | **bitti** |
-| 1   | `egehan` npm CLI — git okuyucu, hikaye motoru, Markdown üreteci, Geliştirici Nabzı | **bitti** |
-| 1   | `egehan-book.html` — tek dosyalık interaktif zaman tüneli, saf SVG, çevrimdışı     | **bitti** |
-| 1   | `egehan capsule` — parolayla mühürlenen, tarayıcıda Web Crypto ile açılan mesaj    | **bitti** |
-| 1   | `egehan hook install` — kendini güncel tutan kronik                                | **bitti** |
-| 2   | VS Code eklentisi — durum çubuğu, zaman tüneli paneli, dönüm noktası bildirimleri  | **bitti** |
-| 3   | `Egehan.Core` — .NET motoru, Node motorunun fixture'larına karşı kanıtlandı        | **bitti** |
-| 3   | `Egehan.Cli` — NuGet global tool (`net8.0` + `net10.0`)                            | **bitti** |
-| 4   | Visual Studio 2022+ eklentisi (VSIX)                                               | planlandı |
+| Faz | Teslim                                                                             | Durum                         |
+| --- | ---------------------------------------------------------------------------------- | ----------------------------- |
+| 1   | `core-spec` — rapor şeması, motor kuralları, anlatı sözlükleri, uyum fixture'ları  | **bitti**                     |
+| 1   | `egehan` npm CLI — git okuyucu, hikaye motoru, Markdown üreteci, Geliştirici Nabzı | **bitti**                     |
+| 1   | `egehan-book.html` — tek dosyalık interaktif zaman tüneli, saf SVG, çevrimdışı     | **bitti**                     |
+| 1   | `egehan capsule` — parolayla mühürlenen, tarayıcıda Web Crypto ile açılan mesaj    | **bitti**                     |
+| 1   | `egehan hook install` — kendini güncel tutan kronik                                | **bitti**                     |
+| 2   | VS Code eklentisi — durum çubuğu, zaman tüneli paneli, dönüm noktası bildirimleri  | **bitti**                     |
+| 3   | `Egehan.Core` — .NET motoru, Node motorunun fixture'larına karşı kanıtlandı        | **bitti**                     |
+| 3   | `Egehan.Cli` — NuGet global tool (`net8.0` + `net10.0`)                            | **bitti**                     |
+| 4   | Visual Studio 2022+ eklentisi                                                      | **v1'de yok** — aşağıya bakın |
+
+### Neden Visual Studio eklentisi yok
+
+Visual Studio'nun eklenti modeli, VS Code'unkinden tamamen ayrı bir şey: VSSDK üzerine C#, yalnızca
+Windows'ta derlenebilir, ayrı bir pazar yerine yayınlanır. Bunu göndermek, projenin bakıldığı
+makinede **doğrulanamayan** bir teslim göndermek olurdu — ve bir sürüm, kimsenin kontrol etmediği
+parçayı eklemekle iyileşmez.
+
+.NET geliştiricisi çok az şey kaybediyor: `dotnet tool install -g Egehan.Cli` bütün komut yüzeyini
+veriyor, üretilen HTML zaman tüneli de Visual Studio içinde tarayıcıdaki kadar rahat açılıyor.
+Eksik olan şey IDE içindeki durum çubuğu, yani üründen çok bir konfor.
+
+Yapılmaya değer bulunursa `Egehan.Core` üzerine ince bir kabuk olacak — motor, sözleşme, kancalar ve
+kapsül zaten C#'ta ve test edilmiş durumda. Kuralları veride, motoru kütüphanede tutmanın karşılığı
+tam olarak bu.
 
 ## Komut sözleşmesi
 
@@ -119,6 +159,10 @@ ritüel, parola ise kilidin kendisidir.** Şifreli metin, yayınlayabileceğiniz
 eder; dolayısıyla dosyanın kendi başına çözebildiği her şeyi, onu okuyan herkes de çözebilir. Parolasız
 bir kapsül modunun hiç var olmamasının sebebi tam olarak budur. Kapsül dosyaları varsayılan olarak git
 tarafından izlenmez.
+
+## Yayınlama
+
+Üç paketi de tek etiketle yayınlama adımları: [docs/YAYINLAMA.md](docs/YAYINLAMA.md)
 
 ## Lisans
 
