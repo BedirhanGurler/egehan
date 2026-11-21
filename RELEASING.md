@@ -79,7 +79,7 @@ $EDITOR CHANGELOG.md
 # 3. Commit and tag
 git add -A
 git commit -m "chore(release): 0.1.0"
-git tag v0.1.0
+git tag -a v0.1.0 -m "v0.1.0"   # annotated: --follow-tags skips lightweight tags
 git push origin main --follow-tags
 ```
 

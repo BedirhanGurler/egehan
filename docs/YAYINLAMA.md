@@ -153,15 +153,16 @@ git commit -m "chore(release): 0.1.0"
 **Adım 4 — etiketleyip gönderin:**
 
 ```bash
-git tag v0.1.0
+git tag -a v0.1.0 -m "v0.1.0"
 ```
 
 ```bash
 git push origin main --follow-tags
 ```
 
-Bu son komut yayını başlatır. `--follow-tags` hem commit'i hem etiketi gönderir; etiketi
-göndermezseniz hiçbir şey olmaz.
+Bu son komut yayını başlatır. Etiketi `-a` ile açıklamalı (annotated) oluşturun: `--follow-tags`
+yalnızca açıklamalı etiketleri gönderir, `git tag v0.1.0` ile üretilen hafif etiket sessizce
+yerelde kalır ve hiçbir şey yayınlanmaz.
 
 ---
 
@@ -232,7 +233,7 @@ node scripts/set-version.mjs 0.2.0
 ```
 
 ```bash
-git add -A && git commit -m "chore(release): 0.2.0" && git tag v0.2.0 && git push origin main --follow-tags
+git add -A && git commit -m "chore(release): 0.2.0" && git tag -a v0.2.0 -m "v0.2.0" && git push origin main --follow-tags
 ```
 
 Anahtarları tekrar üretmeniz gerekmez — süreleri dolana kadar.
