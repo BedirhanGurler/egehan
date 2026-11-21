@@ -39,11 +39,13 @@ jobs:
       - name: Check that the expected fixture reports still match the engine
         run: npm run fixtures:generate -w egehan -- --check
 
-      - name: Test
-        run: npm test
+      # Only the contract's own tests here: the engine and the extension need a build, which the
+      # matrix job below does across every platform this tool claims to support.
+      - name: Test the contract
+        run: npm test -w @egehan/core-spec
 
   node:
-    name: node-cli (${{ matrix.os }}, node ${{ matrix.node }})
+    name: cli + extension (${{ matrix.os }}, node ${{ matrix.node }})
     # Enabled with the node-cli package. Turkish characters in git log output are exactly the kind
     # of thing that works on macOS and breaks on Windows, so the matrix is not optional here.
     if: ${{ hashFiles('packages/node-cli/package.json') != '' }}
@@ -65,6 +67,7 @@ jobs:
 
       - run: npm ci
       - run: npm run build
+      - run: npm run typecheck
 
       # git must be configured for the integration tests, which build real repositories.
       - name: Configure git

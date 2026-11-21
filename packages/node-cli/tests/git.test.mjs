@@ -252,3 +252,20 @@ test('a repository with no commits says so', () => {
     rmSync(fresh, { recursive: true, force: true });
   }
 });
+
+test('a caller may read less history, but never more than the contract allows', () => {
+  const capped = readHistory(context, { since: null, until: null, maxCommits: 2 }, rules);
+  assert.equal(capped.commits.length, 2);
+  assert.equal(capped.truncated, true, 'a capped read must say it was capped');
+
+  const full = readHistory(context, { since: null, until: null }, rules);
+  assert.ok(full.commits.length > 2);
+
+  // A caller cannot raise the ceiling the rules file sets.
+  const greedy = readHistory(
+    context,
+    { since: null, until: null, maxCommits: rules.limits.maxCommitsPerRun * 100 },
+    rules,
+  );
+  assert.equal(greedy.commits.length, full.commits.length);
+});

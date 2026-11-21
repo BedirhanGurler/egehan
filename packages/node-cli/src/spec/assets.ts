@@ -12,11 +12,27 @@ import { fileURLToPath } from 'node:url';
  * rather than a missing-file error they have to learn the build graph to understand.
  */
 
-const MODULE_DIR = dirname(fileURLToPath(import.meta.url));
 const MARKER = join('spec', 'rules.json');
 const MAX_ASCENT = 6;
 
 let cachedRoot: string | null = null;
+
+/**
+ * Where to start probing from.
+ *
+ * Resolved lazily and defensively. An embedder that bundles this package into CommonJS — the VS
+ * Code extension does, because the extension host loads CommonJS — leaves `import.meta` as an
+ * empty object, and computing this at module scope would throw while the module was still being
+ * initialised. Such an embedder is expected to call `setAssetRoot()`, so the fallback only has to
+ * be harmless, not clever.
+ */
+function moduleDirectory(): string {
+  try {
+    return dirname(fileURLToPath(import.meta.url));
+  } catch {
+    return process.cwd();
+  }
+}
 
 const candidateRoots = (start: string): string[] => {
   const roots: string[] = [];
@@ -51,7 +67,7 @@ export function assetRoot(): string {
     return absolute;
   }
 
-  for (const root of candidateRoots(MODULE_DIR)) {
+  for (const root of candidateRoots(moduleDirectory())) {
     if (existsSync(join(root, MARKER))) {
       cachedRoot = resolve(root);
       return cachedRoot;
@@ -62,6 +78,22 @@ export function assetRoot(): string {
     'Could not locate the Egehan spec assets. Inside the repository, run ' +
       '`npm run sync-spec -w egehan`; in an installed package this means the tarball is incomplete.',
   );
+}
+
+/**
+ * Points the loader at a specific assets directory.
+ *
+ * An embedder that ships its own copy — the VS Code extension bundles one inside the VSIX — calls
+ * this once at startup. It exists so an embedder does not have to set `EGEHAN_SPEC_DIR`: mutating
+ * `process.env` inside an extension host changes the environment for every other extension
+ * sharing that process, which is not a side effect a library should ask for.
+ */
+export function setAssetRoot(directory: string): void {
+  const absolute = resolve(directory);
+  if (!existsSync(join(absolute, MARKER))) {
+    throw new Error(`"${absolute}" has no ${MARKER}, so it is not a core-spec directory.`);
+  }
+  cachedRoot = absolute;
 }
 
 export function assetPath(...segments: string[]): string {

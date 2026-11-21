@@ -10,7 +10,8 @@
   },
   "workspaces": [
     "packages/core-spec",
-    "packages/node-cli"
+    "packages/node-cli",
+    "extensions/vscode-extension"
   ],
   "scripts": {
     "build": "npm run build --workspaces --if-present",

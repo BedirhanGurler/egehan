@@ -1,0 +1,10 @@
+# Everything that is not needed to run the extension. The VSIX ships the bundle, the spec
+# assets it reads at runtime, the icon and the readme — nothing else.
+src/**
+scripts/**
+tests/**
+tsconfig.json
+.vscodeignore
+**/*.map
+**/*.ts
+node_modules/**

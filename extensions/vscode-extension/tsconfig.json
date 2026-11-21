@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    // The source is written as ESM and esbuild emits the CommonJS the extension host loads.
+    // TypeScript only type-checks here; letting it also emit would mean fighting the mismatch
+    // between `verbatimModuleSyntax` and a CommonJS target for no benefit.
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "noEmit": true,
+    "composite": false,
+    "declaration": false,
+    "declarationMap": false,
+    "types": ["node", "vscode"]
+  },
+  "include": ["src/**/*.ts"]
+}

@@ -44,6 +44,8 @@ export interface ProduceOptions {
   readonly capsule?: SealedCapsule | null;
   /** Injected in tests so a report can be compared byte for byte. */
   readonly generatedAt?: string;
+  /** An embedder's own ceiling on how much history to read; never raises the contract's. */
+  readonly maxCommits?: number | undefined;
 }
 
 export interface ProduceResult {
@@ -71,7 +73,7 @@ export function produceReport(options: ProduceOptions): ProduceResult {
 
   const history = readHistory(
     rootContext,
-    { since: options.since ?? null, until: options.until ?? null },
+    { since: options.since ?? null, until: options.until ?? null, maxCommits: options.maxCommits },
     rules,
   );
 

@@ -1,7 +1,5 @@
-import { mkdirSync, writeFileSync } from 'node:fs';
-import { isAbsolute, join, relative, resolve } from 'node:path';
-import { renderHtml } from '../../renderers/html.js';
-import { renderMarkdown } from '../../renderers/markdown.js';
+import { isAbsolute, relative, resolve } from 'node:path';
+import { writeArtifacts } from '../../artifacts.js';
 import { loadDictionary } from '../../spec/dictionary.js';
 import { loadRules } from '../../spec/rules.js';
 import { produceReport } from '../../pipeline.js';
@@ -42,31 +40,14 @@ export function runGenerate(options: GenerateOptions): GenerateResult {
 
   const format = options.format ?? config.format;
   const outputDir = resolveOutputDir(repositoryRoot, options.output ?? config.output);
-  mkdirSync(outputDir, { recursive: true });
 
-  const wants = (candidate: OutputFormat): boolean =>
-    format === candidate || format === 'all' || (format === 'both' && candidate !== 'json');
-
-  const dictionary = loadDictionary(report.config.language);
-  const written: string[] = [];
-
-  if (wants('md')) {
-    const path = join(outputDir, rules.output.markdownFileName);
-    writeFileSync(path, renderMarkdown(report, dictionary), 'utf8');
-    written.push(path);
-  }
-
-  if (wants('html')) {
-    const path = join(outputDir, rules.output.htmlFileName);
-    writeFileSync(path, renderHtml(report, dictionary, rules), 'utf8');
-    written.push(path);
-  }
-
-  if (wants('json')) {
-    const path = join(outputDir, rules.output.reportFileName);
-    writeFileSync(path, `${JSON.stringify(report, null, 2)}\n`, 'utf8');
-    written.push(path);
-  }
+  const written = writeArtifacts({
+    report,
+    dictionary: loadDictionary(report.config.language),
+    rules,
+    outputDirectory: outputDir,
+    format,
+  });
 
   if (!options.quiet) {
     if (report.range.truncated) {

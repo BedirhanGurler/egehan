@@ -1,0 +1,151 @@
+{
+  "name": "egehan-vscode",
+  "displayName": "Egehan — Living Code Chronicle",
+  "description": "Turns your repository's git history into a living chronicle, in the status bar and in an interactive timeline. Offline, deterministic, no API key.",
+  "version": "0.1.0",
+  "publisher": "bedirhangurler",
+  "license": "MIT",
+  "private": true,
+  "icon": "media/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bedirhangurler/egehan.git",
+    "directory": "extensions/vscode-extension"
+  },
+  "bugs": "https://github.com/bedirhangurler/egehan/issues",
+  "homepage": "https://github.com/bedirhangurler/egehan#readme",
+  "categories": [
+    "SCM Providers",
+    "Visualization",
+    "Other"
+  ],
+  "keywords": [
+    "git",
+    "history",
+    "changelog",
+    "chronicle",
+    "storytelling",
+    "offline"
+  ],
+  "engines": {
+    "vscode": "^1.94.0"
+  },
+  "main": "./dist/extension.cjs",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": false,
+      "description": "Egehan runs git in the workspace and reads the project's .egehanrc.json, so it stays off until the workspace is trusted."
+    },
+    "virtualWorkspaces": {
+      "supported": false,
+      "description": "Reading history requires a real git repository on disk."
+    }
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "egehan.openChronicle",
+        "title": "Open the Timeline",
+        "category": "Egehan"
+      },
+      {
+        "command": "egehan.regenerate",
+        "title": "Write the Chronicle Files",
+        "category": "Egehan"
+      },
+      {
+        "command": "egehan.showPulse",
+        "title": "Show the Developer Pulse",
+        "category": "Egehan"
+      },
+      {
+        "command": "egehan.refresh",
+        "title": "Refresh",
+        "category": "Egehan"
+      },
+      {
+        "command": "egehan.installHooks",
+        "title": "Install the Git Hooks",
+        "category": "Egehan"
+      },
+      {
+        "command": "egehan.uninstallHooks",
+        "title": "Remove the Git Hooks",
+        "category": "Egehan"
+      }
+    ],
+    "configuration": {
+      "title": "Egehan",
+      "properties": {
+        "egehan.language": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "tr",
+            "en"
+          ],
+          "default": "auto",
+          "markdownDescription": "Narration language. `auto` uses the language in the project's `.egehanrc.json`, which keeps everyone on the team looking at the same chronicle."
+        },
+        "egehan.tone": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "poetic",
+            "minimalist",
+            "humorous"
+          ],
+          "default": "auto",
+          "markdownDescription": "Narrative tone. `auto` uses the project's `.egehanrc.json`."
+        },
+        "egehan.statusBar.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the project's age and commit count in the status bar."
+        },
+        "egehan.statusBar.alignment": {
+          "type": "string",
+          "enum": [
+            "left",
+            "right"
+          ],
+          "default": "left",
+          "description": "Which side of the status bar the chronicle sits on."
+        },
+        "egehan.notifications.milestones": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show a gentle notification when the project reaches a milestone."
+        },
+        "egehan.refreshOnGitChange": {
+          "type": "boolean",
+          "default": true,
+          "description": "Refresh when the repository's HEAD moves — after a commit, a merge or a checkout."
+        },
+        "egehan.maxCommits": {
+          "type": "number",
+          "default": 5000,
+          "minimum": 100,
+          "description": "Stop reading after this many commits, so a very large repository does not slow the editor."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "sync-spec": "node scripts/build.mjs --assets-only",
+    "build": "node scripts/build.mjs",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "pretest": "npm run build",
+    "test": "node --test \"tests/**/*.test.mjs\"",
+    "package": "npx --yes @vscode/vsce package --no-dependencies"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.94.0",
+    "esbuild": "^0.24.0",
+    "egehan": "^0.1.0"
+  },
+  "$comment": "egehan is a devDependency, not a runtime one: esbuild inlines it into dist/extension.cjs, so the VSIX ships a single file and no node_modules. That is also why `package` passes --no-dependencies."
+}

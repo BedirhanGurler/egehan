@@ -23,6 +23,12 @@ import { isRevision } from './repository.js';
 export interface ReadHistoryOptions {
   readonly since: string | null;
   readonly until: string | null;
+  /**
+   * A lower cap than the contract's own, for callers that must stay responsive — an editor
+   * status bar cannot afford to read a hundred thousand commits on every refresh. Never higher
+   * than `rules.limits.maxCommitsPerRun`, so a caller cannot opt out of the global ceiling.
+   */
+  readonly maxCommits?: number | undefined;
 }
 
 export interface History {
@@ -39,7 +45,10 @@ const PRETTY_FORMAT = `${RECORD}%H${FIELD}%h${FIELD}%P${FIELD}%an${FIELD}%ae${FI
 const FIXED_FIELD_COUNT = 8;
 
 export function readHistory(context: GitContext, options: ReadHistoryOptions, rules: EgehanRules): History {
-  const limit = rules.limits.maxCommitsPerRun;
+  const ceiling = rules.limits.maxCommitsPerRun;
+  const requested = options.maxCommits;
+  const limit =
+    requested === undefined || requested <= 0 ? ceiling : Math.min(ceiling, Math.floor(requested));
 
   const output = git(
     context,

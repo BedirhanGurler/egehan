@@ -224,6 +224,43 @@ it is a personal message published to everyone, permanently, and no encryption a
 file changes that (see ADR-005). The `dedication` field exists in `.egehanrc.json` for users who want one
 in _their_ chronicle; it is opt-in and empty here.
 
+### ADR-013 — The editor extensions use the library, not the CLI
+
+**Decision.** The VS Code extension imports the `egehan` package and calls `produceReport` and
+`renderHtml` in process. It does not spawn `egehan` as a subprocess, and it does not re-implement
+any part of the pipeline.
+
+**Why.** A status bar that started a process on every refresh would be unusable, and one that
+reimplemented the pipeline would eventually tell the user something different from the file the git
+hook writes — which is the single disagreement this architecture exists to prevent. Sharing the
+library also means the extension inherits the privacy defaults, the determinism and the dictionary
+contract for free, including languages added after it shipped.
+
+**Consequence.** The extension host loads CommonJS while the package is ESM, so the extension is
+bundled with esbuild, which inlines the library and settles the module mismatch. The VSIX therefore
+ships one file plus the spec assets and no `node_modules`. Two things fall out of that bundling and
+both are covered by tests: the assets are located through an explicit `setAssetRoot()` call rather
+than the `EGEHAN_SPEC_DIR` environment variable, because an extension host is shared with every
+other extension and changing its environment is not a side effect a library should ask for; and the
+package no longer resolves its own location at module scope, because `import.meta` is an empty
+object in a CommonJS bundle and the extension used to crash while its modules were still
+initialising.
+
+### ADR-014 — The timeline runs under a strict Content-Security-Policy
+
+**Decision.** The webview serves the chronicle with `default-src 'none'`, scripts and styles
+allowed only through a per-panel nonce, and no `unsafe-inline` anywhere.
+
+**Why.** On disk the chronicle is a page somebody opens; in the editor it runs beside their source
+code. The page already escapes everything repository-derived (ADR-011), so the policy is a second
+line rather than a fix — but if that escaping ever regressed, the policy would still stand between
+a commit message and the editor. Reaching `'none'` cost one change to the template: a single inline
+`style` attribute became a class, because `style-src 'nonce-…'` blocks style attributes in markup.
+
+**Consequence.** Milestone identity is keyed on kind, value and author date rather than commit sha.
+A rebase gives every commit a new sha while the story is unchanged, and a sha-keyed extension would
+replay the project's entire history as notifications the first time somebody rebased a branch.
+
 ## 3. Determinism, precisely
 
 Narration must be reproducible across runtimes, so the rules leave nothing to interpretation:

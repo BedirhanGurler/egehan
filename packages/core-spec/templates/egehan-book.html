@@ -357,6 +357,13 @@
         margin-top: 16px;
       }
 
+      /* A class rather than a style attribute: the VS Code webview serves this page under a
+         strict Content-Security-Policy, and `style-src 'nonce-…'` blocks inline style
+         attributes in markup. Scripted `element.style` assignments are unaffected. */
+      .mix-card {
+        margin-top: 16px;
+      }
+
       .chart-title {
         font-size: 0.82rem;
         color: var(--text-3);
@@ -902,7 +909,7 @@
             </div>
           </div>
 
-          <div class="card" style="margin-top: 16px">
+          <div class="card mix-card">
             <p class="chart-title" id="mix-title"></p>
             <div class="strip" id="category-strip" role="img"></div>
             <div class="strip-legend" id="category-legend"></div>

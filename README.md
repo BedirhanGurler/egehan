@@ -68,7 +68,7 @@ done before its tests are.
 | 1     | `egehan-book.html` — the single-file interactive timeline, pure SVG, offline            | **done** |
 | 1     | `egehan capsule` — passphrase-sealed message, opened in the browser by Web Crypto       | **done** |
 | 1     | `egehan hook install` — the chronicle that keeps itself up to date                      | **done** |
-| 2     | VS Code extension — status bar, timeline panel, milestone notifications                 | planned  |
+| 2     | VS Code extension — status bar, timeline panel, milestone notifications                 | **done** |
 | 3     | `Egehan.Cli` .NET global tool (`net8.0` + `net10.0`)                                    | planned  |
 | 4     | Visual Studio 2022+ extension (VSIX)                                                    | planned  |
 

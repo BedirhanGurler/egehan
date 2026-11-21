@@ -12,6 +12,8 @@ export type { ProduceOptions, ProduceResult } from './pipeline.js';
 export { buildReport } from './engine/buildReport.js';
 export type { BuildReportInput } from './engine/buildReport.js';
 
+export { writeArtifacts } from './artifacts.js';
+export type { ArtifactFormat, WriteArtifactsOptions } from './artifacts.js';
 export { renderMarkdown } from './renderers/markdown.js';
 export { renderHtml, readTemplate } from './renderers/html.js';
 
@@ -19,7 +21,7 @@ export { loadRules } from './spec/rules.js';
 export type { EgehanRules } from './spec/rules.js';
 export { loadDictionary, availableLanguages } from './spec/dictionary.js';
 export type { Dictionary } from './spec/dictionary.js';
-export { assetPath, assetRoot } from './spec/assets.js';
+export { assetPath, assetRoot, setAssetRoot } from './spec/assets.js';
 
 export {
   defaultConfig,
