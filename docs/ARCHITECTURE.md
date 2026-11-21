@@ -39,8 +39,8 @@ once does not have to be re-argued from scratch a year later, by a contributor o
 Both engines follow the same pipeline, and the boundary between the stages is deliberate:
 
 ```text
-git log  ──▶  NormalizedCommit[]  ──▶  EgehanReport  ──▶  EGEHAN.md
-             (platform-specific)       (must be identical     egehan-chronicle.html
+git log  ──▶  NormalizedCommit[]  ──▶  EgehanReport  ──▶  EGEHAN.md          (renderer builds it)
+             (platform-specific)       (must be identical     egehan-chronicle.html (template draws itself)
                                         in every runtime)     status bar / stats
 ```
 
@@ -167,6 +167,39 @@ Visual Studio VSIX cannot be built or tested on macOS at all — the VS SDK is W
 only be verified in CI on a Windows runner. Putting an unverifiable deliverable in the first release
 would risk the credibility of everything shipped alongside it.
 
+### ADR-011 — The HTML chronicle renders itself from injected data
+
+**Decision.** `core-spec/templates/egehan-book.html` is a complete page that draws the chronicle
+client-side from two JSON blocks the renderer injects. The renderer replaces five markers and does
+nothing else; it assembles no HTML.
+
+**Why.** The alternative — each engine building HTML strings — would mean the Node and the .NET
+implementations each own a copy of the presentation, and byte-identical output would depend on two
+people writing the same markup forever. With a shared template, "both engines produce the same
+file" is true by construction: same template, same data, same bytes. It also means a design change
+is one edit to one file rather than a coordinated change across two languages.
+
+**Consequence.** The page needs JavaScript. That is a real cost for a keepsake, and it is paid down
+two ways: a `<noscript>` block explains the situation and points at `EGEHAN.md`, which is the same
+story in a format that needs nothing at all. Everything repository-derived is written with
+`textContent`, never `innerHTML` — a commit subject is untrusted input, and a contributor who can
+push can otherwise put `<img onerror=…>` into the maintainer's own chronicle. The injected JSON
+escapes `<` as `\u003c` for the same reason, so a subject containing `</script>` cannot end the
+data block. Both are covered by tests.
+
+### ADR-012 — The passphrase is never a command-line flag
+
+**Decision.** `egehan capsule` has no `--passphrase` option. The passphrase is typed at a prompt
+with the echo suppressed, or supplied through `EGEHAN_PASSPHRASE` for automation, which the CLI
+warns about when it uses it.
+
+**Why.** A secret passed as an argument is written to the shell's history file and is visible to
+every other process on the machine through the process list. For a passphrase that is supposed to
+hold for a decade or two, and that cannot be reset, saving a few keystrokes is not worth it. The
+unlock date is additionally bound into the ciphertext as AES-GCM additional authenticated data:
+that does not make the date a security control — nothing could, on a file the reader holds — but it
+makes an edited countdown _tamper-evident_, because the capsule then stops opening.
+
 ### ADR-010 — This repository carries no personal content
 
 **Decision.** The project is named Egehan. Beyond the name, no dedication, letter or personal message is
@@ -216,6 +249,10 @@ Written down so they stay visible rather than becoming surprises:
   unexpected fixture diffs, and a test asserts the chronicle carries no timestamp.
 - **Hook damage in user repositories.** Mitigated by ADR-006. Deserves the most careful tests in the
   project, because the failure mode lands in someone else's repository.
+- **Web Crypto and Node disagreeing about the capsule.** The message would be unreadable in the
+  one place it was meant to be read. Mitigated by a test that seals with `node:crypto` and opens
+  through the Web Crypto API using the template's exact call sequence, and verified once by hand in
+  a real browser.
 - **The VSIX going stale.** It is the only deliverable that cannot be verified on the maintainer's
   machine. If it becomes unmaintainable, the honest move is to mark it unmaintained rather than ship
   something broken.

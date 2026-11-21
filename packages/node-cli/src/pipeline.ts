@@ -6,6 +6,7 @@ import type { EgehanReport, SealedCapsule } from './engine/types.js';
 import { readHistory } from './git/logReader.js';
 import { hasAnyCommit, isGitRepository, readRepositoryInfo } from './git/repository.js';
 import type { GitContext } from './git/runGit.js';
+import { loadCapsule } from './capsule/storage.js';
 import { loadConfig, mergeConfig, type EgehanConfig } from './config/config.js';
 import { loadRules } from './spec/rules.js';
 import { packageVersion } from './version.js';
@@ -103,7 +104,9 @@ export function produceReport(options: ProduceOptions): ProduceResult {
       version: packageVersion(),
       generatedAt: options.generatedAt ?? nowIso(),
     },
-    capsule: options.capsule ?? null,
+    // A repository's own capsule is picked up without being asked for: the point of sealing one
+    // is that it rides along with every chronicle from then on.
+    capsule: options.capsule ?? loadCapsule(repository.root, rules),
   });
 
   return { report, config, repositoryRoot: repository.root };

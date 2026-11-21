@@ -259,6 +259,7 @@
     "markdownFileName": "EGEHAN.md",
     "htmlFileName": "egehan-chronicle.html",
     "reportFileName": "egehan-report.json",
+    "capsuleFileName": "capsule.egehan.json",
     "stateDirName": ".egehan",
     "configFileName": ".egehanrc.json"
   },

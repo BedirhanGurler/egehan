@@ -18,11 +18,13 @@ import type { Language, Tone } from '../engine/types.js';
 
 export const TONES: readonly Tone[] = ['poetic', 'minimalist', 'humorous'];
 /**
- * Output formats. `html` deliberately does not appear yet: the single-file timeline template is
- * the next deliverable, and an option that parses but produces nothing is a broken promise wearing
- * a flag. It joins this list in the same commit as the renderer.
+ * Output formats.
+ *
+ * `both` means the two artifacts a project keeps — the Markdown chronicle and the interactive
+ * HTML timeline. The JSON report is a separate opt-in because it is the machine format: it carries
+ * the generation timestamp and is meant for tooling, not for reading.
  */
-export const FORMATS = ['md', 'json', 'both'] as const;
+export const FORMATS = ['md', 'html', 'json', 'both', 'all'] as const;
 export type OutputFormat = (typeof FORMATS)[number];
 export const THEMES = ['auto', 'light', 'dark'] as const;
 export type ChronicleTheme = (typeof THEMES)[number];

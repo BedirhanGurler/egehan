@@ -1,0 +1,2020 @@
+<!doctype html>
+<html lang="__EGEHAN_LANG__" data-theme="__EGEHAN_THEME__">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="generator" content="egehan" />
+    <title>__EGEHAN_TITLE__</title>
+
+    <!--
+      egehan-chronicle.html — a self-contained chronicle.
+
+      Nothing here loads from the network: no fonts, no scripts, no stylesheets, no images. The
+      file opens from a USB stick, from an aeroplane, and in ten years' time. That is the whole
+      point of it, so please keep it that way.
+
+      The page renders itself from the two JSON blocks at the bottom. That is deliberate: the
+      template is the single source of presentation for *every* Egehan engine, so the Node and the
+      .NET implementations produce a byte-identical file by injecting the same data into the same
+      template, instead of each assembling HTML strings that would slowly drift apart.
+
+      Every value that comes from a repository — commit subjects, author names, tags, file paths —
+      is written to the DOM with textContent. A commit message is untrusted input: somebody's
+      contributor can write `<img onerror=…>` in a commit subject, and if this file interpolated
+      that into innerHTML the maintainer's own chronicle would execute it.
+    -->
+
+    <style>
+      /* ---------------------------------------------------------------
+         Tokens. Dark values are declared twice on purpose: once for the
+         OS setting and once for the in-page toggle, which must win both
+         ways. The :not() guard lets an explicit light choice beat OS dark.
+         --------------------------------------------------------------- */
+      :root {
+        color-scheme: light;
+
+        --bg: #f4f2ee;
+        --surface: #fdfcfa;
+        --surface-2: #f7f5f1;
+        --surface-3: #efece6;
+        --border: #e2ded5;
+        --border-strong: #cfcabe;
+
+        --text: #15140f;
+        --text-2: #55524a;
+        --text-3: #837f76;
+
+        --accent: #2a78d6;
+        --accent-soft: #e8f0fc;
+        --grid: #e7e3db;
+
+        --cat-birth: #1baf7a;
+        --cat-first-steps: #2a78d6;
+        --cat-growing-pains: #eb6834;
+        --cat-midnight-oil: #6250d6;
+        --cat-milestone: #e87ba4;
+        --cat-evolution: #008300;
+
+        --shadow: 0 1px 2px rgba(20, 18, 12, 0.05), 0 12px 32px -22px rgba(20, 18, 12, 0.3);
+        --radius: 14px;
+        --radius-sm: 9px;
+
+        --sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+          'Noto Sans', sans-serif;
+        --serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+        --mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme='light']) {
+          color-scheme: dark;
+
+          --bg: #121211;
+          --surface: #1c1c1a;
+          --surface-2: #232321;
+          --surface-3: #2b2b28;
+          --border: #32312d;
+          --border-strong: #46453f;
+
+          --text: #f2f0ea;
+          --text-2: #b5b2a9;
+          --text-3: #85827b;
+
+          --accent: #3987e5;
+          --accent-soft: #19283b;
+          --grid: #2b2b27;
+
+          --cat-birth: #199e70;
+          --cat-first-steps: #3987e5;
+          --cat-growing-pains: #d95926;
+          --cat-midnight-oil: #9085e9;
+          --cat-milestone: #d55181;
+          --cat-evolution: #0ca30c;
+
+          --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 32px -22px rgba(0, 0, 0, 0.8);
+        }
+      }
+
+      :root[data-theme='dark'] {
+        color-scheme: dark;
+
+        --bg: #121211;
+        --surface: #1c1c1a;
+        --surface-2: #232321;
+        --surface-3: #2b2b28;
+        --border: #32312d;
+        --border-strong: #46453f;
+
+        --text: #f2f0ea;
+        --text-2: #b5b2a9;
+        --text-3: #85827b;
+
+        --accent: #3987e5;
+        --accent-soft: #19283b;
+        --grid: #2b2b27;
+
+        --cat-birth: #199e70;
+        --cat-first-steps: #3987e5;
+        --cat-growing-pains: #d95926;
+        --cat-midnight-oil: #9085e9;
+        --cat-milestone: #d55181;
+        --cat-evolution: #0ca30c;
+
+        --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 32px -22px rgba(0, 0, 0, 0.8);
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html {
+        -webkit-text-size-adjust: 100%;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        font-size: 16px;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .wrap {
+        max-width: 68rem;
+        margin: 0 auto;
+        padding: 0 16px 96px;
+      }
+
+      /* --- header ------------------------------------------------- */
+
+      .masthead {
+        padding: 56px 0 28px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        align-items: flex-end;
+        justify-content: space-between;
+      }
+
+      .masthead h1 {
+        font-family: var(--serif);
+        font-size: clamp(2rem, 5vw, 3rem);
+        line-height: 1.12;
+        letter-spacing: -0.02em;
+        margin: 0 0 6px;
+        font-weight: 600;
+      }
+
+      .masthead p {
+        margin: 0;
+        color: var(--text-2);
+        font-size: 0.95rem;
+      }
+
+      .dedication {
+        margin: 18px 0 0;
+        padding-left: 14px;
+        border-left: 3px solid var(--border-strong);
+        font-family: var(--serif);
+        font-style: italic;
+        color: var(--text-2);
+        max-width: 46ch;
+      }
+
+      .tools {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+
+      button,
+      select,
+      input[type='search'],
+      input[type='password'] {
+        font: inherit;
+        color: var(--text);
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 7px 11px;
+        cursor: pointer;
+      }
+
+      input[type='search'],
+      input[type='password'] {
+        cursor: text;
+      }
+
+      button:hover,
+      select:hover {
+        border-color: var(--border-strong);
+      }
+
+      button:focus-visible,
+      select:focus-visible,
+      input:focus-visible,
+      summary:focus-visible,
+      .chip:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        border-radius: 999px;
+        padding: 5px 12px 5px 9px;
+        font-size: 0.85rem;
+        color: var(--text-2);
+        cursor: pointer;
+        user-select: none;
+      }
+
+      .chip .dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--chip-color, var(--text-3));
+        flex: none;
+      }
+
+      .chip[aria-pressed='true'] {
+        color: var(--text);
+        border-color: var(--border-strong);
+        background: var(--surface-3);
+      }
+
+      .chip[aria-pressed='false'] {
+        opacity: 0.5;
+      }
+
+      /* --- cards -------------------------------------------------- */
+
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 22px;
+      }
+
+      section {
+        margin-top: 44px;
+      }
+
+      .section-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 14px;
+      }
+
+      h2 {
+        font-family: var(--serif);
+        font-size: 1.35rem;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        margin: 0;
+      }
+
+      .lede {
+        font-family: var(--serif);
+        font-size: 1.1rem;
+        line-height: 1.65;
+        color: var(--text);
+        margin: 0 0 20px;
+        max-width: 62ch;
+      }
+
+      /* --- stat tiles --------------------------------------------- */
+
+      /* Borders on the tiles rather than a 1px grid gap: the gap technique paints the container
+         colour wherever the last row runs out of tiles, which reads as an unexplained dark block. */
+      .tiles {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        overflow: hidden;
+      }
+
+      .tile {
+        padding: 15px 18px;
+        border-right: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        min-height: 74px;
+      }
+
+      .tile .label {
+        display: block;
+        font-size: 0.78rem;
+        color: var(--text-3);
+        letter-spacing: 0.01em;
+      }
+
+      .tile .value {
+        display: block;
+        font-size: 1.5rem;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        margin-top: 2px;
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* A worded value (a chronotype name) cannot wear the number size without wrapping into a
+         tile twice the height of its neighbours. */
+      .tile .value.worded {
+        font-size: 1.02rem;
+        font-weight: 600;
+        line-height: 1.35;
+        letter-spacing: 0;
+      }
+
+      .tile .value .unit {
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: var(--text-3);
+        margin-left: 3px;
+      }
+
+      /* --- charts -------------------------------------------------- */
+
+      .charts {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+        gap: 16px;
+        margin-top: 16px;
+      }
+
+      .chart-title {
+        font-size: 0.82rem;
+        color: var(--text-3);
+        margin: 0 0 12px;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+      }
+
+      .chart svg {
+        display: block;
+        width: 100%;
+        height: auto;
+        overflow: visible;
+      }
+
+      .axis-label {
+        font-family: var(--sans);
+        font-size: 10px;
+        fill: var(--text-3);
+      }
+
+      .grid-line {
+        stroke: var(--grid);
+        stroke-width: 1;
+        shape-rendering: crispEdges;
+      }
+
+      .bar {
+        fill: var(--accent);
+      }
+
+      .bar-hit {
+        fill: transparent;
+        cursor: default;
+      }
+
+      .bar-hit:hover + .bar,
+      .bar-hit:focus-visible + .bar {
+        fill: var(--text);
+      }
+
+      .trend-area {
+        fill: var(--accent);
+        opacity: 0.1;
+      }
+
+      .trend-line {
+        fill: none;
+        stroke: var(--accent);
+        stroke-width: 2;
+        stroke-linejoin: round;
+        stroke-linecap: round;
+      }
+
+      .trend-dot {
+        fill: var(--accent);
+        stroke: var(--surface);
+        stroke-width: 2;
+      }
+
+      .crosshair {
+        stroke: var(--border-strong);
+        stroke-width: 1;
+        shape-rendering: crispEdges;
+      }
+
+      .tooltip {
+        position: fixed;
+        z-index: 20;
+        pointer-events: none;
+        background: var(--text);
+        color: var(--bg);
+        border-radius: 8px;
+        padding: 7px 10px;
+        font-size: 0.8rem;
+        line-height: 1.35;
+        box-shadow: 0 8px 24px -12px rgba(0, 0, 0, 0.5);
+        max-width: 18rem;
+      }
+
+      .tooltip .tip-value {
+        font-weight: 650;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .tooltip .tip-label {
+        opacity: 0.72;
+      }
+
+      .tooltip[hidden] {
+        display: none;
+      }
+
+      /* --- category strip ----------------------------------------- */
+
+      .strip {
+        display: flex;
+        gap: 2px;
+        height: 14px;
+        margin: 4px 0 16px;
+      }
+
+      .strip span {
+        border-radius: 3px;
+        min-width: 3px;
+      }
+
+      .strip-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 18px;
+        font-size: 0.86rem;
+        color: var(--text-2);
+      }
+
+      .strip-legend span {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+      }
+
+      .strip-legend .swatch {
+        width: 10px;
+        height: 10px;
+        border-radius: 3px;
+        flex: none;
+      }
+
+      .strip-legend b {
+        color: var(--text);
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* --- data table (the relief rule, and keyboard-only readers) - */
+
+      details.data-table {
+        margin-top: 18px;
+        border-top: 1px solid var(--border);
+        padding-top: 12px;
+      }
+
+      details.data-table summary {
+        cursor: pointer;
+        color: var(--text-2);
+        font-size: 0.86rem;
+      }
+
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 12px;
+        font-size: 0.86rem;
+      }
+
+      th,
+      td {
+        text-align: left;
+        padding: 6px 10px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      th {
+        color: var(--text-3);
+        font-weight: 500;
+      }
+
+      td.num {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* --- milestones --------------------------------------------- */
+
+      .milestones {
+        display: grid;
+        gap: 1px;
+        background: var(--border);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        overflow: hidden;
+      }
+
+      .milestone {
+        background: var(--surface);
+        padding: 12px 18px;
+        display: flex;
+        gap: 14px;
+        align-items: baseline;
+      }
+
+      .milestone time {
+        color: var(--text-3);
+        font-size: 0.82rem;
+        white-space: nowrap;
+        min-width: 7.5rem;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .milestone .what {
+        font-family: var(--serif);
+      }
+
+      .milestone .badge {
+        margin-left: auto;
+        font-family: var(--mono);
+        font-size: 0.72rem;
+        color: var(--text-2);
+        background: var(--surface-3);
+        border-radius: 999px;
+        padding: 2px 9px;
+        white-space: nowrap;
+      }
+
+      /* --- filters ------------------------------------------------- */
+
+      .filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+        padding: 14px 0 4px;
+        position: sticky;
+        top: 0;
+        background: linear-gradient(var(--bg) 70%, transparent);
+        z-index: 10;
+      }
+
+      .filters input[type='search'] {
+        flex: 1 1 14rem;
+        min-width: 10rem;
+      }
+
+      .result-count {
+        font-size: 0.82rem;
+        color: var(--text-3);
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* --- timeline ------------------------------------------------ */
+
+      .chapter {
+        position: relative;
+        padding: 0 0 8px 34px;
+        margin-top: 34px;
+      }
+
+      .chapter::before {
+        content: '';
+        position: absolute;
+        left: 11px;
+        top: 34px;
+        bottom: 0;
+        width: 2px;
+        background: var(--border);
+      }
+
+      .chapter:last-child::before {
+        bottom: 22px;
+      }
+
+      .chapter-mark {
+        position: absolute;
+        left: 0;
+        top: 2px;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font-size: 13px;
+        background: var(--surface);
+        border: 2px solid var(--chapter-color, var(--border-strong));
+      }
+
+      .chapter h3 {
+        font-family: var(--serif);
+        font-size: 1.22rem;
+        font-weight: 600;
+        margin: 0;
+        letter-spacing: -0.01em;
+      }
+
+      .chapter .meta {
+        color: var(--text-3);
+        font-size: 0.8rem;
+        margin: 2px 0 10px;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .chapter .summary {
+        font-family: var(--serif);
+        font-style: italic;
+        color: var(--text-2);
+        margin: 0 0 16px;
+        max-width: 62ch;
+      }
+
+      .entry {
+        position: relative;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-left: 3px solid var(--entry-color, var(--border-strong));
+        border-radius: var(--radius-sm);
+        padding: 13px 16px;
+        margin-bottom: 9px;
+      }
+
+      .entry .narrative {
+        font-family: var(--serif);
+        margin: 0 0 7px;
+        max-width: 68ch;
+      }
+
+      .entry .facts {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px 14px;
+        font-size: 0.78rem;
+        color: var(--text-3);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .entry .facts code {
+        font-family: var(--mono);
+        font-size: 0.74rem;
+      }
+
+      .entry .facts .tag {
+        color: var(--text);
+        background: var(--surface-3);
+        border-radius: 999px;
+        padding: 1px 8px;
+        font-family: var(--mono);
+        font-size: 0.72rem;
+      }
+
+      .entry .facts .added {
+        color: var(--cat-evolution);
+      }
+
+      .entry .facts .removed {
+        color: var(--cat-growing-pains);
+      }
+
+      mark {
+        background: var(--accent-soft);
+        color: var(--text);
+        border-radius: 3px;
+        padding: 0 2px;
+      }
+
+      .empty {
+        color: var(--text-3);
+        font-family: var(--serif);
+        font-style: italic;
+        padding: 28px 0;
+      }
+
+      /* --- capsule ------------------------------------------------- */
+
+      .capsule {
+        text-align: center;
+        padding: 34px 22px;
+      }
+
+      .capsule h2 {
+        margin-bottom: 6px;
+      }
+
+      .countdown {
+        font-size: clamp(1.6rem, 5vw, 2.4rem);
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        font-variant-numeric: tabular-nums;
+        margin: 14px 0 4px;
+      }
+
+      .capsule .hint,
+      .capsule .note {
+        color: var(--text-2);
+        font-size: 0.88rem;
+        margin: 4px 0;
+      }
+
+      .capsule form {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 18px;
+      }
+
+      .capsule input[type='password'] {
+        min-width: 15rem;
+      }
+
+      .capsule .message {
+        font-family: var(--serif);
+        font-size: 1.05rem;
+        text-align: left;
+        white-space: pre-wrap;
+        background: var(--surface-2);
+        border-radius: var(--radius-sm);
+        padding: 18px 20px;
+        margin-top: 18px;
+        max-width: 58ch;
+        margin-inline: auto;
+      }
+
+      .capsule .error {
+        color: var(--cat-growing-pains);
+        font-size: 0.88rem;
+        margin-top: 10px;
+        min-height: 1.3em;
+      }
+
+      /* --- footer -------------------------------------------------- */
+
+      footer {
+        margin-top: 64px;
+        padding-top: 20px;
+        border-top: 1px solid var(--border);
+        color: var(--text-3);
+        font-size: 0.8rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 18px;
+        justify-content: space-between;
+      }
+
+      .noscript {
+        margin: 32px 0;
+        padding: 18px 20px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--surface);
+        font-family: var(--serif);
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+
+      @media (max-width: 640px) {
+        .masthead {
+          padding-top: 34px;
+        }
+        .card {
+          padding: 16px;
+        }
+        .chapter {
+          padding-left: 26px;
+        }
+        .milestone {
+          flex-wrap: wrap;
+          gap: 4px 12px;
+        }
+        .milestone .badge {
+          margin-left: 0;
+        }
+      }
+
+      @media print {
+        .tools,
+        .filters,
+        .tooltip,
+        details.data-table {
+          display: none !important;
+        }
+        body {
+          background: #fff;
+        }
+        .entry,
+        .card {
+          box-shadow: none;
+          break-inside: avoid;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation: none !important;
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrap">
+      <header class="masthead">
+        <div>
+          <h1 id="project-name"></h1>
+          <p id="subtitle"></p>
+          <p class="dedication" id="dedication" hidden></p>
+        </div>
+        <div class="tools">
+          <button id="theme-toggle" type="button" aria-pressed="false"></button>
+        </div>
+      </header>
+
+      <noscript>
+        <div class="noscript" id="noscript-notice">
+          This chronicle draws itself from the data stored in this file, so it needs JavaScript to render.
+          Nothing is loaded from the network either way. The same story in plain text lives in the project's
+          EGEHAN.md.
+        </div>
+      </noscript>
+
+      <div class="noscript" id="template-notice" hidden>
+        This is the Egehan page template, not a generated chronicle. Run
+        <code>egehan generate</code> in a repository to produce one.
+      </div>
+
+      <main id="app" hidden>
+        <section id="pulse-section">
+          <div class="section-head"><h2 id="pulse-title"></h2></div>
+          <p class="lede" id="pulse-narrative"></p>
+
+          <div class="tiles" id="tiles"></div>
+
+          <div class="charts">
+            <div class="card chart">
+              <p class="chart-title" id="hour-title"></p>
+              <div id="hour-chart"></div>
+            </div>
+            <div class="card chart">
+              <p class="chart-title" id="weekday-title"></p>
+              <div id="weekday-chart"></div>
+            </div>
+            <div class="card chart" id="monthly-card">
+              <p class="chart-title" id="monthly-title"></p>
+              <div id="monthly-chart"></div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top: 16px">
+            <p class="chart-title" id="mix-title"></p>
+            <div class="strip" id="category-strip" role="img"></div>
+            <div class="strip-legend" id="category-legend"></div>
+          </div>
+
+          <details class="data-table">
+            <summary id="table-summary"></summary>
+            <div id="tables"></div>
+          </details>
+        </section>
+
+        <section id="milestones-section" hidden>
+          <div class="section-head"><h2 id="milestones-title"></h2></div>
+          <div class="milestones" id="milestones"></div>
+        </section>
+
+        <section id="timeline-section">
+          <div class="section-head">
+            <h2 id="timeline-title"></h2>
+            <span class="result-count" id="result-count"></span>
+          </div>
+
+          <div class="filters">
+            <input type="search" id="search" autocomplete="off" />
+            <select id="author-filter"></select>
+            <select id="year-filter"></select>
+            <span id="category-chips"></span>
+          </div>
+
+          <div id="timeline"></div>
+          <p class="empty" id="no-results" hidden></p>
+        </section>
+
+        <section id="capsule-section" hidden>
+          <div class="card capsule">
+            <h2 id="capsule-title"></h2>
+            <p class="note" id="capsule-author"></p>
+            <p class="countdown" id="capsule-countdown"></p>
+            <p class="note" id="capsule-status"></p>
+            <p class="hint" id="capsule-hint" hidden></p>
+
+            <form id="capsule-form" hidden>
+              <label class="visually-hidden" for="capsule-passphrase" id="capsule-label"></label>
+              <input type="password" id="capsule-passphrase" autocomplete="off" />
+              <button type="submit" id="capsule-submit"></button>
+            </form>
+
+            <p class="error" id="capsule-error" role="alert"></p>
+            <div class="message" id="capsule-message" hidden></div>
+            <p class="note" id="capsule-disclaimer"></p>
+          </div>
+        </section>
+
+        <footer>
+          <span id="footer-generator"></span>
+          <span id="footer-offline"></span>
+        </footer>
+      </main>
+    </div>
+
+    <div class="tooltip" id="tooltip" role="status" aria-live="polite" hidden></div>
+
+    <script id="egehan-report" type="application/json">
+      __EGEHAN_REPORT__
+    </script>
+    <script id="egehan-strings" type="application/json">
+      __EGEHAN_STRINGS__
+    </script>
+
+    <script>
+      'use strict';
+
+      /* ================================================================
+         Egehan chronicle renderer.
+
+         Reads the two JSON blocks above and builds the page. No network,
+         no dependencies, and every repository-derived string goes through
+         textContent — a commit subject is untrusted input.
+         ================================================================ */
+
+      const $ = (id) => document.getElementById(id);
+
+      const data = (() => {
+        const read = (id) => {
+          const node = $(id);
+          if (node === null) return null;
+          try {
+            return JSON.parse(node.textContent);
+          } catch (error) {
+            return null;
+          }
+        };
+        return { report: read('egehan-report'), strings: read('egehan-strings') };
+      })();
+
+      const isRendered =
+        data.report !== null &&
+        data.strings !== null &&
+        Array.isArray(data.report.entries) &&
+        data.report.entries.length > 0;
+
+      /* ---------------------------------------------------------------
+         Theme. The stored choice is a per-viewer convenience, so every
+         access is guarded: private windows and blocked site data make
+         localStorage throw rather than return empty.
+         --------------------------------------------------------------- */
+
+      const THEME_KEY = 'egehan:theme';
+
+      const storage = {
+        get(key) {
+          try {
+            return window.localStorage.getItem(key);
+          } catch (error) {
+            return null;
+          }
+        },
+        set(key, value) {
+          try {
+            window.localStorage.setItem(key, value);
+          } catch (error) {
+            /* nothing to do: the page works the same without a remembered theme */
+          }
+        },
+      };
+
+      function resolvedTheme() {
+        const stored = storage.get(THEME_KEY);
+        if (stored === 'light' || stored === 'dark') return stored;
+        const declared = document.documentElement.getAttribute('data-theme');
+        if (declared === 'light' || declared === 'dark') return declared;
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+
+      function applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        const button = $('theme-toggle');
+        if (button !== null) button.setAttribute('aria-pressed', String(theme === 'dark'));
+      }
+
+      /* ---------------------------------------------------------------
+         Formatting. Dates are parsed out of the ISO string's own fields,
+         never through Date(), so a commit keeps the wall clock it was
+         written at instead of being shifted into the reader's timezone.
+         --------------------------------------------------------------- */
+
+      const strings = data.strings ?? {};
+      const locale = strings.locale ?? {};
+      const ui = strings.ui ?? {};
+
+      const fill = (template, values) =>
+        String(template ?? '').replace(/\{([A-Za-z][A-Za-z0-9]*)\}/g, (match, name) =>
+          Object.prototype.hasOwnProperty.call(values, name) ? String(values[name]) : match,
+        );
+
+      function parts(iso) {
+        const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/.exec(String(iso ?? ''));
+        if (match === null) return null;
+        return {
+          year: Number(match[1]),
+          month: Number(match[2]),
+          day: Number(match[3]),
+          hour: match[4],
+          minute: match[5],
+        };
+      }
+
+      function formatDate(iso, short) {
+        const at = parts(iso);
+        if (at === null) return '';
+        const months = locale.months ?? [];
+        return fill(short === true ? locale.dateShortFormat : locale.dateFormat, {
+          day: at.day,
+          month: months[at.month - 1] ?? at.month,
+          year: at.year,
+        });
+      }
+
+      function formatTime(iso) {
+        const at = parts(iso);
+        if (at === null) return '';
+        return fill(locale.timeFormat, { hour: at.hour, minute: at.minute });
+      }
+
+      function formatMonth(key) {
+        const match = /^(\d{4})-(\d{2})$/.exec(String(key ?? ''));
+        if (match === null) return String(key ?? '');
+        const months = locale.months ?? [];
+        return (months[Number(match[2]) - 1] ?? match[2]) + ' ' + match[1];
+      }
+
+      const number = (value) => new Intl.NumberFormat(document.documentElement.lang || 'en').format(value);
+
+      /** Appends text with every occurrence of `needle` wrapped in <mark>, without innerHTML. */
+      function appendHighlighted(target, text, needle) {
+        const haystack = String(text ?? '');
+        if (needle === '') {
+          target.appendChild(document.createTextNode(haystack));
+          return;
+        }
+
+        const lowered = haystack.toLowerCase();
+        const term = needle.toLowerCase();
+        let cursor = 0;
+
+        for (;;) {
+          const found = lowered.indexOf(term, cursor);
+          if (found === -1) break;
+          if (found > cursor) {
+            target.appendChild(document.createTextNode(haystack.slice(cursor, found)));
+          }
+          const hit = document.createElement('mark');
+          hit.textContent = haystack.slice(found, found + term.length);
+          target.appendChild(hit);
+          cursor = found + term.length;
+        }
+
+        if (cursor < haystack.length) {
+          target.appendChild(document.createTextNode(haystack.slice(cursor)));
+        }
+      }
+
+      function el(tag, className, text) {
+        const node = document.createElement(tag);
+        if (className !== undefined && className !== null) node.className = className;
+        if (text !== undefined && text !== null) node.textContent = String(text);
+        return node;
+      }
+
+      const SVG_NS = 'http://www.w3.org/2000/svg';
+
+      function svgEl(tag, attributes) {
+        const node = document.createElementNS(SVG_NS, tag);
+        for (const key of Object.keys(attributes ?? {})) {
+          node.setAttribute(key, String(attributes[key]));
+        }
+        return node;
+      }
+
+      /* ---------------------------------------------------------------
+         Tooltip. Shared by every chart; the hovered mark is the hit
+         target, and keyboard focus gets the same readout as hover.
+         --------------------------------------------------------------- */
+
+      const tooltip = $('tooltip');
+
+      function showTooltip(event, value, label) {
+        if (tooltip === null) return;
+        tooltip.replaceChildren();
+        tooltip.appendChild(el('div', 'tip-value', value));
+        tooltip.appendChild(el('div', 'tip-label', label));
+        tooltip.hidden = false;
+
+        const box = tooltip.getBoundingClientRect();
+        const target = event.currentTarget.getBoundingClientRect();
+        const x = Math.min(
+          Math.max(8, target.left + target.width / 2 - box.width / 2),
+          window.innerWidth - box.width - 8,
+        );
+        const y = target.top - box.height - 10;
+        tooltip.style.left = x + 'px';
+        tooltip.style.top = (y < 8 ? target.bottom + 10 : y) + 'px';
+      }
+
+      function hideTooltip() {
+        if (tooltip !== null) tooltip.hidden = true;
+      }
+
+      /* ---------------------------------------------------------------
+         Charts. One series each, so no legend box: the card title says
+         what is plotted. Bars cap at 24px with a 2px surface gap and a
+         4px rounded data-end, square where they meet the baseline.
+         --------------------------------------------------------------- */
+
+      const MAX_BAR = 24;
+      const GAP = 2;
+      const CORNER = 4;
+
+      function roundedTopPath(x, y, width, height, radius) {
+        const r = Math.max(0, Math.min(radius, width / 2, height));
+        return (
+          'M' +
+          x +
+          ' ' +
+          (y + height) +
+          'V' +
+          (y + r) +
+          'a' +
+          r +
+          ' ' +
+          r +
+          ' 0 0 1 ' +
+          r +
+          ' ' +
+          -r +
+          'h' +
+          (width - 2 * r) +
+          'a' +
+          r +
+          ' ' +
+          r +
+          ' 0 0 1 ' +
+          r +
+          ' ' +
+          r +
+          'V' +
+          (y + height) +
+          'Z'
+        );
+      }
+
+      function barChart(container, values, options) {
+        if (container === null) return;
+        container.replaceChildren();
+
+        const width = 480;
+        const plotHeight = 92;
+        const axisHeight = 18;
+        const height = plotHeight + axisHeight;
+        const peak = Math.max(1, ...values);
+        const slot = width / values.length;
+        const barWidth = Math.min(MAX_BAR, slot - GAP);
+
+        const svg = svgEl('svg', {
+          viewBox: '0 0 ' + width + ' ' + height,
+          role: 'img',
+          'aria-label': options.ariaLabel ?? '',
+        });
+
+        // Baseline plus one recessive gridline at the peak: hairline, solid, never dashed.
+        svg.appendChild(
+          svgEl('line', { class: 'grid-line', x1: 0, y1: plotHeight + 0.5, x2: width, y2: plotHeight + 0.5 }),
+        );
+        svg.appendChild(svgEl('line', { class: 'grid-line', x1: 0, y1: 0.5, x2: width, y2: 0.5 }));
+
+        values.forEach((value, index) => {
+          const barHeight = value === 0 ? 0 : Math.max(2, (value / peak) * plotHeight);
+          const x = index * slot + (slot - barWidth) / 2;
+
+          // The hit target covers the whole slot, so a one-commit bar is still easy to reach.
+          const hit = svgEl('rect', {
+            class: 'bar-hit',
+            x: index * slot,
+            y: 0,
+            width: slot,
+            height: plotHeight,
+            tabindex: 0,
+            role: 'graphics-symbol',
+            'aria-label': options.describe(index, value),
+          });
+          const readout = () => options.describe(index, value);
+          const show = (event) => showTooltip(event, number(value), options.labelFor(index));
+          hit.addEventListener('pointerenter', show);
+          hit.addEventListener('focus', show);
+          hit.addEventListener('pointerleave', hideTooltip);
+          hit.addEventListener('blur', hideTooltip);
+          hit.appendChild(svgEl('title', {})).textContent = readout();
+          svg.appendChild(hit);
+
+          if (barHeight > 0) {
+            svg.appendChild(
+              svgEl('path', {
+                class: 'bar',
+                d: roundedTopPath(x, plotHeight - barHeight, barWidth, barHeight, CORNER),
+              }),
+            );
+          }
+        });
+
+        (options.axisTicks ?? []).forEach((tick) => {
+          const label = svgEl('text', {
+            class: 'axis-label',
+            x: tick.index * slot + slot / 2,
+            y: height - 5,
+            'text-anchor': 'middle',
+          });
+          label.textContent = tick.label;
+          svg.appendChild(label);
+        });
+
+        container.appendChild(svg);
+      }
+
+      function trendChart(container, points, options) {
+        if (container === null || points.length === 0) return;
+        container.replaceChildren();
+
+        const width = 480;
+        const plotHeight = 100;
+        const axisHeight = 18;
+        const height = plotHeight + axisHeight;
+        const peak = Math.max(1, ...points.map((point) => point.value));
+        const step = points.length === 1 ? 0 : width / (points.length - 1);
+        const xOf = (index) => (points.length === 1 ? width / 2 : index * step);
+        const yOf = (value) => plotHeight - (value / peak) * (plotHeight - 6);
+
+        const svg = svgEl('svg', {
+          viewBox: '0 0 ' + width + ' ' + height,
+          role: 'img',
+          'aria-label': options.ariaLabel ?? '',
+        });
+
+        svg.appendChild(
+          svgEl('line', { class: 'grid-line', x1: 0, y1: plotHeight + 0.5, x2: width, y2: plotHeight + 0.5 }),
+        );
+        svg.appendChild(svgEl('line', { class: 'grid-line', x1: 0, y1: 0.5, x2: width, y2: 0.5 }));
+
+        const line = points.map((point, index) => xOf(index) + ' ' + yOf(point.value)).join(' L');
+        svg.appendChild(
+          svgEl('path', {
+            class: 'trend-area',
+            d: 'M' + line + 'L' + xOf(points.length - 1) + ' ' + plotHeight + 'L0 ' + plotHeight + 'Z',
+          }),
+        );
+        svg.appendChild(svgEl('path', { class: 'trend-line', d: 'M' + line }));
+
+        const crosshair = svgEl('line', { class: 'crosshair', x1: 0, y1: 0, x2: 0, y2: plotHeight });
+        crosshair.setAttribute('visibility', 'hidden');
+        svg.appendChild(crosshair);
+
+        const dot = svgEl('circle', { class: 'trend-dot', r: 4.5, cx: 0, cy: 0 });
+        dot.setAttribute('visibility', 'hidden');
+        svg.appendChild(dot);
+
+        // The crosshair snaps to the nearest point, so the reader aims at a month, not at a line.
+        points.forEach((point, index) => {
+          const hit = svgEl('rect', {
+            class: 'bar-hit',
+            x: xOf(index) - (step || width) / 2,
+            y: 0,
+            width: step || width,
+            height: plotHeight,
+            tabindex: 0,
+            role: 'graphics-symbol',
+            'aria-label': options.describe(point),
+          });
+          const show = (event) => {
+            crosshair.setAttribute('x1', String(xOf(index)));
+            crosshair.setAttribute('x2', String(xOf(index)));
+            crosshair.setAttribute('visibility', 'visible');
+            dot.setAttribute('cx', String(xOf(index)));
+            dot.setAttribute('cy', String(yOf(point.value)));
+            dot.setAttribute('visibility', 'visible');
+            showTooltip(event, number(point.value), options.labelFor(point));
+          };
+          const hide = () => {
+            crosshair.setAttribute('visibility', 'hidden');
+            dot.setAttribute('visibility', 'hidden');
+            hideTooltip();
+          };
+          hit.addEventListener('pointerenter', show);
+          hit.addEventListener('focus', show);
+          hit.addEventListener('pointerleave', hide);
+          hit.addEventListener('blur', hide);
+          hit.appendChild(svgEl('title', {})).textContent = options.describe(point);
+          svg.appendChild(hit);
+        });
+
+        // Only the ends are labelled: a value on every point is chaos and goes unread.
+        [0, points.length - 1].forEach((index, position) => {
+          if (points.length === 1 && position === 1) return;
+          const label = svgEl('text', {
+            class: 'axis-label',
+            x: xOf(index),
+            y: height - 5,
+            'text-anchor': position === 0 ? 'start' : 'end',
+          });
+          label.textContent = options.labelFor(points[index]);
+          svg.appendChild(label);
+        });
+
+        container.appendChild(svg);
+      }
+
+      /* ---------------------------------------------------------------
+         Sections
+         --------------------------------------------------------------- */
+
+      const report = data.report ?? {};
+      const categories = strings.categories ?? {};
+      const pulseStrings = strings.pulse ?? {};
+      const labels = pulseStrings.labels ?? {};
+      const units = strings.units ?? {};
+
+      const categoryColor = (id) => 'var(--cat-' + String(id).replace(/[^a-z-]/g, '') + ')';
+      const categoryLabel = (id) => (categories[id] ?? {}).label ?? id;
+      const categoryIcon = (id) => (categories[id] ?? {}).icon ?? '•';
+
+      function unit(count, key) {
+        const forms = units[key] ?? {};
+        const word = count === 1 ? forms.one : forms.other;
+        return fill(units.format ?? '{n} {unit}', { n: number(count), unit: word ?? '' });
+      }
+
+      function renderHeader() {
+        $('project-name').textContent = report.project.name;
+        $('subtitle').textContent = fill(ui.subtitle, {
+          days: number(report.range.days),
+          commits: number(report.totals.commits),
+        });
+
+        const dedication = report.project.dedication;
+        if (typeof dedication === 'string' && dedication.trim() !== '') {
+          $('dedication').textContent = dedication.trim();
+          $('dedication').hidden = false;
+        }
+
+        $('theme-toggle').textContent = ui.themeToggle ?? 'Theme';
+        $('pulse-title').textContent = pulseStrings.title ?? '';
+        $('pulse-narrative').textContent = report.pulse.narrative;
+        $('timeline-title').textContent = ui.timelineTitle ?? '';
+        $('milestones-title').textContent = categoryLabel('milestone');
+        $('mix-title').textContent = ui.filterByCategory ?? '';
+        $('table-summary').textContent = ui.dataTable ?? '';
+        $('hour-title').textContent = labels.hourDistribution ?? '';
+        $('weekday-title').textContent = labels.weekdayDistribution ?? '';
+        $('monthly-title').textContent = labels.monthlyActivity ?? '';
+        $('search').placeholder = ui.searchPlaceholder ?? '';
+        $('no-results').textContent = ui.noResults ?? '';
+        $('footer-generator').textContent = fill(ui.generatedBy, {
+          version: report.generator.version,
+        });
+        $('footer-offline').textContent = ui.offlineNote ?? '';
+      }
+
+      function renderTiles() {
+        const pulse = report.pulse;
+        const chronotype = (pulseStrings.chronotypes ?? {})[pulse.chronotype] ?? {};
+        const weekdays = locale.weekdays ?? [];
+
+        const tiles = [
+          { label: labels.totalCommits, value: number(report.totals.commits) },
+          { label: labels.totalAuthors, value: number(report.totals.authors) },
+          { label: labels.projectAge, value: number(report.range.days), unit: ui.daysLabel },
+          { label: labels.filesTouched, value: number(report.totals.filesTouched) },
+          {
+            label: labels.chronotype,
+            value: (chronotype.icon ?? '') + ' ' + pulse.chronotypeLabel,
+            worded: true,
+          },
+          { label: labels.busiestHour, value: String(pulse.busiestHour).padStart(2, '0') + ':00' },
+          { label: labels.busiestDay, value: weekdays[pulse.busiestWeekday] ?? '', worded: true },
+          { label: labels.creationRatio, value: Math.round(pulse.creationRatio * 100) + '%' },
+          {
+            label: labels.longestStreak,
+            value: number(pulse.longestStreak.days),
+            unit: pulse.longestStreak.days > 0 ? ui.daysLabel : null,
+          },
+        ];
+
+        const container = $('tiles');
+        container.replaceChildren();
+
+        for (const spec of tiles) {
+          const tile = el('div', 'tile');
+          tile.appendChild(el('span', 'label', spec.label ?? ''));
+          const valueNode = el('span', spec.worded === true ? 'value worded' : 'value', spec.value);
+          if (spec.unit !== null && spec.unit !== undefined) {
+            valueNode.appendChild(el('span', 'unit', spec.unit));
+          }
+          tile.appendChild(valueNode);
+          container.appendChild(tile);
+        }
+      }
+
+      function renderCharts() {
+        const pulse = report.pulse;
+        const weekdays = locale.weekdays ?? [];
+        const shortDays = locale.weekdaysShort ?? weekdays;
+
+        barChart($('hour-chart'), pulse.hourHistogram, {
+          ariaLabel: labels.hourDistribution ?? '',
+          labelFor: (index) => String(index).padStart(2, '0') + ':00',
+          describe: (index, value) => String(index).padStart(2, '0') + ':00 — ' + unit(value, 'commit'),
+          axisTicks: [0, 3, 6, 9, 12, 15, 18, 21].map((hour) => ({
+            index: hour,
+            label: String(hour),
+          })),
+        });
+
+        barChart($('weekday-chart'), pulse.weekdayHistogram, {
+          ariaLabel: labels.weekdayDistribution ?? '',
+          labelFor: (index) => weekdays[index] ?? '',
+          describe: (index, value) => (weekdays[index] ?? '') + ' — ' + unit(value, 'commit'),
+          axisTicks: shortDays.map((day, index) => ({ index, label: day })),
+        });
+
+        const monthly = pulse.monthlyActivity ?? [];
+        if (monthly.length < 2) {
+          $('monthly-card').hidden = true;
+        } else {
+          trendChart(
+            $('monthly-chart'),
+            monthly.map((month) => ({ key: month.month, value: month.commits })),
+            {
+              ariaLabel: labels.monthlyActivity ?? '',
+              labelFor: (point) => formatMonth(point.key),
+              describe: (point) => formatMonth(point.key) + ' — ' + unit(point.value, 'commit'),
+            },
+          );
+        }
+      }
+
+      /**
+       * The category mix, as one segmented bar.
+       *
+       * Every segment carries a 2px surface gap, and the legend below prints each name, icon and
+       * count — so identity never rests on colour alone. Two of the light-mode hues sit below 3:1
+       * against the surface, which is exactly the case the visible labels are there to relieve.
+       */
+      function renderCategoryMix() {
+        const byCategory = report.totals.byCategory ?? {};
+        const present = Object.keys(byCategory).filter((id) => byCategory[id] > 0);
+        const total = present.reduce((sum, id) => sum + byCategory[id], 0);
+
+        const strip = $('category-strip');
+        const legend = $('category-legend');
+        strip.replaceChildren();
+        legend.replaceChildren();
+
+        strip.setAttribute(
+          'aria-label',
+          present.map((id) => categoryLabel(id) + ': ' + byCategory[id]).join(', '),
+        );
+
+        for (const id of present) {
+          const segment = el('span');
+          segment.style.background = categoryColor(id);
+          segment.style.flexGrow = String(byCategory[id]);
+          segment.title = categoryLabel(id) + ' — ' + unit(byCategory[id], 'commit');
+          strip.appendChild(segment);
+
+          const item = el('span');
+          const swatch = el('span', 'swatch');
+          swatch.style.background = categoryColor(id);
+          item.appendChild(swatch);
+          item.appendChild(document.createTextNode(categoryIcon(id) + ' ' + categoryLabel(id) + ' '));
+          item.appendChild(el('b', null, number(byCategory[id])));
+          if (total > 0) {
+            item.appendChild(
+              document.createTextNode(' (' + Math.round((byCategory[id] / total) * 100) + '%)'),
+            );
+          }
+          legend.appendChild(item);
+        }
+      }
+
+      /** The table view: the relief for low-contrast hues, and the version a screen reader reads. */
+      function renderTables() {
+        const container = $('tables');
+        container.replaceChildren();
+
+        const table = (heading, columns, rows) => {
+          container.appendChild(el('p', 'chart-title', heading));
+          const node = el('table');
+          const head = el('tr');
+          for (const column of columns) head.appendChild(el('th', null, column));
+          node.appendChild(el('thead')).appendChild(head);
+          const body = el('tbody');
+          for (const row of rows) {
+            const tr = el('tr');
+            row.forEach((cell, index) => {
+              tr.appendChild(el('td', index === 0 ? null : 'num', cell));
+            });
+            body.appendChild(tr);
+          }
+          node.appendChild(body);
+          container.appendChild(node);
+        };
+
+        const commitsLabel = ui.commitsLabel ?? '';
+        const weekdays = locale.weekdays ?? [];
+
+        table(
+          labels.hourDistribution ?? '',
+          [labels.busiestHour ?? '', commitsLabel],
+          report.pulse.hourHistogram
+            .map((value, hour) => [String(hour).padStart(2, '0') + ':00', number(value)])
+            .filter((row, hour) => report.pulse.hourHistogram[hour] > 0),
+        );
+
+        table(
+          labels.weekdayDistribution ?? '',
+          [labels.busiestDay ?? '', commitsLabel],
+          report.pulse.weekdayHistogram.map((value, index) => [weekdays[index] ?? '', number(value)]),
+        );
+
+        const monthly = report.pulse.monthlyActivity ?? [];
+        if (monthly.length > 0) {
+          table(
+            labels.monthlyActivity ?? '',
+            [labels.monthlyActivity ?? '', commitsLabel, ui.insertionsLabel ?? '+', ui.deletionsLabel ?? '-'],
+            monthly.map((month) => [
+              formatMonth(month.month),
+              number(month.commits),
+              number(month.insertions),
+              number(month.deletions),
+            ]),
+          );
+        }
+      }
+
+      function renderMilestones() {
+        const milestones = report.milestones ?? [];
+        if (milestones.length === 0) return;
+
+        const container = $('milestones');
+        container.replaceChildren();
+
+        for (const milestone of milestones) {
+          const row = el('div', 'milestone');
+          const time = el('time', null, formatDate(milestone.at));
+          time.setAttribute('datetime', milestone.at);
+          row.appendChild(time);
+          row.appendChild(el('span', 'what', milestone.narrative));
+          if (milestone.label !== null && milestone.label !== undefined && milestone.label !== '') {
+            row.appendChild(el('span', 'badge', milestone.label));
+          }
+          container.appendChild(row);
+        }
+
+        $('milestones-section').hidden = false;
+      }
+
+      /* ---------------------------------------------------------------
+         Timeline and filters
+         --------------------------------------------------------------- */
+
+      const entriesBySha = new Map((report.entries ?? []).map((entry) => [entry.sha, entry]));
+      const authorsById = new Map((report.authors ?? []).map((author) => [author.id, author]));
+      const rendered = [];
+
+      function renderTimeline() {
+        const container = $('timeline');
+        container.replaceChildren();
+        rendered.length = 0;
+
+        for (const chapter of report.chapters ?? []) {
+          const article = el('article', 'chapter');
+          article.style.setProperty('--chapter-color', categoryColor(chapter.category));
+
+          const mark = el('div', 'chapter-mark', categoryIcon(chapter.category));
+          mark.setAttribute('aria-hidden', 'true');
+          article.appendChild(mark);
+
+          article.appendChild(el('h3', null, chapter.title));
+
+          const from = formatDate(chapter.from, true);
+          const to = formatDate(chapter.to);
+          article.appendChild(
+            el(
+              'p',
+              'meta',
+              (from === formatDate(chapter.to, true) ? to : from + ' – ' + to) +
+                ' · ' +
+                fill(ui.chapterCommits, { commits: number(chapter.stats.commits) }),
+            ),
+          );
+
+          article.appendChild(el('p', 'summary', chapter.narrative));
+
+          const list = el('div', 'entries');
+          for (const sha of chapter.entryShas) {
+            const entry = entriesBySha.get(sha);
+            if (entry === undefined) continue;
+            const node = renderEntry(entry);
+            list.appendChild(node);
+            rendered.push({ entry, node, chapter: article });
+          }
+          article.appendChild(list);
+          container.appendChild(article);
+        }
+      }
+
+      function renderEntry(entry) {
+        const node = el('div', 'entry');
+        node.style.setProperty('--entry-color', categoryColor(entry.category));
+
+        const narrative = el('p', 'narrative');
+        narrative.textContent = entry.narrative;
+        node.appendChild(narrative);
+
+        const facts = el('div', 'facts');
+        const author = authorsById.get(entry.authorId);
+
+        const when = el(
+          'span',
+          null,
+          formatDate(entry.authoredAt, true) + ' ' + formatTime(entry.authoredAt),
+        );
+        facts.appendChild(when);
+        facts.appendChild(el('code', null, entry.shortSha));
+        if (author !== undefined) facts.appendChild(el('span', null, author.displayName));
+        facts.appendChild(el('span', null, unit(entry.stats.filesCount, 'file')));
+        // A commit that deleted nothing says nothing about deletions; "−0" is ink without content.
+        if (entry.stats.insertions > 0) {
+          facts.appendChild(el('span', 'added', '+' + number(entry.stats.insertions)));
+        }
+        if (entry.stats.deletions > 0) {
+          facts.appendChild(el('span', 'removed', '−' + number(entry.stats.deletions)));
+        }
+        for (const tag of entry.tags ?? []) facts.appendChild(el('span', 'tag', tag));
+
+        node.appendChild(facts);
+        return node;
+      }
+
+      const filters = { search: '', author: '', year: '', categories: new Set() };
+
+      function buildFilterControls() {
+        const authorSelect = $('author-filter');
+        authorSelect.replaceChildren();
+        authorSelect.appendChild(el('option', null, ui.filterByAuthor ?? '')).value = '';
+        for (const author of report.authors ?? []) {
+          authorSelect.appendChild(el('option', null, author.displayName)).value = author.id;
+        }
+
+        const years = [
+          ...new Set((report.entries ?? []).map((entry) => entry.authoredAt.slice(0, 4))),
+        ].sort();
+        const yearSelect = $('year-filter');
+        yearSelect.replaceChildren();
+        yearSelect.appendChild(el('option', null, ui.filterByYear ?? '')).value = '';
+        for (const year of years) yearSelect.appendChild(el('option', null, year)).value = year;
+        yearSelect.hidden = years.length < 2;
+
+        const chips = $('category-chips');
+        chips.replaceChildren();
+        const present = Object.keys(report.totals.byCategory ?? {}).filter(
+          (id) => report.totals.byCategory[id] > 0,
+        );
+        for (const id of present) {
+          filters.categories.add(id);
+          const chip = el('button', 'chip');
+          chip.type = 'button';
+          chip.setAttribute('aria-pressed', 'true');
+          chip.style.setProperty('--chip-color', categoryColor(id));
+          const dot = el('span', 'dot');
+          dot.setAttribute('aria-hidden', 'true');
+          chip.appendChild(dot);
+          chip.appendChild(document.createTextNode(categoryLabel(id)));
+          chip.addEventListener('click', () => {
+            if (filters.categories.has(id)) {
+              filters.categories.delete(id);
+              chip.setAttribute('aria-pressed', 'false');
+            } else {
+              filters.categories.add(id);
+              chip.setAttribute('aria-pressed', 'true');
+            }
+            applyFilters();
+          });
+          chips.appendChild(chip);
+        }
+
+        $('search').addEventListener('input', (event) => {
+          filters.search = event.target.value.trim();
+          applyFilters();
+        });
+        authorSelect.addEventListener('change', (event) => {
+          filters.author = event.target.value;
+          applyFilters();
+        });
+        yearSelect.addEventListener('change', (event) => {
+          filters.year = event.target.value;
+          applyFilters();
+        });
+      }
+
+      function matches(entry) {
+        if (!filters.categories.has(entry.category)) return false;
+        if (filters.author !== '' && entry.authorId !== filters.author) return false;
+        if (filters.year !== '' && !entry.authoredAt.startsWith(filters.year)) return false;
+
+        if (filters.search !== '') {
+          const needle = filters.search.toLowerCase();
+          const author = authorsById.get(entry.authorId);
+          const haystack = [
+            entry.narrative,
+            entry.cleanSubject,
+            entry.subject,
+            entry.shortSha,
+            author === undefined ? '' : author.displayName,
+            (entry.tags ?? []).join(' '),
+          ]
+            .join(' ')
+            .toLowerCase();
+          if (!haystack.includes(needle)) return false;
+        }
+
+        return true;
+      }
+
+      function applyFilters() {
+        let visible = 0;
+        const chaptersWithContent = new Set();
+
+        for (const item of rendered) {
+          const show = matches(item.entry);
+          item.node.hidden = !show;
+          if (show) {
+            visible += 1;
+            chaptersWithContent.add(item.chapter);
+
+            // Re-render the narrative so the search term is highlighted — built from text nodes,
+            // never from an HTML string, because the narrative quotes a commit message.
+            const narrative = item.node.querySelector('.narrative');
+            narrative.replaceChildren();
+            appendHighlighted(narrative, item.entry.narrative, filters.search);
+          }
+        }
+
+        for (const chapter of document.querySelectorAll('.chapter')) {
+          chapter.hidden = !chaptersWithContent.has(chapter);
+        }
+
+        $('result-count').textContent = fill(ui.chapterCommits, { commits: number(visible) });
+        $('no-results').hidden = visible > 0;
+      }
+
+      /* ---------------------------------------------------------------
+         The time capsule.
+
+         The countdown is a ritual; the passphrase is the lock. This file
+         can be published and the message stays unreadable without it,
+         which is why there is no passphrase-free mode to offer here.
+         --------------------------------------------------------------- */
+
+      function base64ToBytes(value) {
+        const binary = atob(String(value));
+        const bytes = new Uint8Array(binary.length);
+        for (let index = 0; index < binary.length; index += 1) bytes[index] = binary.charCodeAt(index);
+        return bytes;
+      }
+
+      function renderCapsule() {
+        const capsule = report.capsule;
+        if (capsule === null || capsule === undefined) return;
+
+        const section = $('capsule-section');
+        section.hidden = false;
+
+        $('capsule-title').textContent = ui.capsuleTitle ?? '';
+        $('capsule-disclaimer').textContent = ui.capsuleDisclaimer ?? '';
+        $('capsule-label').textContent = ui.capsulePassphrasePrompt ?? '';
+        $('capsule-passphrase').placeholder = ui.capsulePassphrasePrompt ?? '';
+        $('capsule-submit').textContent = ui.capsulePassphraseButton ?? '';
+
+        if (typeof capsule.authorLabel === 'string' && capsule.authorLabel !== '') {
+          $('capsule-author').textContent = fill(ui.capsuleAuthor, { author: capsule.authorLabel });
+        }
+        if (typeof capsule.hint === 'string' && capsule.hint !== '') {
+          $('capsule-hint').textContent = fill(ui.capsuleHint, { hint: capsule.hint });
+          $('capsule-hint').hidden = false;
+        }
+
+        const unlockAt = new Date(capsule.unlockDate + 'T00:00:00');
+        const form = $('capsule-form');
+        const status = $('capsule-status');
+        const countdown = $('capsule-countdown');
+        let timer = null;
+
+        const stopCountdown = () => {
+          if (timer !== null) {
+            window.clearInterval(timer);
+            timer = null;
+          }
+        };
+
+        const tick = () => {
+          const remaining = unlockAt.getTime() - Date.now();
+
+          if (remaining <= 0) {
+            countdown.textContent = '';
+            status.textContent = ui.capsuleUnlockable ?? '';
+            form.hidden = false;
+            return true;
+          }
+
+          const minutes = Math.floor(remaining / 60000);
+          countdown.textContent = fill(ui.capsuleCountdown, {
+            days: Math.floor(minutes / 1440),
+            hours: Math.floor((minutes % 1440) / 60),
+            minutes: minutes % 60,
+          });
+          status.textContent = fill(ui.capsuleLocked, {
+            unlockDate: formatDate(capsule.unlockDate + 'T00:00:00+00:00'),
+          });
+          return false;
+        };
+
+        if (!tick()) {
+          timer = window.setInterval(() => {
+            if (tick()) stopCountdown();
+          }, 1000);
+
+          // The date is presentational, and saying so is the honest thing to do: anyone can change
+          // their clock. Offer the form to whoever already holds the passphrase.
+          const early = el('details');
+          early.appendChild(el('summary', null, ui.capsuleOpenEarly ?? ''));
+          early.appendChild(form);
+          form.hidden = false;
+          $('capsule-hint').after(early);
+        }
+
+        form.addEventListener('submit', async (event) => {
+          event.preventDefault();
+          const error = $('capsule-error');
+          error.textContent = '';
+
+          if (window.crypto === undefined || window.crypto.subtle === undefined) {
+            error.textContent = ui.capsuleNoCrypto ?? '';
+            return;
+          }
+
+          const passphrase = $('capsule-passphrase').value;
+          const submit = $('capsule-submit');
+          submit.disabled = true;
+
+          try {
+            const encoder = new TextEncoder();
+            const material = await crypto.subtle.importKey(
+              'raw',
+              encoder.encode(passphrase),
+              'PBKDF2',
+              false,
+              ['deriveKey'],
+            );
+            const key = await crypto.subtle.deriveKey(
+              {
+                name: 'PBKDF2',
+                salt: base64ToBytes(capsule.salt),
+                iterations: capsule.algorithm.iterations,
+                hash: capsule.algorithm.kdfHash,
+              },
+              material,
+              { name: 'AES-GCM', length: 256 },
+              false,
+              ['decrypt'],
+            );
+            const plaintext = await crypto.subtle.decrypt(
+              {
+                name: 'AES-GCM',
+                iv: base64ToBytes(capsule.iv),
+                additionalData: encoder.encode(
+                  fill((strings.crypto ?? {}).additionalDataFormat, {
+                    unlockDate: capsule.unlockDate,
+                  }),
+                ),
+                tagLength: capsule.algorithm.authTagBits ?? 128,
+              },
+              key,
+              base64ToBytes(capsule.ciphertext),
+            );
+
+            // The countdown has done its job; leaving the interval running would paint the
+            // remaining time back over a capsule that is already open.
+            stopCountdown();
+
+            const message = $('capsule-message');
+            message.textContent = new TextDecoder().decode(plaintext);
+            message.hidden = false;
+            form.hidden = true;
+            countdown.textContent = '';
+            status.textContent = '';
+            $('capsule-hint').hidden = true;
+          } catch (failure) {
+            // AES-GCM authentication failing is indistinguishable from a wrong passphrase, which
+            // is the property that makes it worth using. Say the one thing that is true.
+            error.textContent = ui.capsuleWrongPassphrase ?? '';
+          } finally {
+            submit.disabled = false;
+          }
+        });
+      }
+
+      /* ---------------------------------------------------------------
+         Boot
+         --------------------------------------------------------------- */
+
+      applyTheme(resolvedTheme());
+
+      $('theme-toggle').addEventListener('click', () => {
+        const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        storage.set(THEME_KEY, next);
+        applyTheme(next);
+      });
+
+      if (!isRendered) {
+        $('template-notice').hidden = false;
+      } else {
+        document.title = fill(ui.documentTitle, { project: report.project.name });
+        renderHeader();
+        renderTiles();
+        renderCharts();
+        renderCategoryMix();
+        renderTables();
+        renderMilestones();
+        renderTimeline();
+        buildFilterControls();
+        applyFilters();
+        renderCapsule();
+        $('app').hidden = false;
+
+        document.addEventListener('keydown', (event) => {
+          if (event.key === '/' && event.target === document.body) {
+            event.preventDefault();
+            $('search').focus();
+          }
+        });
+
+        window.addEventListener('scroll', hideTooltip, { passive: true });
+      }
+    </script>
+  </body>
+</html>

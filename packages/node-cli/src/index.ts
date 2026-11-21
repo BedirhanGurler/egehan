@@ -13,6 +13,7 @@ export { buildReport } from './engine/buildReport.js';
 export type { BuildReportInput } from './engine/buildReport.js';
 
 export { renderMarkdown } from './renderers/markdown.js';
+export { renderHtml, readTemplate } from './renderers/html.js';
 
 export { loadRules } from './spec/rules.js';
 export type { EgehanRules } from './spec/rules.js';
@@ -38,6 +39,8 @@ export { detectProjectTypes, scanRepository } from './detect/projectType.js';
 export { prepareCommits } from './engine/prepare.js';
 export { classifyCommits } from './engine/classifier.js';
 export { computePulse } from './engine/pulse.js';
+export { sealCapsule, openCapsule, CapsuleError } from './capsule/capsule.js';
+export { loadCapsule, readCapsuleFile, saveCapsule, capsulePath } from './capsule/storage.js';
 export { packageVersion } from './version.js';
 
 export type * from './engine/types.js';

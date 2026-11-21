@@ -178,6 +178,7 @@ export interface OutputRules {
   readonly markdownFileName: string;
   readonly htmlFileName: string;
   readonly reportFileName: string;
+  readonly capsuleFileName: string;
   readonly stateDirName: string;
   readonly configFileName: string;
 }

@@ -1,11 +1,14 @@
 #!/usr/bin/env node
 import { Command, InvalidArgumentError } from 'commander';
+import { runCapsule } from './commands/capsule.js';
 import { runGenerate } from './commands/generate.js';
 import { runInit } from './commands/init.js';
 import { runStats } from './commands/stats.js';
 import { fail, info, theme } from './output.js';
 import { ConfigError, FORMATS, TONES, type OutputFormat } from '../config/config.js';
 import { availableLanguages } from '../spec/dictionary.js';
+import { CapsuleError } from '../capsule/capsule.js';
+import { PromptError } from './prompt.js';
 import { EmptyHistoryError, NoCommitsError, NotARepositoryError } from '../pipeline.js';
 import { GitError } from '../git/runGit.js';
 import { packageVersion } from '../version.js';
@@ -100,6 +103,49 @@ program
     await runInit({ cwd: process.cwd(), yes: flags.yes === true, force: flags.force === true });
   });
 
+program
+  .command('capsule')
+  .description('seal a passphrase-protected message into the chronicle, or open one')
+  .option('-m, --message <text>', 'the message to seal')
+  .option('--message-file <path>', 'read the message from a file instead')
+  .option('-d, --unlock-date <date>', 'the date the countdown runs to (YYYY-MM-DD)')
+  .option('-a, --author <name>', 'who the message is from')
+  .option('--hint <text>', 'a passphrase hint — stored in clear text, and it travels with the file')
+  .option('--file <path>', 'where the capsule lives (default: capsule.egehan.json)')
+  .option('--open', 'decrypt an existing capsule and print it')
+  .option('--force', 'replace an existing capsule, losing the message inside it')
+  // There is no --passphrase flag on purpose: a secret on the command line lands in the shell
+  // history and in the process list. See src/cli/prompt.ts.
+  .addHelpText(
+    'after',
+    '\nThe passphrase is always typed at a prompt, never passed as a flag.\n' +
+      'Set EGEHAN_PASSPHRASE for automation; be aware every child process inherits it.',
+  )
+  .action(
+    async (flags: {
+      message?: string;
+      messageFile?: string;
+      unlockDate?: string;
+      author?: string;
+      hint?: string;
+      file?: string;
+      open?: boolean;
+      force?: boolean;
+    }) => {
+      await runCapsule({
+        cwd: process.cwd(),
+        message: flags.message ?? null,
+        messageFile: flags.messageFile ?? null,
+        unlockDate: flags.unlockDate ?? null,
+        author: flags.author ?? null,
+        hint: flags.hint ?? null,
+        file: flags.file ?? null,
+        open: flags.open === true,
+        force: flags.force === true,
+      });
+    },
+  );
+
 function parseFormat(value: string): OutputFormat {
   if (!FORMATS.includes(value as OutputFormat)) {
     throw new InvalidArgumentError(`Expected one of: ${FORMATS.join(', ')}`);
@@ -121,6 +167,8 @@ function reportError(error: unknown): never {
     error instanceof NoCommitsError ||
     error instanceof EmptyHistoryError ||
     error instanceof ConfigError ||
+    error instanceof CapsuleError ||
+    error instanceof PromptError ||
     error instanceof GitError
   ) {
     fail(error.message);

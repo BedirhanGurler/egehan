@@ -30,6 +30,15 @@ the HTML timeline is a presentational ritual, and anyone can change their system
 browser console. The passphrase is the only thing protecting the contents. This is also why no
 passphrase-free capsule mode exists — it would advertise encryption while providing none.
 
+The passphrase is never accepted as a command-line flag. A secret passed as an argument is written to
+the shell's history file and is visible to every process on the machine through the process list, so
+`egehan capsule` prompts for it with the echo suppressed. `EGEHAN_PASSPHRASE` exists for automation and
+is warned about when used, because an environment variable is inherited by every child process.
+
+The unlock date is bound into the ciphertext as AES-GCM additional authenticated data. This does not
+make the date a security control; it makes an edited countdown tamper-evident, because a capsule whose
+date was changed stops opening.
+
 If you lose the passphrase, the message is unrecoverable. That is the intended behaviour, and the CLI
 says so before it writes the file.
 
