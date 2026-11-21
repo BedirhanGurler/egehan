@@ -5,7 +5,7 @@ All notable changes are recorded here. The format follows
 [semantic versioning](https://semver.org/spec/v2.0.0.html) across all three published artifacts —
 they share one version on purpose, and the release workflow refuses to publish when they disagree.
 
-## [0.1.0] — unreleased
+## [0.1.0] — 2026-11-21
 
 The first release.
 
