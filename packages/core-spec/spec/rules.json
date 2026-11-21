@@ -26,9 +26,13 @@
     ],
     "recordSeparator": "\u001e",
     "fieldSeparator": "\u001f",
-    "logFields": ["H", "h", "P", "an", "ae", "aI", "cI", "D", "s", "b"],
+    "logFields": ["H", "h", "P", "an", "ae", "aI", "cI", "s", "b"],
+    "tagSource": "for-each-ref",
+    "$tagSourceComment": "Tags are read with `git for-each-ref refs/tags`, not from the %D decoration in the log. An annotated tag's own object name is not the commit's, so %D-based parsing silently loses annotated releases — which are exactly the ones a project bothers to annotate.",
     "numstatMode": "--numstat",
     "followMerges": false,
+    "commitOrdering": ["author-date-ascending", "commit-date-ascending", "sha-ascending"],
+    "$commitOrderingComment": "git log returns topological order, which is not chronological: a rebase, a cherry-pick or a skewed clock can place a commit before one it was authored after. Fix clustering and streak counting both depend on chronological order, so the engine re-sorts by author date with an explicit, total tie-break. Without the tie-break two commits sharing a timestamp could land in either order and the two engines would disagree.",
     "maxSubjectLength": 200
   },
 
@@ -62,6 +66,8 @@
       "deps": "chore",
       "init": "feat"
     },
+    "keywordFallbackOrder": ["fix", "feat", "perf", "test", "docs", "refactor", "style", "build", "ci", "chore"],
+    "$keywordFallbackOrderComment": "Explicit, because object key order is not a portable guarantee: .NET's Dictionary gives no ordering, so an engine iterating the keywordFallback map directly could classify a subject differently from the Node engine. The order is part of the contract, not an implementation detail.",
     "keywordFallback": {
       "$comment": "Applied only when the subject carries no conventional prefix. Case-insensitive, diacritic-sensitive, whole-word match on the lowercased subject. Turkish and English keywords both count — the tool must be useful in repositories that never adopted Conventional Commits.",
       "fix": ["fix", "fixed", "fixes", "bug", "bugfix", "hotfix", "patch", "repair", "resolve", "resolved", "hata", "hatasi", "hatası", "duzelt", "düzelt", "duzeltme", "düzeltme", "onar", "cozuldu", "çözüldü", "giderildi"],
@@ -80,10 +86,20 @@
       "stripTicketPattern": "(?:\\s+#\\d+|\\s*\\[[A-Z][A-Z0-9]{1,9}-\\d+\\]|\\s*\\(#\\d+\\))\\s*$",
       "stripTrailingPeriod": true,
       "collapseWhitespace": true,
-      "capitalizeFirstLetter": true,
+      "capitalizeFirstLetter": false,
+      "capitalizationLocale": "report-language",
+      "$capitalizeFirstLetterComment": "Off by default, and the default is the interesting part. Every narrative template quotes the subject (\u00abu2026\u00bb), and a quotation keeps the casing it was written with — upper-casing it produced \"V0.1.0\" from a release commit and, worse, \"\u0130nitial commit\" under Turkish casing rules applied to an English word. Sentence-level capitalization is handled by narrative.capitalizeFirstLetter instead, where the text really is in the report's language.",
+      "$capitalizationLocaleComment": "The first letter is upper-cased using the report's own language tag, not the host locale and not an invariant upcase. Turkish needs this: an invariant upcase turns \"iyileştirme\" into \"Iyileştirme\" instead of \"İyileştirme\". Determinism is preserved because the language is part of the report, so every engine upper-cases with the same tag. Everything else in this engine lowercases invariantly — only this one step is locale-aware, and only ever with the report language.",
       "maxLength": 140,
       "ellipsis": "…"
     }
+  },
+
+  "narrative": {
+    "capitalizeFirstLetter": true,
+    "capitalizationLocale": "report-language",
+    "skipWhenFirstCharIsNotALetter": true,
+    "$comment": "The generated sentence is capitalized, not the commit subject. The skip rule matters: a template may begin with a date or with the quoted subject, and in both cases the first character is not a letter the engine should touch — upper-casing inside the quotation would corrupt the citation."
   },
 
   "classification": {
@@ -135,7 +151,7 @@
     "$comment": "Entries are grouped into chapters by consecutive runs of the same primary category, so the chronicle reads as a story rather than a list.",
     "groupBy": "consecutive-primary-category",
     "maxEntriesPerChapter": 40,
-    "maxGapHoursWithinChapter": 336,
+    "maxGapHoursWithinChapter": 720,
     "titleSelection": "deterministic-by-first-entry-sha"
   },
 
@@ -150,10 +166,18 @@
     "chronotypeTieBreak": "highest-share-then-declaration-order",
     "fallbackChronotype": "balanced-rhythm",
     "creationRatioFormula": "insertions / max(1, insertions + deletions)",
+    "peakSmoothingWindow": 1,
+    "$peakSmoothingComment": "The busiest hour is the peak of the histogram smoothed over a circular window of this many hours on each side. Raw peaks are meaningless on small histories: with fourteen commits at fourteen different hours everything ties at one and the lowest index wins, which reported \"busiest hour 02\" for a project that commits in daylight. Smoothing finds the busiest PERIOD, which is what the question actually means.",
     "streak": {
       "unit": "local-calendar-day",
       "minLengthToReport": 2,
-      "currentStreakGraceDays": 1
+      "anchor": "last-commit-in-range",
+      "$anchorComment": "currentStreak is the run of consecutive days ending at the LAST COMMIT IN RANGE, never at today's date. Anchoring it to the wall clock would make the report change every day while the repository stayed still — breaking determinism, producing a churning git diff, and making the two engines disagree whenever they ran on different days."
+    },
+    "rounding": {
+      "ratioDecimals": 4,
+      "averageDecimals": 2,
+      "$comment": "Derived decimals are rounded before they enter the report. IEEE-754 gives Node and .NET the same bits, but an unrounded 0.6666666666666666 invites divergence the moment either side formats or re-serializes it, so the contract fixes the precision instead of hoping."
     },
     "sizeBuckets": [
       { "id": "touch", "maxChangedLines": 10 },
@@ -170,6 +194,8 @@
     "anniversaryDays": [30, 100, 365, 500, 730, 1000],
     "onReleaseTag": true,
     "onMidnightFix": true,
+    "midnightFixMilestone": "first-only",
+    "$midnightFixComment": "An IDE may celebrate every late-night fix, but the report's milestone strip records only the FIRST one. A project with two hundred night commits would otherwise bury its releases under two hundred identical entries.",
     "onLongestStreakBroken": false,
     "onStreakDays": [7, 30, 100]
   },
@@ -228,6 +254,8 @@
   },
 
   "output": {
+    "embedGenerationTimeInArtifacts": false,
+    "$embedGenerationTimeComment": "The rendered artifacts (EGEHAN.md, egehan-chronicle.html) must not carry the moment they were generated. They are meant to be committed, and a post-commit hook that regenerates them would otherwise produce a one-line diff on every single commit forever — which is exactly the churn determinism exists to prevent. The JSON report keeps generator.generatedAt, because it is the machine format and provenance belongs there.",
     "markdownFileName": "EGEHAN.md",
     "htmlFileName": "egehan-chronicle.html",
     "reportFileName": "egehan-report.json",

@@ -54,19 +54,23 @@ koda karşı iyileştirilen kod oranı ve en uzun kesintisiz commit seriniz.
 **Yaşayan bir kronik.** Bir kez `egehan hook install` dersiniz; sonraki her commit hikayeyi sessizce
 günceller. VS Code ve Visual Studio'da durum çubuğu nabzı görünür tutar, dönüm noktaları kendini duyurur.
 
+Üretilmiş bir örnek [docs/example-chronicle.md](docs/example-chronicle.md) dosyasında duruyor — uyum
+fixture'ından aracın kendisi tarafından üretiliyor, yani her zaman güncel motorun gerçek çıktısıdır.
+
 ## Projenin durumu
 
 Egehan fazlar hâlinde geliştiriliyor. Bu tablo her fazın dürüst durumudur; hiçbir şey testleri yazılmadan
 "bitti" olarak işaretlenmez.
 
-| Faz | Teslim                                                                            | Durum     |
-| --- | --------------------------------------------------------------------------------- | --------- |
-| 1   | `core-spec` — rapor şeması, motor kuralları, anlatı sözlükleri, uyum fixture'ları | **bitti** |
-| 1   | `egehan-book.html` — tek dosyalık interaktif zaman tüneli şablonu                 | sürüyor   |
-| 1   | `egehan` npm CLI — git okuyucu, hikaye motoru, üreteçler, hook'lar                | planlandı |
-| 2   | VS Code eklentisi — durum çubuğu, zaman tüneli paneli, dönüm noktası bildirimleri | planlandı |
-| 3   | `Egehan.Cli` .NET global tool (`net8.0` + `net10.0`)                              | planlandı |
-| 4   | Visual Studio 2022+ eklentisi (VSIX)                                              | planlandı |
+| Faz | Teslim                                                                             | Durum     |
+| --- | ---------------------------------------------------------------------------------- | --------- |
+| 1   | `core-spec` — rapor şeması, motor kuralları, anlatı sözlükleri, uyum fixture'ları  | **bitti** |
+| 1   | `egehan` npm CLI — git okuyucu, hikaye motoru, Markdown üreteci, Geliştirici Nabzı | **bitti** |
+| 1   | `egehan-book.html` — tek dosyalık interaktif zaman tüneli şablonu                  | sürüyor   |
+| 1   | `egehan hook install` ve `egehan capsule` — yaşayan kronik ve mühürlü kapsül       | planlandı |
+| 2   | VS Code eklentisi — durum çubuğu, zaman tüneli paneli, dönüm noktası bildirimleri  | planlandı |
+| 3   | `Egehan.Cli` .NET global tool (`net8.0` + `net10.0`)                               | planlandı |
+| 4   | Visual Studio 2022+ eklentisi (VSIX)                                               | planlandı |
 
 ## Komut sözleşmesi
 

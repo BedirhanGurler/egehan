@@ -53,19 +53,23 @@ the ratio of code created to code refined, and your longest unbroken commit stre
 **A living chronicle.** One `egehan hook install` and every later commit quietly updates the story. In
 VS Code and Visual Studio a status bar entry keeps the pulse visible and milestones announce themselves.
 
+A rendered example is committed at [docs/example-chronicle.md](docs/example-chronicle.md) — generated
+from the conformance fixture by the tool itself, so it is always what the current engine produces.
+
 ## Project status
 
 Egehan is being built in phases, and this table is the honest state of each one. Nothing is listed as
 done before its tests are.
 
-| Phase | Deliverable                                                                             | Status      |
-| ----- | --------------------------------------------------------------------------------------- | ----------- |
-| 1     | `core-spec` — report schema, engine rules, narrative dictionaries, conformance fixtures | **done**    |
-| 1     | `egehan-book.html` — the single-file interactive timeline template                      | in progress |
-| 1     | `egehan` npm CLI — git reader, story engine, renderers, hooks                           | planned     |
-| 2     | VS Code extension — status bar, timeline panel, milestone notifications                 | planned     |
-| 3     | `Egehan.Cli` .NET global tool (`net8.0` + `net10.0`)                                    | planned     |
-| 4     | Visual Studio 2022+ extension (VSIX)                                                    | planned     |
+| Phase | Deliverable                                                                              | Status      |
+| ----- | ---------------------------------------------------------------------------------------- | ----------- |
+| 1     | `core-spec` — report schema, engine rules, narrative dictionaries, conformance fixtures  | **done**    |
+| 1     | `egehan` npm CLI — git reader, story engine, Markdown renderer, Developer Pulse          | **done**    |
+| 1     | `egehan-book.html` — the single-file interactive timeline template                       | in progress |
+| 1     | `egehan hook install` and `egehan capsule` — the living chronicle and the sealed capsule | planned     |
+| 2     | VS Code extension — status bar, timeline panel, milestone notifications                  | planned     |
+| 3     | `Egehan.Cli` .NET global tool (`net8.0` + `net10.0`)                                     | planned     |
+| 4     | Visual Studio 2022+ extension (VSIX)                                                     | planned     |
 
 ## The command contract
 

@@ -1,0 +1,6 @@
+# Intentionally present, and intentionally almost empty.
+#
+# When a package has no .npmignore, npm falls back to .gitignore when packing. The published
+# assets/ directory is generated at build time and therefore git-ignored, so that fallback would
+# silently ship a package with no rules file and no dictionaries. This file stops the fallback;
+# the "files" allowlist in package.json is what decides the contents of the tarball.

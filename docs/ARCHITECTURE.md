@@ -81,6 +81,14 @@ impossible to keep in version control — the exact opposite of a chronicle.
 than from a model, so the dictionaries carry 108 entry templates per language and the validator rejects
 duplicates within a variant list (a duplicate would skew the deterministic choice).
 
+**Consequence, learned the hard way.** Determinism is a property of the _whole artifact_, not just of
+the sentences. The Markdown renderer originally printed the generation timestamp in its footer, which
+meant every `egehan generate` changed the file — so the post-commit hook of ADR-006 would have attached a
+one-line diff to every commit in the project, forever. `rules.json → output.embedGenerationTimeInArtifacts`
+is now `false`: the rendered artifacts depend only on the repository, and `generator.generatedAt` survives
+only in the JSON report, which is the machine format and the right place for provenance. A test asserts
+that the rendered chronicle contains no timestamp, because this is an easy mistake to make twice.
+
 ### ADR-003 — The local hour is preserved, never normalized
 
 **Decision.** `localHour` and `localWeekday` come from the commit's own ISO-8601 offset. Timestamps are
@@ -203,8 +211,9 @@ Written down so they stay visible rather than becoming surprises:
 - **Two engines drifting.** Mitigated by ADR-001 and the shared fixtures. This is the risk most likely to
   end the project, and the one the architecture is mostly shaped around.
 - **Types drifting from the schema.** Mitigated by validating generated reports against the schema in CI.
-- **Generated artifacts churning in git.** Mitigated by determinism; regressions here show up immediately
-  as unexpected fixture diffs.
+- **Generated artifacts churning in git.** Mitigated by determinism, and by keeping the generation
+  timestamp out of the rendered artifacts entirely (ADR-002). Regressions show up immediately as
+  unexpected fixture diffs, and a test asserts the chronicle carries no timestamp.
 - **Hook damage in user repositories.** Mitigated by ADR-006. Deserves the most careful tests in the
   project, because the failure mode lands in someone else's repository.
 - **The VSIX going stale.** It is the only deliverable that cannot be verified on the maintainer's

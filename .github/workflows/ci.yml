@@ -33,6 +33,12 @@ jobs:
       - name: Validate the dictionary contract
         run: npm run spec:validate
 
+      - name: Check that the published assets still match core-spec
+        run: npm run sync-spec -w egehan -- --check
+
+      - name: Check that the expected fixture reports still match the engine
+        run: npm run fixtures:generate -w egehan -- --check
+
       - name: Test
         run: npm test
 
@@ -59,4 +65,12 @@ jobs:
 
       - run: npm ci
       - run: npm run build
+
+      # git must be configured for the integration tests, which build real repositories.
+      - name: Configure git
+        run: |
+          git config --global user.name "CI"
+          git config --global user.email "ci@example.com"
+          git config --global init.defaultBranch main
+
       - run: npm test

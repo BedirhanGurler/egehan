@@ -407,3 +407,24 @@ test('the dictionaries carry no personal content — this repository ships no de
     assert.doesNotMatch(raw, /egehan['’]?a|dear son|oğluma|ithaf/i, 'dictionaries must stay impersonal');
   }
 });
+
+test('rules.json: the keyword fallback order covers every keyword group exactly once', () => {
+  const { keywordFallback, keywordFallbackOrder } = readJson(DEFAULT_RULES_PATH).conventionalCommits;
+  const groups = Object.keys(keywordFallback).filter((k) => !k.startsWith('$'));
+
+  assert.deepEqual([...keywordFallbackOrder].sort(), groups.sort());
+  assert.equal(
+    new Set(keywordFallbackOrder).size,
+    keywordFallbackOrder.length,
+    'the order must not repeat a group',
+  );
+
+  // The order is what makes the fallback portable: an engine iterating the map instead would
+  // classify subjects differently wherever map ordering differs, .NET included.
+  for (const group of keywordFallbackOrder) {
+    assert.ok(keywordFallback[group].length > 0, `keyword group "${group}" is empty`);
+    const lowercased = keywordFallback[group].map((k) => k.toLowerCase());
+    assert.deepEqual(lowercased, keywordFallback[group], `keyword group "${group}" must be lowercase`);
+    assert.equal(new Set(lowercased).size, lowercased.length, `keyword group "${group}" repeats a keyword`);
+  }
+});

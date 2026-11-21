@@ -43,6 +43,10 @@
     "dateFormat": "{day} {month} {year}",
     "dateShortFormat": "{day} {month}",
     "timeFormat": "{hour}:{minute}",
+    "rangeFormat": "{from} – {to}",
+    "rangeSameDayFormat": "{from}",
+    "periodFormat": "{from} – {to} arasında",
+    "periodSameDayFormat": "{from} günü",
     "listSeparator": ", ",
     "listLastSeparator": " ve "
   },
@@ -122,7 +126,7 @@
         "minimalist": [
           "{from}: proje kuruldu. {commits}, {additions} eklendi.",
           "Başlangıç dönemi: {commits}, {files}.",
-          "{from} – {to} arası kurulum işleri."
+          "{period} kurulum işleri."
         ],
         "humorous": [
           "{from} günü biri bir klasör açtı ve geri dönüş yoktu: {commits}.",
@@ -133,7 +137,7 @@
       "entries": {
         "poetic": [
           "{date} günü hiçlikten bir satır doğdu; «{subject}» ile bu projenin ilk nefesi alındı.",
-          "{date}, saat {time} sularında {files} dosyaya dokundu ve «{subject}» ile {flavorSubject} ilk şeklini buldu.",
+          "{date}, saat {time} sularında {filesCount} dosyaya dokundu ve «{subject}» ile {flavorSubject} ilk şeklini buldu.",
           "Boş bir dizinin üzerine {author} ilk tuğlayı koydu: «{subject}».",
           "{date} tarihinde {additions} ile birlikte bu projenin hikayesi başladı; adı henüz yoktu ama yönü vardı: «{subject}».",
           "Henüz hiçbir şeyin bozulmadığı o ilk anda, {weekday} günü «{subject}» kaydedildi.",
@@ -150,7 +154,7 @@
         "humorous": [
           "{date} günü bir klasör açıldı ve geri dönüşü olmayan yola girildi: «{subject}».",
           "Henüz hiçbir bug yoktu, hiçbir toplantı yapılmamıştı. Sadece «{subject}» vardı.",
-          "{author}, {date} günü {files} dosyayla işe girişti: «{subject}». Masumiyet dönemi.",
+          "{author}, {date} günü {filesCount} dosyayla işe girişti: «{subject}». Masumiyet dönemi.",
           "«{subject}» — yani «ben bu projeyi 2 günde bitiririm» dendiği an.",
           "{time} sularında {additions} yazıldı ve proje resmen var oldu: «{subject}».",
           "İlk commit, ilk heves: «{subject}»."
@@ -183,24 +187,24 @@
       },
       "chapterNarratives": {
         "poetic": [
-          "{from} – {to} arasında {commits} ile {flavorSubject} ayakta durmayı öğrendi.",
+          "{period} {commits} ile {flavorSubject} ayakta durmayı öğrendi.",
           "İlk sürüm etiketi henüz yokken, {span} boyunca {commits} atıldı ve {additions} eklendi.",
           "{commits} boyunca projenin iskeleti yükseldi; her commit bir sonrakine zemin hazırladı."
         ],
         "minimalist": [
-          "{from} – {to}: {commits}, {additions} eklendi, {removals} silindi.",
+          "{range}: {commits}, {additions} eklendi, {removals} silindi.",
           "İlk sürüm öncesi geliştirme: {commits}, {files}.",
           "Çekirdek özellikler: {commits} ({authorsCount} geliştirici)."
         ],
         "humorous": [
-          "{commits} ile «mimariyi baştan doğru kurduk» denen dönem: {from} – {to}.",
+          "{commits} ile «mimariyi baştan doğru kurduk» denen dönem: {range}.",
           "Henüz kimsenin kullanmadığı, dolayısıyla hiçbir şeyin bozulmadığı {span}.",
           "{commits} atıldı, {additions} yazıldı, hiçbiri test edilmedi. Henüz."
         ]
       },
       "entries": {
         "poetic": [
-          "{date} günü «{subject}» ile {flavorSubject} bir adım daha sağlam bastı; {files} dosyada {additions} yeni satır belirdi.",
+          "{date} günü «{subject}» ile {flavorSubject} bir adım daha sağlam bastı; {filesCount} dosyada {additions} yeni satır belirdi.",
           "{weekday} günü {flavorArtifact} tarafına yeni bir yetenek eklendi: «{subject}».",
           "{author}, {date} tarihinde «{subject}» ile projeye bir yetenek daha kazandırdı.",
           "{date}, saat {time} civarında {flavorLayer} genişledi; «{subject}» tamamlandı.",
@@ -218,7 +222,7 @@
         "humorous": [
           "{date} günü «{subject}» eklendi; o an gerçekten çalıştığına inanılmıştı.",
           "«{subject}» — {additions} ile gelen, dokümantasyonu asla yazılmayacak özellik.",
-          "{author} {date} tarihinde {files} dosyaya dokunup «{subject}» dedi ve kahvesine döndü.",
+          "{author} {date} tarihinde {filesCount} dosyaya dokunup «{subject}» dedi ve kahvesine döndü.",
           "{time} sularında «{subject}» yazıldı. Test? Sonra.",
           "«{subject}» — TODO listesinden silinen, ama yerine üç yenisini doğuran commit.",
           "{changedLines} satır değişti, hiçbir şey bozulmadı: «{subject}»."
@@ -251,24 +255,24 @@
       },
       "chapterNarratives": {
         "poetic": [
-          "{from} – {to} arasında {commits} boyunca aynı yaraya dönülüp durulduk; {removals} silindi, {additions} yeniden yazıldı.",
+          "{period} {commits} boyunca aynı yaraya defalarca dönüldü; {removals} silindi, {additions} yeniden yazıldı.",
           "{span} süren bu dönemde proje büyümenin bedelini ödedi: {commits}, {files}.",
           "Kırılan her parça {commits} ile yeniden yerine oturdu."
         ],
         "minimalist": [
-          "{from} – {to}: {commits} düzeltme. +{insertions}/-{deletions}.",
+          "{range}: {commits} düzeltme. +{insertions}/-{deletions}.",
           "Kararlılık dönemi: {commits}, {files}.",
           "{commits} ile hatalar giderildi ({span})."
         ],
         "humorous": [
           "{span} içinde {commits}. Hepsi aynı şeyi düzeltmek içindi, muhtemelen.",
-          "{from} – {to}: projenin «aslında çalışıyordu» dediği dönem.",
+          "{range}: projenin «aslında çalışıyordu» dediği dönem.",
           "{removals} silindi. Bazı kodlar gitti ve kimse arkasından ağlamadı."
         ]
       },
       "entries": {
         "poetic": [
-          "{date} günü «{subject}» sorunu giderildi; {files} dosyada {removals} silinip {additions} yeniden yazıldı.",
+          "{date} günü «{subject}» sorunu giderildi; {filesCount} dosyada {removals} silinip {additions} yeniden yazıldı.",
           "{flavorLayer} tarafında bir çatlak belirdi ve {date} tarihinde «{subject}» ile onarıldı.",
           "{author}, {weekday} günü titiz bir çalışmayla «{subject}» düğümünü çözdü.",
           "{date}, saat {time} civarında {flavorSubject} nefesini düzeltti: «{subject}».",
@@ -287,7 +291,7 @@
           "{date} günü «{subject}» düzeltildi. Üçüncü denemede.",
           "«{subject}» — {removals} silindi, çünkü bazı kodlar hak etmişti.",
           "{time} sularında «{subject}» çözüldü ve nihayet uyunabildi.",
-          "{author} {date} tarihinde {files} dosyayı açtı, «{subject}» dedi, kapattı. Umut.",
+          "{author} {date} tarihinde {filesCount} dosyayı açtı, «{subject}» dedi, kapattı. Umut.",
           "«{subject}» — «bu nasıl çalışıyordu ki» sorusunun cevabı.",
           "{changedLines} satır sonra «{subject}». Artık gerçekten çalışıyor olabilir."
         ]
@@ -319,12 +323,12 @@
       },
       "chapterNarratives": {
         "poetic": [
-          "{from} – {to} arasında {commits} gecenin sessizliğinde atıldı; şehir uyurken {additions} yazıldı.",
+          "{period} {commits} gecenin sessizliğinde atıldı; şehir uyurken {additions} yazıldı.",
           "Lamba {span} boyunca yanık kaldı: {commits}, {files}.",
           "Gecenin en derin saatlerinde {commits} ile {flavorSubject} şekillendi."
         ],
         "minimalist": [
-          "{from} – {to}: {commits} gece saatlerinde atıldı.",
+          "{range}: {commits} gece saatlerinde atıldı.",
           "Gece mesaisi: {commits}, {additions}.",
           "{commits} — 00:00 ile 05:00 arası."
         ],
@@ -336,7 +340,7 @@
       },
       "entries": {
         "poetic": [
-          "{dateShort} gecesi saat {time} sularında, herkes uyurken {files} dosyada titiz bir çalışma yapıldı; «{subject}» ile {flavorSubject} nefesi düzeltildi.",
+          "{dateShort} gecesi saat {time} sularında, herkes uyurken {filesCount} dosyada titiz bir çalışma yapıldı; «{subject}» ile {flavorSubject} nefesi düzeltildi.",
           "Gecenin {time} sessizliğinde «{subject}» tamamlandı; {additions} yazıldı, kimse görmedi.",
           "{date}, saat {time} — lamba hâlâ yanıyordu ve «{subject}» bitmek üzereydi.",
           "{author}, {weekday} gecesi saat {time} civarında «{subject}» ile {flavorLayer} tarafına döndü.",
@@ -357,7 +361,7 @@
           "{time} — kahve bitti, {additions} yazıldı: «{subject}».",
           "«{subject}» — gece {time} enerjisiyle yazılmış, sabah refactor edilecek kod.",
           "{author}, saat {time} civarında uyku ile {flavorArtifact} arasında seçim yaptı: «{subject}».",
-          "Gecenin {time} saatinde {files} dosya açıldı. Pişmanlık sabaha ertelendi: «{subject}»."
+          "Gecenin {time} saatinde {filesCount} dosya açıldı. Pişmanlık sabaha ertelendi: «{subject}»."
         ]
       }
     },
@@ -392,7 +396,7 @@
           "{additions} ile birlikte {flavorDomain} artık eskisi gibi değildi."
         ],
         "minimalist": [
-          "{from} – {to}: {commits}, {additions} eklendi.",
+          "{range}: {commits}, {additions} eklendi.",
           "Dönüm noktası: {commits}, {files}.",
           "Sürüm dönemi: {commits} ({span})."
         ],
@@ -406,7 +410,7 @@
         "poetic": [
           { "t": "{date} günü {tag} etiketi vuruldu; «{subject}» ile projenin yeni devri ilan edildi.", "requires": ["tag"] },
           { "t": "{tag} ile birlikte {flavorSubject} geriye dönüşü olmayan bir eşiği aştı: «{subject}».", "requires": ["tag"] },
-          "{date} tarihinde {files} dosyada {additions} eklendi; «{subject}» ile mimari bir sıçrama yaşandı.",
+          "{date} tarihinde {filesCount} dosyada {additions} eklendi; «{subject}» ile mimari bir sıçrama yaşandı.",
           "{author}, {date} günü {additions} yazarak {flavorLayer} tarafını yeniden tanımladı: «{subject}».",
           "{weekday} günü {changedLines} satır değişti ve «{subject}» ile {flavorDomain} yeni bir hâl aldı.",
           "{date}, saat {time} civarında taş yerine oturdu: «{subject}»."
@@ -424,7 +428,7 @@
           { "t": "{date} günü {tag} etiketi vuruldu ve proje resmen ciddiye alınmaya başlandı: «{subject}».", "requires": ["tag"] },
           "{date} tarihinde {additions} tek seferde yazıldı. Ya cesaret ya kahve: «{subject}».",
           "«{subject}» — {changedLines} satır. Code review yapan kişiye sabır.",
-          "{author} {date} günü {files} dosyayı birden değiştirdi: «{subject}». Cesur.",
+          "{author} {date} günü {filesCount} dosyayı birden değiştirdi: «{subject}». Cesur.",
           "{additions} ile gelen bu commit, diff'i açanı pişman etti: «{subject}»."
         ]
       }
@@ -455,12 +459,12 @@
       },
       "chapterNarratives": {
         "poetic": [
-          "{from} – {to} arasında {commits} ile proje gürültüsüz biçimde olgunlaştı.",
+          "{period} {commits} ile proje gürültüsüz biçimde olgunlaştı.",
           "{span} boyunca kenarlar törpülendi: {commits}, {files}.",
           "Ne yıkım ne patlama; sadece {commits} ile sabırlı bir ustalık."
         ],
         "minimalist": [
-          "{from} – {to}: {commits} iyileştirme.",
+          "{range}: {commits} iyileştirme.",
           "Bakım dönemi: {commits}, +{insertions}/-{deletions}.",
           "{commits} — testler, dokümantasyon ve iyileştirmeler."
         ],
@@ -472,7 +476,7 @@
       },
       "entries": {
         "poetic": [
-          "{date} günü «{subject}» ile {flavorSubject} bir parça daha olgunlaştı; {files} dosya gözden geçirildi.",
+          "{date} günü «{subject}» ile {flavorSubject} bir parça daha olgunlaştı; {filesCount} dosya gözden geçirildi.",
           "{weekday} günü gürültü çıkarmadan «{subject}» tamamlandı ve {flavorLayer} daha sağlam hâle geldi.",
           "{author}, {date} tarihinde «{subject}» ile {flavorDomain} tarafını törpüledi.",
           "{date}, saat {time} civarında {changedLines} satır düzenlendi: «{subject}».",
@@ -490,7 +494,7 @@
         "humorous": [
           "{date} günü «{subject}». Heyecanlı değil ama doğru olan buydu.",
           "«{subject}» — sonunda biri dokümantasyonu hatırladı.",
-          "{author} {date} tarihinde {files} dosyayı düzenledi: «{subject}». Mükemmeliyetçilik.",
+          "{author} {date} tarihinde {filesCount} dosyayı düzenledi: «{subject}». Mükemmeliyetçilik.",
           "«{subject}» — {changedLines} satır, sıfır yeni özellik. Olgunluk bu.",
           "{time} sularında «{subject}» yapıldı; kimse farketmedi, herkes faydalandı.",
           "Teknik borcun bir taksiti daha ödendi: «{subject}»."
@@ -590,6 +594,8 @@
       "projectAge": "Proje yaşı",
       "hourDistribution": "Saatlere göre dağılım",
       "weekdayDistribution": "Günlere göre dağılım",
+      "lineChurn": "Eklenen / silinen",
+      "filesTouched": "Dokunulan dosya",
       "monthlyActivity": "Aylık etkinlik"
     }
   },

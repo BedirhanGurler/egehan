@@ -43,6 +43,10 @@
     "dateFormat": "{day} {month} {year}",
     "dateShortFormat": "{day} {month}",
     "timeFormat": "{hour}:{minute}",
+    "rangeFormat": "{from} – {to}",
+    "rangeSameDayFormat": "{from}",
+    "periodFormat": "between {from} and {to}",
+    "periodSameDayFormat": "on {from}",
     "listSeparator": ", ",
     "listLastSeparator": " and "
   },
@@ -122,7 +126,7 @@
         "minimalist": [
           "{from}: project created. {commits}, {additions} added.",
           "Setup period: {commits}, {files}.",
-          "{from} – {to}: initial scaffolding."
+          "{range}: initial scaffolding."
         ],
         "humorous": [
           "On {from} somebody created a folder and there was no going back: {commits}.",
@@ -183,17 +187,17 @@
       },
       "chapterNarratives": {
         "poetic": [
-          "Between {from} and {to}, {commits} taught the {flavorSubject} how to stand on its own.",
+          "{period}, {commits} taught the {flavorSubject} how to stand on its own.",
           "With no release tag in sight, {span} carried {commits} and {additions}.",
           "Across {commits} the skeleton rose; each commit laid ground for the next."
         ],
         "minimalist": [
-          "{from} – {to}: {commits}, {additions} added, {removals} removed.",
+          "{range}: {commits}, {additions} added, {removals} removed.",
           "Pre-release development: {commits}, {files}.",
           "Core features: {commits} ({authorsCount} developers)."
         ],
         "humorous": [
-          "{commits} during the «we got the architecture right this time» phase: {from} – {to}.",
+          "{commits} during the «we got the architecture right this time» phase: {range}.",
           "{span} in which nobody used it, so nothing was broken.",
           "{commits} written, {additions} added, none of it tested. Yet."
         ]
@@ -251,18 +255,18 @@
       },
       "chapterNarratives": {
         "poetic": [
-          "Between {from} and {to}, {commits} returned to the same wound again and again; {removals} removed, {additions} rewritten.",
+          "{period}, {commits} returned to the same wound again and again; {removals} removed, {additions} rewritten.",
           "Over {span} the project paid the price of growing: {commits}, {files}.",
           "Every broken piece found its place again across {commits}."
         ],
         "minimalist": [
-          "{from} – {to}: {commits} of fixes. +{insertions}/-{deletions}.",
+          "{range}: {commits} of fixes. +{insertions}/-{deletions}.",
           "Stabilization period: {commits}, {files}.",
           "{commits} resolved the outstanding defects ({span})."
         ],
         "humorous": [
           "{commits} in {span}. All fixing the same thing, probably.",
-          "{from} – {to}: the period the project insists «it was working».",
+          "{range}: the period the project insists «it was working».",
           "{removals} deleted. Some code left and nobody mourned it."
         ]
       },
@@ -319,12 +323,12 @@
       },
       "chapterNarratives": {
         "poetic": [
-          "Between {from} and {to}, {commits} were made in the quiet of the night; {additions} written while the city slept.",
+          "{period}, {commits} were made in the quiet of the night; {additions} written while the city slept.",
           "The lamp stayed on for {span}: {commits}, {files}.",
           "In the deepest hours of the night, {commits} shaped the {flavorSubject}."
         ],
         "minimalist": [
-          "{from} – {to}: {commits} made during night hours.",
+          "{range}: {commits} made during night hours.",
           "Night shift: {commits}, {additions}.",
           "{commits} — between 00:00 and 05:00."
         ],
@@ -392,7 +396,7 @@
           "With {additions}, the {flavorDomain} was no longer what it had been."
         ],
         "minimalist": [
-          "{from} – {to}: {commits}, {additions} added.",
+          "{range}: {commits}, {additions} added.",
           "Milestone: {commits}, {files}.",
           "Release period: {commits} ({span})."
         ],
@@ -455,12 +459,12 @@
       },
       "chapterNarratives": {
         "poetic": [
-          "Between {from} and {to}, {commits} let the project mature without a sound.",
+          "{period}, {commits} let the project mature without a sound.",
           "Across {span} the edges were smoothed: {commits}, {files}.",
           "No demolition, no fireworks; only {commits} of patient craft."
         ],
         "minimalist": [
-          "{from} – {to}: {commits} of improvements.",
+          "{range}: {commits} of improvements.",
           "Maintenance period: {commits}, +{insertions}/-{deletions}.",
           "{commits} — tests, documentation and refinements."
         ],
@@ -590,6 +594,8 @@
       "projectAge": "Project age",
       "hourDistribution": "Distribution by hour",
       "weekdayDistribution": "Distribution by weekday",
+      "lineChurn": "Added / removed",
+      "filesTouched": "Files touched",
       "monthlyActivity": "Monthly activity"
     }
   },

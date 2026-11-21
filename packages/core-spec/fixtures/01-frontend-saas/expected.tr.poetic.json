@@ -1,0 +1,912 @@
+{
+  "schemaVersion": "1.0.0",
+  "generator": {
+    "name": "egehan",
+    "version": "0.0.0-fixture",
+    "platform": "node",
+    "specVersion": "1.0.0",
+    "dictionaryVersion": "1.0.0",
+    "generatedAt": "2026-01-01T00:00:00+00:00"
+  },
+  "project": {
+    "name": "orbit-dashboard",
+    "detectedTypes": [
+      "frontend",
+      "node"
+    ],
+    "flavor": "frontend",
+    "defaultBranch": "main",
+    "remoteHost": "github.com",
+    "dedication": null
+  },
+  "config": {
+    "language": "tr",
+    "tone": "poetic",
+    "redactEmails": true,
+    "anonymizeAuthors": false,
+    "includeMergeCommits": false,
+    "theme": "auto"
+  },
+  "range": {
+    "since": null,
+    "until": null,
+    "firstCommitAt": "2025-01-06T21:14:03+03:00",
+    "lastCommitAt": "2025-09-01T12:00:00+03:00",
+    "days": 239,
+    "truncated": false
+  },
+  "totals": {
+    "commits": 14,
+    "authors": 2,
+    "insertions": 2370,
+    "deletions": 1424,
+    "filesTouched": 25,
+    "tags": 2,
+    "mergeCommits": 0,
+    "byCategory": {
+      "birth": 2,
+      "first-steps": 2,
+      "growing-pains": 4,
+      "midnight-oil": 1,
+      "milestone": 2,
+      "evolution": 3
+    },
+    "byType": {
+      "chore": 3,
+      "feat": 3,
+      "fix": 4,
+      "perf": 1,
+      "test": 1,
+      "docs": 1,
+      "refactor": 1
+    }
+  },
+  "authors": [
+    {
+      "id": "author-b5fc85e55755",
+      "displayName": "Ada Yılmaz",
+      "emailHash": "b5fc85e55755",
+      "email": null,
+      "commits": 9,
+      "insertions": 1893,
+      "deletions": 1372,
+      "firstCommitAt": "2025-01-06T21:14:03+03:00",
+      "lastCommitAt": "2025-09-01T12:00:00+03:00"
+    },
+    {
+      "id": "author-8fe0d692087e",
+      "displayName": "Mert Demir",
+      "emailHash": "8fe0d692087e",
+      "email": null,
+      "commits": 5,
+      "insertions": 477,
+      "deletions": 52,
+      "firstCommitAt": "2025-01-14T16:45:12+03:00",
+      "lastCommitAt": "2025-05-30T23:59:01+03:00"
+    }
+  ],
+  "chapters": [
+    {
+      "id": "chapter-001",
+      "category": "birth",
+      "title": "Hiçlikten Bir Satır",
+      "narrative": "6 Ocak günü boş bir dizin vardı; 2 commit sonra ortada bir proje duruyordu.",
+      "from": "2025-01-06T21:14:03+03:00",
+      "to": "2025-01-06T22:40:11+03:00",
+      "entryShas": [
+        "3f2a1b9c4d5e6f708192a3b4c5d6e7f809a1b2c3",
+        "a1c4e7b20d93f85614ac72be09d3f1a5c6e8b0d2"
+      ],
+      "stats": {
+        "commits": 2,
+        "insertions": 116,
+        "deletions": 2,
+        "filesCount": 5,
+        "authorIds": [
+          "author-b5fc85e55755"
+        ]
+      }
+    },
+    {
+      "id": "chapter-002",
+      "category": "first-steps",
+      "title": "Temeller Atılırken",
+      "narrative": "2 commit boyunca projenin iskeleti yükseldi; her commit bir sonrakine zemin hazırladı.",
+      "from": "2025-01-09T11:02:50+03:00",
+      "to": "2025-01-14T16:45:12+03:00",
+      "entryShas": [
+        "b7d0f3a81e2c45906fb8d1a7c30e92f5481ba6cd",
+        "c2e8a05f7b1d46382ac9e0b5d74f13a86205cfe9"
+      ],
+      "stats": {
+        "commits": 2,
+        "insertions": 455,
+        "deletions": 3,
+        "filesCount": 6,
+        "authorIds": [
+          "author-8fe0d692087e",
+          "author-b5fc85e55755"
+        ]
+      }
+    },
+    {
+      "id": "chapter-003",
+      "category": "milestone",
+      "title": "Taşın Yerine Oturduğu An",
+      "narrative": "1 commit boyunca biriken emek 1 Şubat tarihinde bir dönüm noktasına dönüştü.",
+      "from": "2025-02-01T10:00:00+03:00",
+      "to": "2025-02-01T10:00:00+03:00",
+      "entryShas": [
+        "d9b1c46ea0f358712bd4e8a96c05f3b7142ed8a0"
+      ],
+      "stats": {
+        "commits": 1,
+        "insertions": 25,
+        "deletions": 1,
+        "filesCount": 2,
+        "authorIds": [
+          "author-b5fc85e55755"
+        ]
+      }
+    },
+    {
+      "id": "chapter-004",
+      "category": "growing-pains",
+      "title": "Sabrın Sınandığı Dönem",
+      "narrative": "11 Şubat – 12 Şubat arasında 3 commit boyunca aynı yaraya defalarca dönüldü; 32 satır silindi, 71 satır yeniden yazıldı.",
+      "from": "2025-02-11T14:22:09+03:00",
+      "to": "2025-02-12T18:31:20+03:00",
+      "entryShas": [
+        "e4f7a92b08c1d5346fa7b2e90d85c13f6a4027be",
+        "f8a3c01d5e7b24698cd1a0f4b739e2c58016df4a",
+        "0b5e8d13f6a79c24e81bd0a53f7c926e4a18b7d5"
+      ],
+      "stats": {
+        "commits": 3,
+        "insertions": 71,
+        "deletions": 32,
+        "filesCount": 3,
+        "authorIds": [
+          "author-8fe0d692087e",
+          "author-b5fc85e55755"
+        ]
+      }
+    },
+    {
+      "id": "chapter-005",
+      "category": "midnight-oil",
+      "title": "Herkes Uyurken",
+      "narrative": "Lamba 1 gün boyunca yanık kaldı: 1 commit, 4 dosya.",
+      "from": "2025-03-14T03:18:42+03:00",
+      "to": "2025-03-14T03:18:42+03:00",
+      "entryShas": [
+        "1c6f9e24a07b8d35f92ce1b64a8d037f5b29c8e6"
+      ],
+      "stats": {
+        "commits": 1,
+        "insertions": 85,
+        "deletions": 42,
+        "filesCount": 4,
+        "authorIds": [
+          "author-b5fc85e55755"
+        ]
+      }
+    },
+    {
+      "id": "chapter-006",
+      "category": "evolution",
+      "title": "Törpülenen Kenarlar",
+      "narrative": "2 Nisan – 20 Nisan arasında 2 commit ile proje gürültüsüz biçimde olgunlaştı.",
+      "from": "2025-04-02T13:10:00+03:00",
+      "to": "2025-04-20T15:00:00+03:00",
+      "entryShas": [
+        "2d70af35b18c9e46a03df2c75b9e148a6c3ad9f7",
+        "3e81b046c29da57b14e0f3d86ca0259b7d4be0a8"
+      ],
+      "stats": {
+        "commits": 2,
+        "insertions": 152,
+        "deletions": 18,
+        "filesCount": 2,
+        "authorIds": [
+          "author-8fe0d692087e",
+          "author-b5fc85e55755"
+        ]
+      }
+    },
+    {
+      "id": "chapter-007",
+      "category": "evolution",
+      "title": "Usta İşi Dokunuşlar",
+      "narrative": "30 Mayıs günü 1 commit ile proje gürültüsüz biçimde olgunlaştı.",
+      "from": "2025-05-30T23:59:01+03:00",
+      "to": "2025-05-30T23:59:01+03:00",
+      "entryShas": [
+        "4f92c157d30eb68c25f104e97db1360c8e5cf1b9"
+      ],
+      "stats": {
+        "commits": 1,
+        "insertions": 106,
+        "deletions": 6,
+        "filesCount": 2,
+        "authorIds": [
+          "author-8fe0d692087e"
+        ]
+      }
+    },
+    {
+      "id": "chapter-008",
+      "category": "growing-pains",
+      "title": "Sancılı Günler",
+      "narrative": "1 gün süren bu dönemde proje büyümenin bedelini ödedi: 1 commit, 4 dosya.",
+      "from": "2025-06-15T02:41:33+03:00",
+      "to": "2025-06-15T02:41:33+03:00",
+      "entryShas": [
+        "50a3d268e41fc79d36021fa08ec2471d9f60d2ca"
+      ],
+      "stats": {
+        "commits": 1,
+        "insertions": 120,
+        "deletions": 1010,
+        "filesCount": 4,
+        "authorIds": [
+          "author-b5fc85e55755"
+        ]
+      }
+    },
+    {
+      "id": "chapter-009",
+      "category": "milestone",
+      "title": "Taşın Yerine Oturduğu An",
+      "narrative": "1240 satır ile birlikte kullanıcı deneyimi artık eskisi gibi değildi.",
+      "from": "2025-09-01T12:00:00+03:00",
+      "to": "2025-09-01T12:00:00+03:00",
+      "entryShas": [
+        "72c5f48a0631eb9f58243bc2ae4693fb08a2f4ec"
+      ],
+      "stats": {
+        "commits": 1,
+        "insertions": 1240,
+        "deletions": 310,
+        "filesCount": 6,
+        "authorIds": [
+          "author-b5fc85e55755"
+        ]
+      }
+    }
+  ],
+  "entries": [
+    {
+      "sha": "3f2a1b9c4d5e6f708192a3b4c5d6e7f809a1b2c3",
+      "shortSha": "3f2a1b9",
+      "parents": [],
+      "authorId": "author-b5fc85e55755",
+      "authoredAt": "2025-01-06T21:14:03+03:00",
+      "committedAt": "2025-01-06T21:14:03+03:00",
+      "tzOffsetMinutes": 180,
+      "localHour": 21,
+      "localWeekday": 0,
+      "subject": "chore: initial commit",
+      "cleanSubject": "initial commit",
+      "conventional": {
+        "type": "chore",
+        "scope": null,
+        "breaking": false,
+        "inferred": false
+      },
+      "tags": [],
+      "stats": {
+        "filesCount": 3,
+        "insertions": 54,
+        "deletions": 0,
+        "sizeBucket": "medium"
+      },
+      "category": "birth",
+      "secondaryCategories": [],
+      "narrative": "6 Ocak 2025 günü hiçlikten bir satır doğdu; «initial commit» ile bu projenin ilk nefesi alındı.",
+      "isMerge": false,
+      "variantIndex": 0
+    },
+    {
+      "sha": "a1c4e7b20d93f85614ac72be09d3f1a5c6e8b0d2",
+      "shortSha": "a1c4e7b",
+      "parents": [
+        "3f2a1b9c4d5e6f708192a3b4c5d6e7f809a1b2c3"
+      ],
+      "authorId": "author-b5fc85e55755",
+      "authoredAt": "2025-01-06T22:40:11+03:00",
+      "committedAt": "2025-01-06T22:40:11+03:00",
+      "tzOffsetMinutes": 180,
+      "localHour": 22,
+      "localWeekday": 0,
+      "subject": "chore: vite ve typescript yapılandırmasını kur",
+      "cleanSubject": "vite ve typescript yapılandırmasını kur",
+      "conventional": {
+        "type": "chore",
+        "scope": null,
+        "breaking": false,
+        "inferred": false
+      },
+      "tags": [],
+      "stats": {
+        "filesCount": 3,
+        "insertions": 62,
+        "deletions": 2,
+        "sizeBucket": "medium"
+      },
+      "category": "birth",
+      "secondaryCategories": [],
+      "narrative": "Henüz hiçbir şeyin bozulmadığı o ilk anda, Pazartesi günü «vite ve typescript yapılandırmasını kur» kaydedildi.",
+      "isMerge": false,
+      "variantIndex": 4
+    },
+    {
+      "sha": "b7d0f3a81e2c45906fb8d1a7c30e92f5481ba6cd",
+      "shortSha": "b7d0f3a",
+      "parents": [
+        "a1c4e7b20d93f85614ac72be09d3f1a5c6e8b0d2"
+      ],
+      "authorId": "author-b5fc85e55755",
+      "authoredAt": "2025-01-09T11:02:50+03:00",
+      "committedAt": "2025-01-09T11:02:50+03:00",
+      "tzOffsetMinutes": 180,
+      "localHour": 11,
+      "localWeekday": 3,
+      "subject": "feat(auth): add authentication shell",
+      "cleanSubject": "add authentication shell",
+      "conventional": {
+        "type": "feat",
+        "scope": "auth",
+        "breaking": false,
+        "inferred": false
+      },
+      "tags": [],
+      "stats": {
+        "filesCount": 3,
+        "insertions": 164,
+        "deletions": 3,
+        "sizeBucket": "medium"
+      },
+      "category": "first-steps",
+      "secondaryCategories": [],
+      "narrative": "Henüz hiçbir sürüm etiketi yokken, 9 Ocak 2025 günü «add authentication shell» ile temel biraz daha derinleşti.",
+      "isMerge": false,
+      "variantIndex": 4
+    },
+    {
+      "sha": "c2e8a05f7b1d46382ac9e0b5d74f13a86205cfe9",
+      "shortSha": "c2e8a05",
+      "parents": [
+        "b7d0f3a81e2c45906fb8d1a7c30e92f5481ba6cd"
+      ],
+      "authorId": "author-8fe0d692087e",
+      "authoredAt": "2025-01-14T16:45:12+03:00",
+      "committedAt": "2025-01-14T16:45:12+03:00",
+      "tzOffsetMinutes": 180,
+      "localHour": 16,
+      "localWeekday": 1,
+      "subject": "feat(dashboard): ilk gösterge panosu yerleşimi [EGE-104]",
+      "cleanSubject": "ilk gösterge panosu yerleşimi",
+      "conventional": {
+        "type": "feat",
+        "scope": "dashboard",
+        "breaking": false,
+        "inferred": false
+      },
+      "tags": [],
+      "stats": {
+        "filesCount": 3,
+        "insertions": 291,
+        "deletions": 0,
+        "sizeBucket": "large"
+      },
+      "category": "first-steps",
+      "secondaryCategories": [],
+      "narrative": "14 Ocak 2025, saat 16:45 civarında görünüm katmanı genişledi; «ilk gösterge panosu yerleşimi» tamamlandı.",
+      "isMerge": false,
+      "variantIndex": 3
+    },
+    {
+      "sha": "d9b1c46ea0f358712bd4e8a96c05f3b7142ed8a0",
+      "shortSha": "d9b1c46",
+      "parents": [
+        "c2e8a05f7b1d46382ac9e0b5d74f13a86205cfe9"
+      ],
+      "authorId": "author-b5fc85e55755",
+      "authoredAt": "2025-02-01T10:00:00+03:00",
+      "committedAt": "2025-02-01T10:00:00+03:00",
+      "tzOffsetMinutes": 180,
+      "localHour": 10,
+      "localWeekday": 5,
+      "subject": "chore(release): v0.1.0",
+      "cleanSubject": "v0.1.0",
+      "conventional": {
+        "type": "chore",
+        "scope": "release",
+        "breaking": false,
+        "inferred": false
+      },
+      "tags": [
+        "v0.1.0"
+      ],
+      "stats": {
+        "filesCount": 2,
+        "insertions": 25,
+        "deletions": 1,
+        "sizeBucket": "small"
+      },
+      "category": "milestone",
+      "secondaryCategories": [],
+      "narrative": "Cumartesi günü 26 satır değişti ve «v0.1.0» ile kullanıcı deneyimi yeni bir hâl aldı.",
+      "isMerge": false,
+      "variantIndex": 4
+    },
+    {
+      "sha": "e4f7a92b08c1d5346fa7b2e90d85c13f6a4027be",
+      "shortSha": "e4f7a92",
+      "parents": [
+        "d9b1c46ea0f358712bd4e8a96c05f3b7142ed8a0"
+      ],
+      "authorId": "author-8fe0d692087e",
+      "authoredAt": "2025-02-11T14:22:09+03:00",
+      "committedAt": "2025-02-11T14:22:09+03:00",
+      "tzOffsetMinutes": 180,
+      "localHour": 14,
+      "localWeekday": 1,
+      "subject": "fix: oturum yükleyicisinde null koruması",
+      "cleanSubject": "oturum yükleyicisinde null koruması",
+      "conventional": {
+        "type": "fix",
+        "scope": null,
+        "breaking": false,
+        "inferred": false
+      },
+      "tags": [],
+      "stats": {
+        "filesCount": 1,
+        "insertions": 11,
+        "deletions": 4,
+        "sizeBucket": "small"
+      },
+      "category": "growing-pains",
+      "secondaryCategories": [],
+      "narrative": "11 Şubat 2025, saat 14:22 civarında arayüz nefesini düzeltti: «oturum yükleyicisinde null koruması».",
+      "isMerge": false,
+      "variantIndex": 3
+    },
+    {
+      "sha": "f8a3c01d5e7b24698cd1a0f4b739e2c58016df4a",
+      "shortSha": "f8a3c01",
+      "parents": [
+        "e4f7a92b08c1d5346fa7b2e90d85c13f6a4027be"
+      ],
+      "authorId": "author-8fe0d692087e",
+      "authoredAt": "2025-02-12T09:05:44+03:00",
+      "committedAt": "2025-02-12T09:05:44+03:00",
+      "tzOffsetMinutes": 180,
+      "localHour": 9,
+      "localWeekday": 2,
+      "subject": "fix(auth): session loader race (#211)",
+      "cleanSubject": "session loader race",
+      "conventional": {
+        "type": "fix",
+        "scope": "auth",
+        "breaking": false,
+        "inferred": false
+      },
+      "tags": [],
+      "stats": {
+        "filesCount": 2,
+        "insertions": 35,
+        "deletions": 24,
+        "sizeBucket": "medium"
+      },
+      "category": "growing-pains",
+      "secondaryCategories": [],
+      "narrative": "Büyümenin bedeli 12 Şubat 2025 tarihinde ödendi; «session loader race» ile kullanıcı deneyimi yeniden dengeye geldi.",
+      "isMerge": false,
+      "variantIndex": 5
+    },
+    {
+      "sha": "0b5e8d13f6a79c24e81bd0a53f7c926e4a18b7d5",
+      "shortSha": "0b5e8d1",
+      "parents": [
+        "f8a3c01d5e7b24698cd1a0f4b739e2c58016df4a"
+      ],
+      "authorId": "author-b5fc85e55755",
+      "authoredAt": "2025-02-12T18:31:20+03:00",
+      "committedAt": "2025-02-12T18:31:20+03:00",
+      "tzOffsetMinutes": 180,
+      "localHour": 18,
+      "localWeekday": 2,
+      "subject": "fix(auth): çıkış yapıldığında önbelleği temizle",
+      "cleanSubject": "çıkış yapıldığında önbelleği temizle",
+      "conventional": {
+        "type": "fix",
+        "scope": "auth",
+        "breaking": false,
+        "inferred": false
+      },
+      "tags": [],
+      "stats": {
+        "filesCount": 2,
+        "insertions": 25,
+        "deletions": 4,
+        "sizeBucket": "small"
+      },
+      "category": "growing-pains",
+      "secondaryCategories": [],
+      "narrative": "Görünüm katmanı tarafında bir çatlak belirdi ve 12 Şubat 2025 tarihinde «çıkış yapıldığında önbelleği temizle» ile onarıldı.",
+      "isMerge": false,
+      "variantIndex": 1
+    },
+    {
+      "sha": "1c6f9e24a07b8d35f92ce1b64a8d037f5b29c8e6",
+      "shortSha": "1c6f9e2",
+      "parents": [
+        "0b5e8d13f6a79c24e81bd0a53f7c926e4a18b7d5"
+      ],
+      "authorId": "author-b5fc85e55755",
+      "authoredAt": "2025-03-14T03:18:42+03:00",
+      "committedAt": "2025-03-14T03:18:42+03:00",
+      "tzOffsetMinutes": 180,
+      "localHour": 3,
+      "localWeekday": 4,
+      "subject": "fix: token refresh race condition",
+      "cleanSubject": "token refresh race condition",
+      "conventional": {
+        "type": "fix",
+        "scope": null,
+        "breaking": false,
+        "inferred": false
+      },
+      "tags": [],
+      "stats": {
+        "filesCount": 4,
+        "insertions": 85,
+        "deletions": 42,
+        "sizeBucket": "medium"
+      },
+      "category": "midnight-oil",
+      "secondaryCategories": [],
+      "narrative": "14 Mart gecesi saat 03:18 sularında, herkes uyurken 4 dosyada titiz bir çalışma yapıldı; «token refresh race condition» ile arayüz nefesi düzeltildi.",
+      "isMerge": false,
+      "variantIndex": 0
+    },
+    {
+      "sha": "2d70af35b18c9e46a03df2c75b9e148a6c3ad9f7",
+      "shortSha": "2d70af3",
+      "parents": [
+        "1c6f9e24a07b8d35f92ce1b64a8d037f5b29c8e6"
+      ],
+      "authorId": "author-8fe0d692087e",
+      "authoredAt": "2025-04-02T13:10:00+03:00",
+      "committedAt": "2025-04-02T13:10:00+03:00",
+      "tzOffsetMinutes": 180,
+      "localHour": 13,
+      "localWeekday": 2,
+      "subject": "perf: tablo satırlarını memoize et",
+      "cleanSubject": "tablo satırlarını memoize et",
+      "conventional": {
+        "type": "perf",
+        "scope": null,
+        "breaking": false,
+        "inferred": false
+      },
+      "tags": [],
+      "stats": {
+        "filesCount": 1,
+        "insertions": 34,
+        "deletions": 18,
+        "sizeBucket": "medium"
+      },
+      "category": "evolution",
+      "secondaryCategories": [],
+      "narrative": "Çarşamba günü gürültü çıkarmadan «tablo satırlarını memoize et» tamamlandı ve görünüm katmanı daha sağlam hâle geldi.",
+      "isMerge": false,
+      "variantIndex": 1
+    },
+    {
+      "sha": "3e81b046c29da57b14e0f3d86ca0259b7d4be0a8",
+      "shortSha": "3e81b04",
+      "parents": [
+        "2d70af35b18c9e46a03df2c75b9e148a6c3ad9f7"
+      ],
+      "authorId": "author-b5fc85e55755",
+      "authoredAt": "2025-04-20T15:00:00+03:00",
+      "committedAt": "2025-04-20T15:00:00+03:00",
+      "tzOffsetMinutes": 180,
+      "localHour": 15,
+      "localWeekday": 6,
+      "subject": "test: oturum yükleyicisi için kapsama ekle",
+      "cleanSubject": "oturum yükleyicisi için kapsama ekle",
+      "conventional": {
+        "type": "test",
+        "scope": null,
+        "breaking": false,
+        "inferred": false
+      },
+      "tags": [],
+      "stats": {
+        "filesCount": 1,
+        "insertions": 118,
+        "deletions": 0,
+        "sizeBucket": "medium"
+      },
+      "category": "evolution",
+      "secondaryCategories": [],
+      "narrative": "Ada Yılmaz, 20 Nisan 2025 tarihinde «oturum yükleyicisi için kapsama ekle» ile kullanıcı deneyimi tarafını törpüledi.",
+      "isMerge": false,
+      "variantIndex": 2
+    },
+    {
+      "sha": "4f92c157d30eb68c25f104e97db1360c8e5cf1b9",
+      "shortSha": "4f92c15",
+      "parents": [
+        "3e81b046c29da57b14e0f3d86ca0259b7d4be0a8"
+      ],
+      "authorId": "author-8fe0d692087e",
+      "authoredAt": "2025-05-30T23:59:01+03:00",
+      "committedAt": "2025-05-30T23:59:01+03:00",
+      "tzOffsetMinutes": 180,
+      "localHour": 23,
+      "localWeekday": 4,
+      "subject": "docs: katkı rehberini yaz.",
+      "cleanSubject": "katkı rehberini yaz",
+      "conventional": {
+        "type": "docs",
+        "scope": null,
+        "breaking": false,
+        "inferred": false
+      },
+      "tags": [],
+      "stats": {
+        "filesCount": 2,
+        "insertions": 106,
+        "deletions": 6,
+        "sizeBucket": "medium"
+      },
+      "category": "evolution",
+      "secondaryCategories": [],
+      "narrative": "Cuma günü gürültü çıkarmadan «katkı rehberini yaz» tamamlandı ve görünüm katmanı daha sağlam hâle geldi.",
+      "isMerge": false,
+      "variantIndex": 1
+    },
+    {
+      "sha": "50a3d268e41fc79d36021fa08ec2471d9f60d2ca",
+      "shortSha": "50a3d26",
+      "parents": [
+        "4f92c157d30eb68c25f104e97db1360c8e5cf1b9"
+      ],
+      "authorId": "author-b5fc85e55755",
+      "authoredAt": "2025-06-15T02:41:33+03:00",
+      "committedAt": "2025-06-15T02:41:33+03:00",
+      "tzOffsetMinutes": 180,
+      "localHour": 2,
+      "localWeekday": 6,
+      "subject": "refactor: eski adaptör katmanını kaldır",
+      "cleanSubject": "eski adaptör katmanını kaldır",
+      "conventional": {
+        "type": "refactor",
+        "scope": null,
+        "breaking": false,
+        "inferred": false
+      },
+      "tags": [],
+      "stats": {
+        "filesCount": 4,
+        "insertions": 120,
+        "deletions": 1010,
+        "sizeBucket": "epic"
+      },
+      "category": "growing-pains",
+      "secondaryCategories": [
+        "midnight-oil"
+      ],
+      "narrative": "Ada Yılmaz, Pazar günü titiz bir çalışmayla «eski adaptör katmanını kaldır» düğümünü çözdü. Ve bütün bunlar şehir uyurken oldu.",
+      "isMerge": false,
+      "variantIndex": 2
+    },
+    {
+      "sha": "72c5f48a0631eb9f58243bc2ae4693fb08a2f4ec",
+      "shortSha": "72c5f48",
+      "parents": [
+        "61b4e379f520da8e47132ab19fd3582eaf71e3db"
+      ],
+      "authorId": "author-b5fc85e55755",
+      "authoredAt": "2025-09-01T12:00:00+03:00",
+      "committedAt": "2025-09-01T12:00:00+03:00",
+      "tzOffsetMinutes": 180,
+      "localHour": 12,
+      "localWeekday": 0,
+      "subject": "feat!: yeni faturalama motoru",
+      "cleanSubject": "yeni faturalama motoru",
+      "conventional": {
+        "type": "feat",
+        "scope": null,
+        "breaking": true,
+        "inferred": false
+      },
+      "tags": [
+        "v1.0.0"
+      ],
+      "stats": {
+        "filesCount": 6,
+        "insertions": 1240,
+        "deletions": 310,
+        "sizeBucket": "epic"
+      },
+      "category": "milestone",
+      "secondaryCategories": [],
+      "narrative": "1 Eylül 2025 günü v1.0.0 etiketi vuruldu; «yeni faturalama motoru» ile projenin yeni devri ilan edildi.",
+      "isMerge": false,
+      "variantIndex": 0
+    }
+  ],
+  "pulse": {
+    "chronotype": "daylight-builder",
+    "chronotypeLabel": "Gündüz Ustası",
+    "hourHistogram": [
+      0,
+      0,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      1,
+      1
+    ],
+    "weekdayHistogram": [
+      3,
+      2,
+      3,
+      1,
+      2,
+      1,
+      2
+    ],
+    "busiestHour": 10,
+    "busiestWeekday": 0,
+    "creationRatio": 0.6247,
+    "avgChangedLines": 271,
+    "medianChangedLines": 88,
+    "longestStreak": {
+      "days": 2,
+      "from": "2025-02-11",
+      "to": "2025-02-12"
+    },
+    "currentStreak": {
+      "days": 0,
+      "from": null,
+      "to": null
+    },
+    "monthlyActivity": [
+      {
+        "month": "2025-01",
+        "commits": 4,
+        "insertions": 571,
+        "deletions": 5
+      },
+      {
+        "month": "2025-02",
+        "commits": 4,
+        "insertions": 96,
+        "deletions": 33
+      },
+      {
+        "month": "2025-03",
+        "commits": 1,
+        "insertions": 85,
+        "deletions": 42
+      },
+      {
+        "month": "2025-04",
+        "commits": 2,
+        "insertions": 152,
+        "deletions": 18
+      },
+      {
+        "month": "2025-05",
+        "commits": 1,
+        "insertions": 106,
+        "deletions": 6
+      },
+      {
+        "month": "2025-06",
+        "commits": 1,
+        "insertions": 120,
+        "deletions": 1010
+      },
+      {
+        "month": "2025-09",
+        "commits": 1,
+        "insertions": 1240,
+        "deletions": 310
+      }
+    ],
+    "narrative": "Bu proje gün ışığında, düzenli bir ritimle büyümüş; en yoğun saat 10. İnşa ve iyileştirme dengede: yeni kod oranı %62. En uzun kesintisiz seri: 2 gün (2025-02-11 – 2025-02-12)."
+  },
+  "milestones": [
+    {
+      "kind": "first-commit",
+      "at": "2025-01-06T21:14:03+03:00",
+      "label": "Doğuş",
+      "value": null,
+      "sha": "3f2a1b9c4d5e6f708192a3b4c5d6e7f809a1b2c3",
+      "narrative": "İlk commit atıldı — her şeyin başladığı an."
+    },
+    {
+      "kind": "release-tag",
+      "at": "2025-02-01T10:00:00+03:00",
+      "label": "v0.1.0",
+      "value": "v0.1.0",
+      "sha": "d9b1c46ea0f358712bd4e8a96c05f3b7142ed8a0",
+      "narrative": "v0.1.0 sürümü yayınlandı."
+    },
+    {
+      "kind": "anniversary",
+      "at": "2025-02-11T14:22:09+03:00",
+      "label": "30 gün",
+      "value": 30,
+      "sha": "e4f7a92b08c1d5346fa7b2e90d85c13f6a4027be",
+      "narrative": "Proje 30. gününü doldurdu."
+    },
+    {
+      "kind": "midnight-fix",
+      "at": "2025-03-14T03:18:42+03:00",
+      "label": "Gece Mesaisi",
+      "value": null,
+      "sha": "1c6f9e24a07b8d35f92ce1b64a8d037f5b29c8e6",
+      "narrative": "Gecenin bir yarısı bir sorun çözüldü."
+    },
+    {
+      "kind": "commit-count",
+      "at": "2025-04-02T13:10:00+03:00",
+      "label": "10 commit",
+      "value": 10,
+      "sha": "2d70af35b18c9e46a03df2c75b9e148a6c3ad9f7",
+      "narrative": "10. commit'e ulaşıldı."
+    },
+    {
+      "kind": "anniversary",
+      "at": "2025-04-20T15:00:00+03:00",
+      "label": "100 gün",
+      "value": 100,
+      "sha": "3e81b046c29da57b14e0f3d86ca0259b7d4be0a8",
+      "narrative": "Proje 100. gününü doldurdu."
+    },
+    {
+      "kind": "release-tag",
+      "at": "2025-09-01T12:00:00+03:00",
+      "label": "v1.0.0",
+      "value": "v1.0.0",
+      "sha": "72c5f48a0631eb9f58243bc2ae4693fb08a2f4ec",
+      "narrative": "v1.0.0 sürümü yayınlandı."
+    },
+    {
+      "kind": "architectural-leap",
+      "at": "2025-09-01T12:00:00+03:00",
+      "label": "1240 satır",
+      "value": 1240,
+      "sha": "72c5f48a0631eb9f58243bc2ae4693fb08a2f4ec",
+      "narrative": "Tek seferde 1240 satırlık mimari bir sıçrama yapıldı."
+    }
+  ],
+  "capsule": null
+}

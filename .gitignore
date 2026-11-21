@@ -29,3 +29,6 @@ Thumbs.db
 npm-debug.log*
 .tmp/
 coverage/
+
+# generated from @egehan/core-spec by packages/node-cli/scripts/sync-spec.mjs
+packages/node-cli/assets/

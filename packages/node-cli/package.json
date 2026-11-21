@@ -1,0 +1,56 @@
+{
+  "name": "egehan",
+  "version": "0.1.0",
+  "description": "Turn a project's git history into a living chronicle — offline, deterministic, no API key.",
+  "keywords": [
+    "git",
+    "changelog",
+    "git-log",
+    "history",
+    "storytelling",
+    "chronicle",
+    "cli",
+    "offline",
+    "deterministic"
+  ],
+  "homepage": "https://github.com/bedirhangurler/egehan#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bedirhangurler/egehan.git",
+    "directory": "packages/node-cli"
+  },
+  "bugs": "https://github.com/bedirhangurler/egehan/issues",
+  "license": "MIT",
+  "author": "Bedirhan Gurler",
+  "type": "module",
+  "engines": {
+    "node": ">=20.12.0"
+  },
+  "bin": {
+    "egehan": "./dist/cli/main.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "assets",
+    "README.md"
+  ],
+  "scripts": {
+    "sync-spec": "node scripts/sync-spec.mjs",
+    "prebuild": "npm run sync-spec",
+    "build": "tsc -b",
+    "typecheck": "tsc -b --dry 1>/dev/null && tsc --noEmit -p tsconfig.json",
+    "pretest": "npm run build",
+    "test": "node --test \"tests/**/*.test.mjs\"",
+    "prepack": "npm run build",
+    "fixtures:generate": "node scripts/generate-fixtures.mjs"
+  },
+  "dependencies": {
+    "commander": "^12.1.0"
+  }
+}

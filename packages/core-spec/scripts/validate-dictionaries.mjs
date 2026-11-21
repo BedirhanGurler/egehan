@@ -63,6 +63,8 @@ const CHAPTER_PLACEHOLDERS = new Set([
   'span',
   'from',
   'to',
+  'range',
+  'period',
   'authorsCount',
   'files',
   'filesCount',
@@ -79,14 +81,20 @@ const CHAPTER_PLACEHOLDERS = new Set([
 
 /** section path prefix -> allowed placeholder set */
 const SECTION_CONTRACT = [
-  { match: /^categories\.[^.]+\.entries\./, allowed: ENTRY_PLACEHOLDERS, label: 'entry template' },
+  {
+    match: /^categories\.[^.]+\.entries\./,
+    allowed: ENTRY_PLACEHOLDERS,
+    label: 'entry template',
+    unitBearing: true,
+  },
   {
     match: /^categories\.[^.]+\.chapterNarratives\./,
     allowed: CHAPTER_PLACEHOLDERS,
     label: 'chapter narrative',
+    unitBearing: true,
   },
   { match: /^categories\.[^.]+\.chapterTitles\./, allowed: new Set(), label: 'chapter title' },
-  { match: /^modifiers\./, allowed: ENTRY_PLACEHOLDERS, label: 'modifier clause' },
+  { match: /^modifiers\./, allowed: ENTRY_PLACEHOLDERS, label: 'modifier clause', unitBearing: true },
   {
     match: /^pulse\.chronotypes\.[^.]+\.narratives\./,
     allowed: new Set(['busiestHour', 'busiestWeekday', 'commits']),
@@ -97,7 +105,7 @@ const SECTION_CONTRACT = [
   { match: /^milestones\./, allowed: new Set(['value']), label: 'milestone label' },
   {
     match: /^locale\./,
-    allowed: new Set(['day', 'month', 'year', 'hour', 'minute']),
+    allowed: new Set(['day', 'month', 'year', 'hour', 'minute', 'from', 'to']),
     label: 'locale format',
   },
   { match: /^units\./, allowed: new Set(['n', 'unit']), label: 'unit format' },
@@ -121,6 +129,23 @@ const SECTION_CONTRACT = [
 
 /** Sections whose templates must mention the commit subject, so a sentence is never pure metadata. */
 const SUBJECT_REQUIRED = /^categories\.[^.]+\.entries\./;
+
+/**
+ * Placeholders that already carry their unit, mapped to the `units` key that supplies the word.
+ *
+ * `{files}` interpolates "4 dosya" / "4 files", so a template writing `{files} dosyada` produces
+ * "4 dosya dosyada". The raw counterparts (`{filesCount}`, `{insertions}`, …) exist precisely so a
+ * sentence can inflect the unit itself, and the two are one keystroke apart — which is why this is
+ * checked mechanically instead of being left to review. Turkish makes it worse by suffixing the
+ * unit ("dosyada", "dosyaya", "dosyayı"), so the check matches on the stem.
+ */
+const UNIT_BEARING_PLACEHOLDERS = {
+  files: 'file',
+  additions: 'line',
+  removals: 'line',
+  commits: 'commit',
+  span: 'day',
+};
 
 /* ------------------------------------------------------------------ */
 
@@ -310,6 +335,34 @@ export function validateDictionaries(options = {}) {
             where,
             `${at} requires {${required}} but never interpolates it, so the filter can only ever hide it`,
           );
+        }
+      }
+
+      // Only the narrative sections interpolate the formatted, unit-bearing values. In `ui` and
+      // `pulse` the same names carry raw counts, so applying this check there would be a false alarm.
+      for (const [placeholder, unitKey] of contract.unitBearing === true
+        ? Object.entries(UNIT_BEARING_PLACEHOLDERS)
+        : []) {
+        const forms = dict.units?.[unitKey];
+        if (forms === undefined) continue;
+
+        const stems = [...new Set([forms.one, forms.other])].filter(
+          (word) => typeof word === 'string' && word.length > 2,
+        );
+
+        for (const stem of stems) {
+          const duplicated = new RegExp(
+            `\\{${placeholder}\\}\\s*${stem.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`,
+            'iu',
+          );
+          if (duplicated.test(template.t)) {
+            fail(
+              where,
+              `${at} writes "{${placeholder}} ${stem}…", but {${placeholder}} already expands to ` +
+                `"4 ${forms.other}". Use {${placeholder === 'files' ? 'filesCount' : placeholder === 'commits' ? 'commitsCount' : 'insertions/deletions'}} ` +
+                'when the sentence needs to inflect the unit itself.',
+            );
+          }
         }
       }
 
