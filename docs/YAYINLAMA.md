@@ -46,37 +46,47 @@ Bu bölümü yalnızca ilk sürümden önce yapıyorsunuz. Üç anahtar üretip 
    - **Select Packages** → **Glob Pattern**: `Egehan.*`
 5. **Create** deyip anahtarı kopyalayın. Bu da bir kez gösteriliyor.
 
-### 0.3 VS Code Marketplace: yayıncı + token
+### 0.3 VS Code Marketplace: yayıncı + Trusted Publishing
 
-Burası üç adımın en dolambaçlısı, çünkü Azure DevOps üzerinden çalışıyor.
+Burada **anahtar üretmiyorsunuz.** Marketplace, GitHub Actions'ın kimliğini OIDC ile doğruluyor;
+saklanacak, süresi dolacak bir token yok. (Azure DevOps'un global PAT'leri 1 Aralık 2026'da
+emekliye ayrıldı; yeni bir Azure DevOps organizasyonu açmak da artık ücretli bir Azure aboneliği
+istiyor. Bu yol ikisini birden ortadan kaldırıyor.)
 
-1. [dev.azure.com](https://dev.azure.com/) adresine Microsoft hesabınızla girin. Bir
-   **organization** yoksa oluşturun (adı önemli değil, kimse görmeyecek).
-2. Sağ üstte **User settings** (kişi ikonu) → **Personal access tokens** → **New Token**.
-3. Şunları seçin — ikisi de kritik:
-   - **Organization**: **All accessible organizations** ← tek bir organizasyon seçerseniz
-     **çalışmaz**
-   - **Scopes**: **Custom defined** → aşağı inip **Marketplace** → **Manage** kutusunu işaretleyin
-   - **Expiration**: en fazla 1 yıl verilir
-4. Token'ı kopyalayın.
-5. Şimdi yayıncıyı oluşturun:
+1. Yayıncıyı oluşturun:
    [marketplace.visualstudio.com/manage/createpublisher](https://marketplace.visualstudio.com/manage/createpublisher)
+   — Microsoft hesabıyla giriliyor, Azure DevOps organizasyonu gerekmiyor.
    - **ID**: `bedirhangurler` ← bu alan `extensions/vscode-extension/package.json` içindeki
      `publisher` değeriyle **harfi harfine** aynı olmalı, yoksa yayın reddedilir
    - **Name**: görünen adınız (serbest)
+2. Yayıncı panelinde sol menüden **Trusted Publishing** → **Create** bölümünü açın ve doldurun:
 
-### 0.4 Üç anahtarı GitHub'a girin
+   | Alan             | Değer              |
+   | ---------------- | ------------------ |
+   | Policy name      | `Release workflow` |
+   | Repository owner | `BedirhanGurler`   |
+   | Repository       | `egehan`           |
+   | Workflow         | `release.yml`      |
+   | Environment      | boş bırakın        |
+
+3. **Create** deyin. Depo herkese açık olduğu için politika hemen geçerli. (Özel depolarda
+   politika 48 saat içinde kullanılmazsa iptal oluyor.)
+
+İş akışındaki `vscode` işi `id-token: write` izniyle çalışıp `vsce publish --oidc` komutunu
+kullanıyor; Marketplace'in verdiği geçici kimlik 15 dakika yaşıyor.
+
+### 0.4 İki anahtarı GitHub'a girin
 
 GitHub'da depoya gidin → **Settings** → sol menüde **Secrets and variables** → **Actions** →
-**New repository secret**. Üç kez tekrarlayın:
+**New repository secret**. İki kez tekrarlayın:
 
-| Name (birebir bu) | Secret                                |
-| ----------------- | ------------------------------------- |
-| `NPM_TOKEN`       | 0.1'de aldığınız npm token'ı          |
-| `NUGET_API_KEY`   | 0.2'de aldığınız NuGet anahtarı       |
-| `VSCE_PAT`        | 0.3'te aldığınız Azure DevOps token'ı |
+| Name (birebir bu) | Secret                          |
+| ----------------- | ------------------------------- |
+| `NPM_TOKEN`       | 0.1'de aldığınız npm token'ı    |
+| `NUGET_API_KEY`   | 0.2'de aldığınız NuGet anahtarı |
 
-> İsimleri değiştirmeyin. İş akışı tam olarak bu üç adı arıyor.
+> İsimleri değiştirmeyin. İş akışı tam olarak bu iki adı arıyor. VS Code tarafı için gizli
+> anahtar yok; 0.3'teki politika yeterli.
 
 ---
 

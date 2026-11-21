@@ -38,19 +38,20 @@ The first push of a brand-new package id can take a few minutes to index.
 
 ### 3. VS Code Marketplace
 
-This one has the most steps, because it runs on Azure DevOps.
+No secret here. Marketplace Trusted Publishing verifies the workflow over OIDC, so there is no
+token to store or rotate. (Azure DevOps retired global PATs on 1 December 2026, and creating a new
+Azure DevOps organisation now requires a paid Azure subscription — this route avoids both.)
 
-1. Create an [Azure DevOps](https://dev.azure.com/) organisation if you do not have one.
-2. Create a **Personal Access Token** with _Marketplace → Manage_ scope, for **All accessible
-   organizations**. A token scoped to a single organisation will not work.
-3. Create the publisher at
+1. Create the publisher at
    [marketplace.visualstudio.com/manage](https://marketplace.visualstudio.com/manage), with the id
    **`bedirhangurler`** — it must match the `publisher` field in
-   `extensions/vscode-extension/package.json`.
-4. Add the token as the secret **`VSCE_PAT`**.
+   `extensions/vscode-extension/package.json`. A Microsoft account is enough; no Azure DevOps
+   organisation is needed.
+2. In the publisher, open **Trusted Publishing → Create** and add a policy: repository owner
+   `BedirhanGurler`, repository `egehan`, workflow `release.yml`, environment empty.
 
-> The PAT expires, by default after a year. When a release fails on the VS Code job and nothing
-> else changed, this is almost always why.
+> The `vscode` job runs with `id-token: write` and publishes with `vsce publish --oidc`. The
+> credential Marketplace hands back expires after 15 minutes.
 
 ## Rehearsing
 

@@ -158,6 +158,11 @@ jobs:
     name: vs code marketplace
     needs: verify
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # Required for Marketplace Trusted Publishing: vsce exchanges this OIDC token for a
+      # credential that lives 15 minutes, so no publishing secret is stored anywhere.
+      id-token: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -179,16 +184,11 @@ jobs:
 
       - name: Publish
         working-directory: extensions/vscode-extension
-        env:
-          VSCE_PAT: ${{ secrets.VSCE_PAT }}
         run: |
           if [ "$DRY_RUN" = "true" ]; then
             echo "### VS Code — packaged only" >> "$GITHUB_STEP_SUMMARY"
-          elif [ -z "${VSCE_PAT:-}" ]; then
-            echo "::error::VSCE_PAT is not set, so nothing was published to the Marketplace."
-            exit 1
           else
-            npx --yes @vscode/vsce publish --no-dependencies --packagePath egehan.vsix
+            npx --yes @vscode/vsce publish --oidc --no-dependencies --packagePath egehan.vsix
             echo "### VS Code — published ${{ needs.verify.outputs.version }}" >> "$GITHUB_STEP_SUMMARY"
           fi
 
