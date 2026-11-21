@@ -1,0 +1,49 @@
+<Project>
+  <PropertyGroup>
+    <!--
+      Both frameworks ship. A global tool is independent of the user's project, but not of the
+      runtime on their machine: .NET 8 left support in November 2026, so shipping only net8.0
+      would launch on an unsupported runtime, while shipping only net10.0 would fail on the many
+      corporate machines that still carry nothing newer. RollForward keeps the net8.0 asset
+      working as later runtimes appear. See docs/ARCHITECTURE.md, ADR-008.
+
+      A machine with only one of the two SDKs can still build:
+        dotnet build -p:TargetFrameworks=net8.0
+    -->
+    <TargetFrameworks Condition="'$(TargetFrameworks)' == ''">net8.0;net10.0</TargetFrameworks>
+
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+
+    <!--
+      Globalization stays on. The engine upper-cases the first letter of a narrative with the
+      report's own language tag, and Turkish needs a real culture to turn "iyileştirme" into
+      "İyileştirme" rather than "Iyileştirme". Invariant mode would silently produce the wrong
+      letter in the project's first language.
+    -->
+    <InvariantGlobalization>false</InvariantGlobalization>
+
+    <!--
+      Roll forward across majors. This is what keeps the net8.0 asset usable as newer runtimes
+      appear, and it is not theoretical: this very solution's net10.0 tests run on a machine that
+      has the .NET 8 and .NET 11 runtimes and no .NET 10 at all. Without it they refuse to start.
+    -->
+    <RollForward>Major</RollForward>
+
+    <Deterministic>true</Deterministic>
+    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+
+    <Authors>Bedirhan Gurler</Authors>
+    <Company>Bedirhan Gurler</Company>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/bedirhangurler/egehan</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/bedirhangurler/egehan</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Version>0.1.0</Version>
+  </PropertyGroup>
+</Project>

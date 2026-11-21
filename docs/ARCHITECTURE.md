@@ -261,6 +261,51 @@ a commit message and the editor. Reaching `'none'` cost one change to the templa
 A rebase gives every commit a new sha while the story is unchanged, and a sha-keyed extension would
 replay the project's entire history as notifications the first time somebody rebased a branch.
 
+### ADR-015 — The .NET engine is proved against the Node engine, not reviewed against it
+
+**Decision.** `Egehan.Core` embeds the contract straight out of `packages/core-spec` and is held to
+the expected reports the Node engine generated, by a conformance suite that fails on any difference
+outside `generator.platform` and `generator.generatedAt`.
+
+**Why.** Two implementations of one specification drift; the only question is whether anyone notices.
+Reading both and agreeing they look equivalent is not a method — it is a hope with a code review
+attached. Running both over the same fixtures and diffing the output is a method.
+
+**Consequence.** Porting the engine surfaced four places where the two runtimes quietly disagree, each
+of which would have produced a different chronicle on a .NET machine and none of which a test of either
+engine alone would have caught:
+
+- **`String.replace` is not `Regex.Replace`.** JavaScript's non-global replace changes the first
+  match; .NET's changes every one. Each subject-cleanup step passes an explicit count of 1.
+- **Rounding.** `Math.round` rounds halves up; .NET rounds them to even. Every derived number uses
+  `MidpointRounding.AwayFromZero`.
+- **Locale-aware sorting.** `localeCompare` orders by a language's collation rules, which are a
+  property of the reader rather than of the data. Both engines now compare ordinally — the Node side
+  was changed to match, since it was the one making the assumption.
+- **Resource naming.** The SDK reads `narratives.en.json` as a _localized_ resource, strips the `.en`
+  as a culture tag, and names both dictionaries the same thing, so one silently replaced the other.
+
+**Also worth recording:** the suite was made to fail on purpose before it was trusted. A one-line change
+to the pulse calculation failed exactly the six conformance cases and nothing else; reverting it restored
+them. A comparison that has never failed is not yet evidence of anything.
+
+**What the proof covers now.** Driven through both command-line tools over the same real repository:
+`EGEHAN.md` is byte-identical; `egehan-chronicle.html` differs on exactly one line, the
+`generator.platform` field; the JSON report is structurally identical once `platform` and
+`generatedAt` are excluded. The capsule closes the last loop — a message sealed by the Node engine is
+opened by the .NET engine in a test, and by the browser's Web Crypto in the generated page, from one
+set of parameters in `rules.json`.
+
+Two further portability traps surfaced while finishing the .NET side, both silent:
+
+- **The hook script was about to exist twice.** Transcribing it into C# would have put the same
+  content in two languages — exactly what ADR-001 forbids for the narrative templates. It moved to
+  `core-spec/templates/hook.sh`, and both engines interpolate the version and the git verb into it.
+- **Astral characters.** System.Text.Json escapes anything above the Basic Multilingual Plane even
+  under its relaxed encoder, so every emoji in the dictionaries came out as a surrogate pair while
+  `JSON.stringify` wrote them literally. Both files parse to the same strings; only a byte comparison
+  of the HTML would ever have noticed.
+
 ## 3. Determinism, precisely
 
 Narration must be reproducible across runtimes, so the rules leave nothing to interpretation:

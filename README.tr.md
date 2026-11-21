@@ -70,7 +70,8 @@ Egehan fazlar hâlinde geliştiriliyor. Bu tablo her fazın dürüst durumudur; 
 | 1   | `egehan capsule` — parolayla mühürlenen, tarayıcıda Web Crypto ile açılan mesaj    | **bitti** |
 | 1   | `egehan hook install` — kendini güncel tutan kronik                                | **bitti** |
 | 2   | VS Code eklentisi — durum çubuğu, zaman tüneli paneli, dönüm noktası bildirimleri  | **bitti** |
-| 3   | `Egehan.Cli` .NET global tool (`net8.0` + `net10.0`)                               | planlandı |
+| 3   | `Egehan.Core` — .NET motoru, Node motorunun fixture'larına karşı kanıtlandı        | **bitti** |
+| 3   | `Egehan.Cli` — NuGet global tool (`net8.0` + `net10.0`)                            | **bitti** |
 | 4   | Visual Studio 2022+ eklentisi (VSIX)                                               | planlandı |
 
 ## Komut sözleşmesi

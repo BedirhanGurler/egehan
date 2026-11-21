@@ -75,7 +75,7 @@ export function detectProjectTypes(view: FileSystemView, rules: EgehanRules): Pr
       return false;
     })
     // Priority descending, then id, so equal priorities cannot reorder between runs.
-    .sort((a, b) => b.priority - a.priority || a.id.localeCompare(b.id, 'en'));
+    .sort((a, b) => b.priority - a.priority || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
 
   const strongest = matched[0];
 

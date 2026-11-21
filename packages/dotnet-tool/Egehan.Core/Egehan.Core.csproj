@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Egehan.Core</RootNamespace>
+    <AssemblyName>Egehan.Core</AssemblyName>
+    <Description>The Egehan story engine: the .NET half of a contract shared with the Node implementation.</Description>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- One source of truth, embedded rather than copied. See docs/ARCHITECTURE.md, ADR-001. -->
+    <SpecDir>$(MSBuildThisFileDirectory)../../core-spec/</SpecDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="$(SpecDir)spec/rules.json" LogicalName="Egehan.Core.spec.rules.json" />
+    <EmbeddedResource Include="$(SpecDir)schema/egehan-report.schema.json" LogicalName="Egehan.Core.schema.egehan-report.schema.json" />
+
+    <!-- Globbed: the hook script lives here too, so both engines install the same text. -->
+    <EmbeddedResource Include="$(SpecDir)templates/*" Link="templates/%(Filename)%(Extension)" WithCulture="false" />
+
+    <!--
+      The dictionaries are globbed so that adding a language means adding one JSON file to
+      core-spec, with no change to any engine.
+
+      `WithCulture="false"` is doing real work here. The SDK reads `narratives.en.json` as a
+      *localized* resource — it treats the `.en` as a culture designator, strips it, and names
+      both files `narratives.json`, so the two dictionaries collide and one silently replaces the
+      other on its way to a satellite assembly. Telling it these are ordinary files keeps the
+      language code where it belongs: in the name.
+    -->
+    <EmbeddedResource
+      Include="$(SpecDir)dictionary/narratives.*.json"
+      Link="dictionary/%(Filename)%(Extension)"
+      WithCulture="false" />
+  </ItemGroup>
+
+</Project>

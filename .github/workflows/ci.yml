@@ -77,3 +77,31 @@ jobs:
           git config --global init.defaultBranch main
 
       - run: npm test
+
+  dotnet:
+    name: dotnet engine (${{ matrix.tfm }})
+    if: ${{ hashFiles('packages/dotnet-tool/Egehan.sln') != '' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        tfm: [net8.0, net10.0]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+
+      # The conformance suite is the point of this job: it runs the .NET engine over the same
+      # fixtures the Node engine produced its expected reports from, and fails on any difference.
+      - name: Test the engine against the shared fixtures
+        run: dotnet test packages/dotnet-tool/Egehan.sln -f ${{ matrix.tfm }} --nologo
+
+      # Packing is part of the contract too: the tool must carry both frameworks, so that a
+      # machine with only the .NET 8 runtime installs the net8.0 asset and a newer one does not.
+      - name: Pack the global tool
+        if: matrix.tfm == 'net10.0'
+        run: dotnet pack packages/dotnet-tool/Egehan.Cli/Egehan.Cli.csproj -c Release --nologo

@@ -69,7 +69,8 @@ done before its tests are.
 | 1     | `egehan capsule` — passphrase-sealed message, opened in the browser by Web Crypto       | **done** |
 | 1     | `egehan hook install` — the chronicle that keeps itself up to date                      | **done** |
 | 2     | VS Code extension — status bar, timeline panel, milestone notifications                 | **done** |
-| 3     | `Egehan.Cli` .NET global tool (`net8.0` + `net10.0`)                                    | planned  |
+| 3     | `Egehan.Core` — the .NET engine, proved against the Node engine's own fixtures          | **done** |
+| 3     | `Egehan.Cli` — the NuGet global tool (`net8.0` + `net10.0`)                             | **done** |
 | 4     | Visual Studio 2022+ extension (VSIX)                                                    | planned  |
 
 ## The command contract

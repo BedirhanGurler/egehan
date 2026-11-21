@@ -10,14 +10,14 @@
   },
   "project": {
     "name": "orbit-dashboard",
+    "dedication": null,
     "detectedTypes": [
       "frontend",
       "node"
     ],
     "flavor": "frontend",
     "defaultBranch": "main",
-    "remoteHost": "github.com",
-    "dedication": null
+    "remoteHost": "github.com"
   },
   "config": {
     "language": "tr",

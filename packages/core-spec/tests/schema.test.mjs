@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -22,7 +22,10 @@ const newAjv = () => {
   return ajv;
 };
 
-const fixtureDirs = readdirSync(FIXTURES).filter((name) => statSync(join(FIXTURES, name)).isDirectory());
+// A fixture is a directory with an input; `capsule/` holds interop material, not a history.
+const fixtureDirs = readdirSync(FIXTURES).filter(
+  (name) => statSync(join(FIXTURES, name)).isDirectory() && existsSync(join(FIXTURES, name, 'input.json')),
+);
 
 test('the report schema compiles as a strict JSON Schema 2020-12 document', () => {
   const schema = readJson(join(ROOT, 'schema', 'egehan-report.schema.json'));

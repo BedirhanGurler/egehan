@@ -16,6 +16,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { buildReport } from '../dist/engine/buildReport.js';
+import { renderHtml } from '../dist/renderers/html.js';
 import { renderMarkdown } from '../dist/renderers/markdown.js';
 import { loadDictionary } from '../dist/spec/dictionary.js';
 
@@ -53,7 +54,9 @@ const COMBINATIONS = [
 const checkOnly = process.argv.includes('--check');
 const readJson = (path) => JSON.parse(readFileSync(path, 'utf8'));
 
-const fixtures = readdirSync(FIXTURES).filter((name) => statSync(join(FIXTURES, name)).isDirectory());
+const fixtures = readdirSync(FIXTURES).filter(
+  (name) => statSync(join(FIXTURES, name)).isDirectory() && existsSync(join(FIXTURES, name, 'input.json')),
+);
 
 let written = 0;
 const drifted = [];
@@ -64,7 +67,17 @@ for (const fixture of fixtures) {
   for (const { language, tone } of COMBINATIONS) {
     const report = buildReport({
       commits: input.commits,
-      project: { ...input.project, dedication: null },
+      // Built field by field in the schema's own order, not by spreading: a spread would put
+      // `dedication` last, and the embedded JSON in the HTML is compared byte for byte against
+      // the .NET engine, which follows the schema.
+      project: {
+        name: input.project.name,
+        dedication: null,
+        detectedTypes: input.project.detectedTypes,
+        flavor: input.project.flavor,
+        defaultBranch: input.project.defaultBranch ?? null,
+        remoteHost: input.project.remoteHost ?? null,
+      },
       config: {
         ...input.config,
         language,
@@ -80,15 +93,28 @@ for (const fixture of fixtures) {
     const serialized = `${JSON.stringify(report, null, 2)}\n`;
     const path = join(FIXTURES, fixture, `expected.${language}.${tone}.json`);
 
+    // The rendered page is a conformance artifact too, and for one combination the whole file is
+    // kept rather than a hash: the .NET engine must produce it byte for byte, and when that ever
+    // fails the person fixing it needs a diff, not a mismatched digest.
+    const artifacts = [[path, serialized]];
+    if (language === 'tr' && tone === 'poetic') {
+      artifacts.push([
+        join(FIXTURES, fixture, `expected.${language}.${tone}.html`),
+        renderHtml(report, loadDictionary(language)),
+      ]);
+    }
+
     if (checkOnly) {
-      if (!existsSync(path) || readFileSync(path, 'utf8') !== serialized) {
-        drifted.push(`${fixture}/expected.${language}.${tone}.json`);
+      for (const [file, content] of artifacts) {
+        if (!existsSync(file) || readFileSync(file, 'utf8') !== content) {
+          drifted.push(`${fixture}/${file.split('/').pop()}`);
+        }
       }
       continue;
     }
 
-    writeFileSync(path, serialized, 'utf8');
-    written += 1;
+    for (const [file, content] of artifacts) writeFileSync(file, content, 'utf8');
+    written += artifacts.length;
   }
 }
 

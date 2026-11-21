@@ -138,13 +138,20 @@ export function computeMilestones(
   }
 
   // Chronological, with a declared tie-break so two engines cannot order the same instant
-  // differently.
+  // differently. The final comparison is ordinal rather than locale-aware: `localeCompare` orders
+  // by the collation rules of a language, which is a property of the reader, not of the data —
+  // and the .NET engine has no reason to reproduce JavaScript's choice of them.
   return milestones.sort(
     (a, b) =>
       Date.parse(a.at) - Date.parse(b.at) ||
       KIND_ORDER.indexOf(a.kind) - KIND_ORDER.indexOf(b.kind) ||
-      String(a.value).localeCompare(String(b.value), 'en'),
+      compareOrdinal(String(a.value ?? ''), String(b.value ?? '')),
   );
+}
+
+/** Code-unit comparison, so two engines in two runtimes agree on every tie. */
+function compareOrdinal(a: string, b: string): number {
+  return a < b ? -1 : a > b ? 1 : 0;
 }
 
 function narrate(kind: MilestoneKind, value: number | string | null, dictionary: Dictionary): string {

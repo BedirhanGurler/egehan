@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Egehan.Cli</RootNamespace>
+    <AssemblyName>Egehan.Cli</AssemblyName>
+
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>egehan</ToolCommandName>
+    <PackageId>Egehan.Cli</PackageId>
+    <PackageOutputPath>$(MSBuildThisFileDirectory)../nupkg</PackageOutputPath>
+    <Description>Turn a project's git history into a living chronicle — offline, deterministic, no API key. The .NET half of the Egehan toolchain; the same command contract as the npm package.</Description>
+    <PackageTags>git;changelog;history;chronicle;storytelling;cli;offline</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.CommandLine" Version="3.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Egehan.Core/Egehan.Core.csproj" />
+    <None Include="../README.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
+
+</Project>

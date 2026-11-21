@@ -1,0 +1,16 @@
+{
+  "mode": "sealed",
+  "unlockDate": "2044-02-01",
+  "authorLabel": "Conformance",
+  "hint": null,
+  "algorithm": {
+    "kdf": "PBKDF2",
+    "kdfHash": "SHA-256",
+    "iterations": 600000,
+    "cipher": "AES-256-GCM"
+  },
+  "salt": "3jDJwO8YyJhcA/VpPSr+2Q==",
+  "iv": "iisvRT7XnMJqmMRG",
+  "ciphertext": "4qZ229uhMlXQpWR2fy2y4Ox9j8LLYXR4ovuVWsKdp8ryz9X6lqXJo8viGwQR3e4dGa/0XHqGn0MqyIRIFCH1plDsOpQboW7JRP+3BnQW+ZprPrNyoGsDm0xW/EvqwlPWHJPraqdmwQsXHVIQfksnSgs2QFDhALICCI/Zhe4ekI8+95vq498gMYen05OxwHPjtA==",
+  "createdAt": "2026-11-21T21:00:18+03:00"
+}

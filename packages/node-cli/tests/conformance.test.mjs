@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -25,7 +25,10 @@ const GENERATED_AT = '2026-01-01T00:00:00+00:00';
 const VERSION = '0.0.0-fixture';
 
 const readJson = (path) => JSON.parse(readFileSync(path, 'utf8'));
-const fixtures = readdirSync(FIXTURES).filter((name) => statSync(join(FIXTURES, name)).isDirectory());
+// A fixture is a directory with an input; `capsule/` holds interop material, not a history.
+const fixtures = readdirSync(FIXTURES).filter(
+  (name) => statSync(join(FIXTURES, name)).isDirectory() && existsSync(join(FIXTURES, name, 'input.json')),
+);
 
 const COMBINATIONS = [
   ['tr', 'poetic'],
